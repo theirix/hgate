@@ -1,10 +1,11 @@
 from django.conf.urls.defaults import *
-
+from hgate.views import index
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    (r'^$', index)
     # Example:
     # (r'^mercurial/', include('mercurial.foo.urls')),
 
