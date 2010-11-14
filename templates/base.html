@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% block head %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/main.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="" class="">
+    <h1 id="" class=""><a href="#">hGate</a></h1>
+
+    <ul id="menu_main_horizontal" class="">
+        <li class=""><a href="#">{% trans "Repository" %}</a></li>
+        <li class=""><a href="#">{% trans "Home" %}</a></li>
+        <li class=""><a href="#">{% trans "Users" %}</a></li>
+        <li class=""><a href="#">{% trans "HgWeb" %}</a></li>
+        <li class=""><a href="#">{% trans "Help" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
