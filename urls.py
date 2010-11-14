@@ -3,9 +3,11 @@ from hgate.views import index
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
+import settings
 
 urlpatterns = patterns('',
-    (r'^$', index)
+    (r'^$', index),
+    (r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     # Example:
     # (r'^mercurial/', include('mercurial.foo.urls')),
 
