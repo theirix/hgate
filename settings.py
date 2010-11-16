@@ -2,6 +2,10 @@
 import os
 import mercurial
 
+# hGate specific settings
+HGWEB_CONFIG = "/etc/mercurial/hgweb.config"
+REPOSITORIES_ROOT = "/home/hg"
+
 PROJECT_ROOT, PROJECT_MODULE_NAME = os.path.split(
     os.path.dirname(os.path.realpath(mercurial.__file__))
 )

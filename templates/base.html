@@ -1,14 +1,16 @@
 {% load i18n %}
-
+<html>
+<head>
 {% block head %}
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.4.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/main.css" />
+    <title>{% block title %}hGate{% endblock %}</title>
 {% endblock %}
-
-{% block body %}
-<div id="" class="">
-    <h1 id="" class=""><a href="#">hGate</a></h1>
-
+</head>
+<body>
+<div id="" class="header">
+    <h1 id="" class="">hGate<sup>prealpha</sup></h1>
     <ul id="menu_main_horizontal" class="">
         <li class=""><a href="#">{% trans "Repository" %}</a></li>
         <li class=""><a href="#">{% trans "Home" %}</a></li>
@@ -17,4 +19,11 @@
         <li class=""><a href="#">{% trans "Help" %}</a></li>
     </ul>
 </div>
-{% endblock %}
+<div class="tree">
+{% include 'tree.html' %}
+</div>
+<div class="main">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>
