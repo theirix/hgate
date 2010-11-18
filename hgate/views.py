@@ -4,13 +4,13 @@ from hgate.modhg.HGWeb import HGWeb
 import settings
 import modhg
 
-def prepare_tree(tree):
+def prepare_tree(tree, group=""):
     res = ""
     for (key, value) in tree.iteritems():
         if isinstance(value, dict):
-            res += "<li><span>" + key + "</span><ul>" + prepare_tree(value) + "</ul></li>"
+            res += "<li><span>" + key + "</span><ul>" + prepare_tree(value, group+key+"/") + "</ul></li>"
         else:
-            res += "<li><a href='/repo/"+key+"'>" + key + "</a></li>"
+            res += "<li><a href='/repo/"+group+key+"'>" + key + "</a></li>"
     return res
 
 def index(request):
@@ -23,8 +23,6 @@ def index(request):
 def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
-
-
 
     return render_to_response('index.html', {"tree": tree, "repo_path": repo_path},
                               context_instance=RequestContext(request))
