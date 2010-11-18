@@ -7,10 +7,10 @@ import modhg
 def prepare_tree(tree):
     res = ""
     for (key, value) in tree.iteritems():
-        if isinstance(value,dict):
-            res += "<li><span>"+key+"</span><ul>"+prepare_tree(value)+"</ul></li>"
+        if isinstance(value, dict):
+            res += "<li><span>" + key + "</span><ul>" + prepare_tree(value) + "</ul></li>"
         else:
-            res+="<li>"+key+"</li>"
+            res += "<li><a href='/repo/"+key+"'>" + key + "</a></li>"
     return res
 
 def index(request):
@@ -18,4 +18,13 @@ def index(request):
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     groups = hgweb.get_groups()
     return render_to_response('index.html', {"tree": tree, "groups": groups},
-                              context_instance = RequestContext(request))
+                              context_instance=RequestContext(request))
+
+def repo(request, repo_path):
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
+
+
+
+    return render_to_response('index.html', {"tree": tree, "repo_path": repo_path},
+                              context_instance=RequestContext(request))
