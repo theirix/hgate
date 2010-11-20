@@ -1,5 +1,6 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from hgate.forms import RepositoryForm
 from hgate.modhg.HGWeb import HGWeb
 import settings
 import modhg
@@ -26,3 +27,7 @@ def repo(request, repo_path):
 
     return render_to_response('index.html', {"tree": tree, "repo_path": repo_path},
                               context_instance=RequestContext(request))
+
+def repository(request):
+    form = RepositoryForm()
+    return render_to_response('form.html', {"form": form}, context_instance=RequestContext(request))

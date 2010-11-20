@@ -32,7 +32,7 @@
 {% endblock %}
 </head>
 <body>
-<div id="" class="header">
+<div id="header" class="header">
     <h1 id="" class="">hGate<sup>prealpha</sup></h1>
     <ul id="menu_main_horizontal" class="">
         <li class=""><a href="#">{% trans "Repository" %}</a></li>
@@ -46,7 +46,8 @@
 {% include 'tree.html' %}
 </div>
 <div class="main">
-{% block content %}{% endblock %}
+{% block content %}
+{% endblock %}
 </div>
 </body>
 </html>
