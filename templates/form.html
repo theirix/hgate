@@ -1,9 +1,17 @@
-{% extends base.html %}
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block content %}
+<form class="" action="." method="post">
     <div>
-        <h1>{% trans "Customers" %}</h1>
-        {{ form.as_p }}
+        <h2>{% trans "Customers" %}</h2>
+        {% for field in form %}
+        <p>
+            <span>{{ field.label_tag }}</span>
+            {{ field }}
+        </p>
+        {% endfor %}
     </div>
+    <input class="submit" type="submit" value="{% trans "Save" %}" />
+</form>
 {% endblock %}

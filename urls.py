@@ -6,9 +6,9 @@ from hgate.views import index, repo, repository
 import settings
 
 urlpatterns = patterns('',
-    (r'^$', index),
+    (r'^$', index, 'index'),
     (r'repo/(?P<repo_path>.*)', repo),
-    (r'repository/$', repository),
+    (r'repository/$', repository, 'repository'),
     (r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     # Example:
     # (r'^mercurial/', include('mercurial.foo.urls')),

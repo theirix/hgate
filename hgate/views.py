@@ -4,6 +4,7 @@ from hgate.forms import RepositoryForm
 from hgate.modhg.HGWeb import HGWeb
 import settings
 import modhg
+from django.http import HttpResponseRedirect
 
 def prepare_tree(tree, group=""):
     res = ""
@@ -29,5 +30,10 @@ def repo(request, repo_path):
                               context_instance=RequestContext(request))
 
 def repository(request):
-    form = RepositoryForm()
+    if request.method == 'POST':
+        form = RepositoryForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('index')
+    else:
+        form = RepositoryForm()
     return render_to_response('form.html', {"form": form}, context_instance=RequestContext(request))
