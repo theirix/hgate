@@ -6,10 +6,10 @@ from hgate.views import index, repo, repository
 import settings
 
 urlpatterns = patterns('',
-    (r'^$', index, 'index'),
-    (r'repo/(?P<repo_path>.*)', repo),
-    (r'repository/$', repository, 'repository'),
-    (r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^$', index, name='index'),
+    url(r'repo/(?P<repo_path>.*)', repo),
+    url(r'repository/$', repository, name='repository'),
+    url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     # Example:
     # (r'^mercurial/', include('mercurial.foo.urls')),
 
