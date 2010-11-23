@@ -1,4 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
+
 {% block content %}
 bla-bla-bla
+<br/>
+<form class="" action="." method="post">
+    <div>
+        {{ repo_form.as_p }}
+    </div>
+    <input class="submit" type="submit" value="{% trans "Save" %}" />
+</form>
 {% endblock %}
