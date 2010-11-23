@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from hgate.views import index, repo, repository
+from hgate.views import index, repo
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -7,8 +7,7 @@ import settings
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
-    url(r'repo/(?P<repo_path>.*)', repo),
-    url(r'repository/$', repository, name='repository'),
+    url(r'repo/(?P<repo_path>.*)', repo, name='repository'),
     url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     # Example:
     # (r'^mercurial/', include('mercurial.foo.urls')),

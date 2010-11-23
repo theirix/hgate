@@ -26,14 +26,15 @@ def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
 
-    return render_to_response('index.html', {"tree": tree, "repo_path": repo_path},
-                              context_instance=RequestContext(request))
+    model = {"tree": tree, "repo_path": repo_path}
 
-def repository(request):
     if request.method == 'POST':
         form = RepositoryForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('index')
+            True #            return HttpResponseRedirect('index')
     else:
         form = RepositoryForm()
-    return render_to_response('form.html', {"form": form}, context_instance=RequestContext(request))
+        model["form"] = form
+
+    return render_to_response('form.html', model,
+                              context_instance=RequestContext(request))
