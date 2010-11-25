@@ -1,13 +1,13 @@
-# Django settings for mercurial project.
+# Django settings for hgate project.
 import os
-import mercurial
+import hgate
 
 # hGate specific settings
 HGWEB_CONFIG = "/etc/mercurial/hgweb.config"
 REPOSITORIES_ROOT = "/home/hg"
 
 PROJECT_ROOT, PROJECT_MODULE_NAME = os.path.split(
-    os.path.dirname(os.path.realpath(mercurial.__file__))
+    os.path.dirname(os.path.realpath(hgate.__file__))
 )
 
 DEBUG = True
@@ -88,7 +88,7 @@ TEMPLATE_DIRS = (
 MIDDLEWARE_CLASSES = (
 )
 
-ROOT_URLCONF = 'mercurial.urls'
+ROOT_URLCONF = 'hgate.urls'
 
 
 INSTALLED_APPS = (
@@ -96,5 +96,5 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'mercurial.hgate',
+    'hgate.app',
 )
