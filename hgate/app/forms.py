@@ -25,10 +25,10 @@ class AddUser(forms.Form):
 
 
 class CreateRepoForm(forms.Form):
-    def __init__(self, groups, *args, **kwargs):
+    def __init__(self, default_groups, *args, **kwargs):
         super(CreateRepoForm, self).__init__(*args, **kwargs)
 
-        self.fields['groups'].choices = [("-","-")] + groups
+        self.fields['group'].choices = [("-","-")] + default_groups
 
     name = forms.CharField(label = _("Repository name"), max_length=100)
-    groups = forms.ChoiceField(label = _("Group"))
+    group = forms.ChoiceField(label = _("Group"))
