@@ -36,12 +36,18 @@ def index(request):
     if request.method == 'POST':
         create_repo_form = CreateRepoForm(groups, request.POST)
         if create_repo_form.is_valid():
+            redirect_path = ""
             name = create_repo_form.cleaned_data['name']
             group = create_repo_form.cleaned_data['group']
             repo_path = prepare_path(name, group, groups)
-            print repo_path
-            modhg.repository.create(repo_path)
-            return HttpResponseRedirect('/')
+            is_created = modhg.repository.create(repo_path)
+            if(is_created):
+                if(group == "-"):
+                    hgweb.add_paths(name, repo_path)
+                    redirect_path = "repo/"+name
+                else:
+                    redirect_path = "repo/"+group+"/"+name
+            return HttpResponseRedirect('/'+redirect_path)
     else:
         create_repo_form = CreateRepoForm(default_groups = groups)
 

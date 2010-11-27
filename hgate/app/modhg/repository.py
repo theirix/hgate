@@ -12,6 +12,8 @@ def create(path):
         os.makedirs(path) #check if this is necessary
     uio = ui.ui()
     hg.repository(uio, path, create=True)
+
+    return True
 #    raise NotImplementedError()
 
 def delete(path):
