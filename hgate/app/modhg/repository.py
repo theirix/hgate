@@ -2,19 +2,25 @@ import os
 from mercurial import hg,ui
 __author__ = 'Shedar'
 
+
+class RepositoryException(Exception):
+    """
+    Custom exception for repository module
+    """
+    pass
+
+
 def create(path):
     """
     http://mercurial.selenic.com/wiki/MercurialApi#Repositories
     """
     if(is_repository(path)):
-        return False #make here something more informative or exception
-    if(not os.path.exists(path)):
-        os.makedirs(path) #check if this is necessary
+        raise RepositoryException("There is already such repository.") #make here something more informative or exception
     uio = ui.ui()
-    hg.repository(uio, path, create=True)
-
-    return True
-#    raise NotImplementedError()
+    try:
+        hg.repository(uio, path, create=True)
+    except Exception as e: #more specific exception is needed
+        raise RepositoryException("Repository ["+path+"] is not created, because of error: " + e.strerror)
 
 def delete(path):
     raise NotImplementedError()

@@ -79,13 +79,17 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
 )
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, PROJECT_MODULE_NAME, 'templates'),
 )
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 MIDDLEWARE_CLASSES = (
+    'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'hgate.urls'
@@ -96,5 +100,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'django.contrib.messages',
     'hgate.app',
 )

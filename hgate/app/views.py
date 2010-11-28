@@ -6,6 +6,8 @@ import settings
 import modhg
 from django.http import HttpResponseRedirect
 import os
+from django.contrib import messages
+from hgate.app.modhg.repository import RepositoryException
 
 def prepare_tree(tree, group=""):
     res = ""
@@ -40,13 +42,17 @@ def index(request):
             name = create_repo_form.cleaned_data['name']
             group = create_repo_form.cleaned_data['group']
             repo_path = prepare_path(name, group, groups)
-            is_created = modhg.repository.create(repo_path)
-            if(is_created):
+            try:
+                modhg.repository.create(repo_path)
+                messages.success(request, 'New repository was created.')
                 if(group == "-"):
                     hgweb.add_paths(name, repo_path)
                     redirect_path = "repo/" + name
                 else:
                     redirect_path = "repo/" + group + "/" + name
+            except RepositoryException as e:
+                messages.warning(request, e.message)
+                
             return HttpResponseRedirect('/' + redirect_path)
     else:
         create_repo_form = CreateRepoForm(default_groups=groups)

@@ -34,6 +34,35 @@ h1 sup{
     font-size:14px;
 }
 
+/*classes for messages*/
+.messages {
+    padding: 0;
+    margin: 12px;
+	font-size: 1.1em;
+    list-style: none;
+}
+
+.messages li {
+    padding: 5px;
+    border: 2px solid;
+}
+
+.messages .error {
+    background-color: #FFE3E3;
+    border-color: #D00;
+    color: #800;
+}
+.messages .warning {
+	background-color: #FFEBC1;
+	border-color: #FDBF3B;
+	color: #A6750C;
+}
+.messages .success {
+	background-color: #dfffdf;
+	border-color: #9fcf9f;
+	color: #005f00;
+}
+
 .header{
     width: 100%;
     height:80px;
