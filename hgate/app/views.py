@@ -11,9 +11,9 @@ def prepare_tree(tree, group=""):
     res = ""
     for (key, value) in tree.iteritems():
         if isinstance(value, dict):
-            res += "<li><span>" + key + "</span><ul>" + prepare_tree(value, group+key+"/") + "</ul></li>"
+            res += "<li><span>" + key + "</span><ul>" + prepare_tree(value, group + key + "/") + "</ul></li>"
         else:
-            res += "<li><a href='/repo/"+group+key+"'>" + key + "</a></li>"
+            res += "<li><a href='/repo/" + group + key + "'>" + key + "</a></li>"
     return res
 
 def prepare_path(name, group, groups):
@@ -44,12 +44,12 @@ def index(request):
             if(is_created):
                 if(group == "-"):
                     hgweb.add_paths(name, repo_path)
-                    redirect_path = "repo/"+name
+                    redirect_path = "repo/" + name
                 else:
-                    redirect_path = "repo/"+group+"/"+name
-            return HttpResponseRedirect('/'+redirect_path)
+                    redirect_path = "repo/" + group + "/" + name
+            return HttpResponseRedirect('/' + redirect_path)
     else:
-        create_repo_form = CreateRepoForm(default_groups = groups)
+        create_repo_form = CreateRepoForm(default_groups=groups)
 
     return render_to_response('index.html', {"tree": tree, "repo_form": create_repo_form},
                               context_instance=RequestContext(request))
