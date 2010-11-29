@@ -32,6 +32,10 @@ class HGWeb:
         self._parser.set("paths", key, path)
         self._parser.write(open(self._file_name, "w"))
 
+    def del_paths(self, key):
+        self._parser.remove_option("paths", key)
+        self._parser.write(open(self._file_name, "w"))
+
     def get_web(self):
         return self._parser.items["web"]
 

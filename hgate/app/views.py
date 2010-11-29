@@ -43,10 +43,9 @@ def index(request):
             group = create_repo_form.cleaned_data['group']
             repo_path = prepare_path(name, group, groups)
             try:
-                modhg.repository.create(repo_path)
+                modhg.repository.create(repo_path, name, group == "-")
                 messages.success(request, 'New repository was created.')
                 if(group == "-"):
-                    hgweb.add_paths(name, repo_path)
                     redirect_path = "repo/" + name
                 else:
                     redirect_path = "repo/" + group + "/" + name

@@ -1,5 +1,9 @@
 import os
 from mercurial import hg,ui
+import shutil
+from app.modhg.HGWeb import HGWeb
+import settings
+
 __author__ = 'Shedar'
 
 
@@ -10,7 +14,7 @@ class RepositoryException(Exception):
     pass
 
 
-def create(path):
+def create(path, name="", has_no_group=False):
     """
     http://mercurial.selenic.com/wiki/MercurialApi#Repositories
     """
@@ -19,14 +23,35 @@ def create(path):
     uio = ui.ui()
     try:
         hg.repository(uio, path, create=True)
-    except Exception as e: #more specific exception is needed
+    except Exception as e: #probably more specific exception is needed
         raise RepositoryException("Repository ["+path+"] is not created, because of error: " + e.strerror)
 
-def delete(path):
-    raise NotImplementedError()
+    if has_no_group: #another one try-except block for this
+        hgweb = HGWeb(settings.HGWEB_CONFIG)
+        hgweb.add_paths(name, path)
 
-def rename(old_path, new_path):
-    raise NotImplementedError()
+def delete(path, name="", has_no_group=False):
+    if not is_repository(path):
+        raise RepositoryException("There is no repository by path: ["+path+"]")
+    try:
+        shutil.rmtree(path)
+    except Exception as e: #probably more specific exception is needed
+        raise RepositoryException("Repository ["+path+"] is not removed, because of error: " + e.strerror)
+    if has_no_group:
+        hgweb = HGWeb(settings.HGWEB_CONFIG)
+        hgweb.del_paths(name)
+
+def rename(old_path, new_path, name="", has_no_group=False):
+    if not is_repository(old_path):
+        raise RepositoryException("There is no repository by path: ["+old_path+"]")
+    try:
+        shutil.move(old_path, new_path)
+    except Exception as e: #probably more specific exception is needed
+        raise RepositoryException("Repository ["+old_path+"] is not moved to ["+new_path+"], because of error: " + e.strerror)
+    if has_no_group:
+        hgweb = HGWeb(settings.HGWEB_CONFIG)
+        hgweb.del_paths(name)
+        hgweb.add_paths(name, new_path)
 
 def is_repository(path):
     path = os.path.join(path,".hg")
