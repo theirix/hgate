@@ -26,9 +26,12 @@ def create(path, name="", has_no_group=False):
     except Exception as e: #probably more specific exception is needed
         raise RepositoryException("Repository ["+path+"] is not created, because of error: " + e.strerror)
 
-    if has_no_group: #another one try-except block for this
-        hgweb = HGWeb(settings.HGWEB_CONFIG)
-        hgweb.add_paths(name, path)
+    try:
+        if has_no_group: #another one try-except block for this
+            hgweb = HGWeb(settings.HGWEB_CONFIG)
+            hgweb.add_paths(name, path)
+    except Exception as e:
+        raise RepositoryException(e)
 
 def delete(path, name="", has_no_group=False):
     if not is_repository(path):
@@ -37,9 +40,12 @@ def delete(path, name="", has_no_group=False):
         shutil.rmtree(path)
     except Exception as e: #probably more specific exception is needed
         raise RepositoryException("Repository ["+path+"] is not removed, because of error: " + e.strerror)
-    if has_no_group:
-        hgweb = HGWeb(settings.HGWEB_CONFIG)
-        hgweb.del_paths(name)
+    try:
+        if has_no_group:
+            hgweb = HGWeb(settings.HGWEB_CONFIG)
+            hgweb.del_paths(name)
+    except Exception as e:
+        raise RepositoryException(e)
 
 def rename(old_path, new_path, name="", has_no_group=False):
     if not is_repository(old_path):
@@ -48,10 +54,13 @@ def rename(old_path, new_path, name="", has_no_group=False):
         shutil.move(old_path, new_path)
     except Exception as e: #probably more specific exception is needed
         raise RepositoryException("Repository ["+old_path+"] is not moved to ["+new_path+"], because of error: " + e.strerror)
-    if has_no_group:
-        hgweb = HGWeb(settings.HGWEB_CONFIG)
-        hgweb.del_paths(name)
-        hgweb.add_paths(name, new_path)
+    try:
+        if has_no_group:
+            hgweb = HGWeb(settings.HGWEB_CONFIG)
+            hgweb.del_paths(name)
+            hgweb.add_paths(name, new_path)
+    except Exception as e:
+        raise RepositoryException(e)
 
 def is_repository(path):
     path = os.path.join(path,".hg")
