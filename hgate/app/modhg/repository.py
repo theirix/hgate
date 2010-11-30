@@ -21,10 +21,6 @@ def create(path, name="", has_no_group=False):
     if(is_repository(path)):
         raise RepositoryException("There is already such repository.") #make here something more informative or exception
     uio = ui.ui()
-    try:
-        hg.repository(uio, path, create=True)
-    except Exception as e: #probably more specific exception is needed
-        raise RepositoryException("Repository ["+path+"] is not created, because of error: " + e.strerror)
 
     try:
         if has_no_group: #another one try-except block for this
@@ -32,6 +28,16 @@ def create(path, name="", has_no_group=False):
             hgweb.add_paths(name, path)
     except Exception as e:
         raise RepositoryException(e)
+
+    try:
+        hg.repository(uio, path, create=True)
+    except Exception as e: #probably more specific exception is needed
+        if has_no_group: #rollback
+            hgweb = HGWeb(settings.HGWEB_CONFIG)
+            hgweb.del_paths(name)
+
+        raise RepositoryException("Repository ["+path+"] is not created, because of error: " + e.strerror)
+
 
 def delete(path, name="", has_no_group=False):
     if not is_repository(path):

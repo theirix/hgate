@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 import os
 from django.contrib import messages
 from hgate.app.modhg.repository import RepositoryException
+from hgate.app.forms import ManageGroupsForm
 
 def prepare_tree(tree, group=""):
     res = ""
@@ -39,8 +40,8 @@ def index(request):
         create_repo_form = CreateRepoForm(groups, request.POST)
         if create_repo_form.is_valid():
             redirect_path = ""
-            name = create_repo_form.cleaned_data['name']
-            group = create_repo_form.cleaned_data['group']
+            name = create_repo_form.cleaned_data['repo_name']
+            group = create_repo_form.cleaned_data['repo_group']
             repo_path = prepare_path(name, group, groups)
             try:
                 modhg.repository.create(repo_path, name, group == "-")
@@ -51,12 +52,15 @@ def index(request):
                     redirect_path = "repo/" + group + "/" + name
             except RepositoryException as e:
                 messages.warning(request, e.message)
-                
+
             return HttpResponseRedirect('/' + redirect_path)
     else:
         create_repo_form = CreateRepoForm(default_groups=groups)
 
-    return render_to_response('index.html', {"tree": tree, "repo_form": create_repo_form},
+    groups_form = ManageGroupsForm()
+
+    return render_to_response('index.html', {"tree": tree, "repo_form": create_repo_form, "groups_form": groups_form,
+                                             "groups": groups},
                               context_instance=RequestContext(request))
 
 def repo(request, repo_path):

@@ -27,14 +27,18 @@ class CreateRepoForm(forms.Form):
     def __init__(self, default_groups, *args, **kwargs):
         super(CreateRepoForm, self).__init__(*args, **kwargs)
 
-        self.fields['group'].choices = [("-","-")] + default_groups
+        self.fields['repo_group'].choices = [("-","-")] + default_groups
 
     def clean_name(self):
-        _name = self.cleaned_data['name'].strip()
+        _name = self.cleaned_data['repo_name'].strip()
         if re.search(r"[\*\:\?\/\\]", _name): #found one of (*:?/\)
-            raise forms.ValidationError("Don`t use special characters any of (*:?/\)")
+            raise forms.ValidationError("Don`t use special characters any of *:?/\\")
         return _name
 
 
-    name = forms.CharField(label = _("Repository name"), max_length=100)
-    group = forms.ChoiceField(label = _("Group"))
+    repo_name = forms.CharField(label = _("Repository name"), max_length=100)
+    repo_group = forms.ChoiceField(label = _("Group"))
+
+class ManageGroupsForm(forms.Form):
+    group_name = forms.CharField(label = _("Group name"), max_length=100)
+    group_path = forms.CharField(label = _("Path"), max_length=100)
