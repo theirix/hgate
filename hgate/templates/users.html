@@ -1,21 +1,39 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block head %}
+{{ block.super }}
+<script>
+ $(document).ready(function(){
+    $(".user_list tbody tr").hover(
+        function(){$(this).addClass("rowHover")},
+        function(){$(this).removeClass("rowHover");}
+     );
+    $(".user_delete").click(function(){
+        var login = $(this).parents("tr").find("td.login").text();
+        return confirm("{% trans "Delete user" %} '"+login+"'?")
+    })
+  })
+</script>
+{% endblock %}
+
 {% block content %}
-<form class="" action="{% url users %}" method="post">
+<h3>{% trans "Create user" %}</h3>
+<form class="user_create" action="{% url users %}" method="post">
     <table>
         {{ form.as_table }}
+    <tr><td colspan="2" class="bottom"><input class="submit" type="submit" value="{% trans "Create" %}" /></td></tr>
     </table>
-    <input class="submit" type="submit" value="{% trans "Create" %}" />
 </form>
+<h3>{% trans "Manage users" %}</h3>
 <table class="user_list">
 <tr><th>{% trans "Login" %}</th><th>{% trans "Action" %}</th></tr>
 {% for user in users %}
-<tr>
-    <td>{{ user }}</td>
+<tr class="{% cycle odd,even %}">
+    <td class="login">{{ user }}</td>
     <td><a href="/users/edit/{{ user }}"
            title="{% trans "Change password and manage user's permissions" %}">{% trans "edit" %}</a>
-        <a href="/users/delete/{{ user }}" title="{% trans "Remove user" %}">{% trans "delete" %}</a>
+        <a class="user_delete" href="/users/delete/{{ user }}" title="{% trans "Remove user" %}">{% trans "delete" %}</a>
     </td>
 {% endfor %}
 </table>

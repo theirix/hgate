@@ -34,6 +34,10 @@ h1 sup{
     font-size:14px;
 }
 
+h3{
+    margin-bottom: 6px;
+}
+
 /*classes for messages*/
 .messages {
     padding: 0;
@@ -95,3 +99,63 @@ h1 sup{
     display:block;
     padding:5px;
 }
+
+/* Form errors*/
+
+.errorlist {
+    list-style-type: none;
+    color: #ff2222;
+    padding: 0;
+    margin-bottom: 2px;
+}
+
+/* Users page */
+
+.user_create table, .user_edit table{
+    text-align: left;
+}
+
+.user_create th, .user_edit th{
+    vertical-align: bottom;
+}
+
+.user_create table input, .user_edit table input {
+    width: 200px;
+}
+
+.user_create .bottom, .user_edit .bottom{
+    text-align: right;
+}
+
+.user_create input.submit, .user_edit input.submit{
+    width: auto;
+}
+
+.user_list {
+    background-color:#fff;
+    border-collapse:separate;
+}
+
+.user_list th{
+    text-align: left;
+}
+
+.user_list .login {
+    min-width:120px;
+}
+
+.user_list td, .user_list th{
+    background-color: #F4F4F4;
+    padding: 2px 7px;
+}
+
+.user_list .rowHover td{
+    background-color: #cacac4 !important;
+}
+
+.user_list tr.odd td{
+    background-color: #e4e4e4;
+}
+
+
+
