@@ -10,13 +10,22 @@ def list(filename):
     for line in lines:
         login, hash = line.split(':')
         login_list.append(login)
+    login_list.sort()
     return login_list
+
+def exists(filename,login):
+    lines = _get_rows(filename)
+    match = [line for line in lines if line.startswith(login)]
+    if match:
+        return True
+    return False
+
 
 def add(filename,login,password):
     lines = _get_rows(filename)
     match = [line for line in lines if line.startswith(login)]
     if match:
-        raise ValueError("User already exists")
+        raise ValueError("User exists")
     row = _form_file_row(login, password)
     lines.append(row)
     open(filename,'w+').writelines(lines)

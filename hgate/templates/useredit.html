@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<a class="back" href="{% url users %}">{% trans "<< Back to users list" %}</a><br />
+<h2>{% trans "User" %}: {{ login }}</h2>
+<h3>{% trans "Change password" %}</h3>
+<form class="" action="{% url users %}/edit/{{ login }}" method="post">
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input class="submit" type="submit" value="{% trans "Save" %}" />
+</form>
+{% endblock %}

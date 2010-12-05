@@ -8,7 +8,7 @@ import settings
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
     url(r'repo/(?P<repo_path>.*)', repo, name='repository'),
-    url(r'users(/(?P<action>.*)/(?P<login>.*))?', user, name='users'),
+    url(r'users(/(?P<action>[^/]+)/(?P<login>.*))?', user, name='users'),
     url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     # Example:
     # (r'^hgate/', include('hgate.foo.urls')),
