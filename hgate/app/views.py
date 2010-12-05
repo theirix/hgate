@@ -1,13 +1,15 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from app.forms import RepositoryForm, CreateRepoForm
+from app.forms import RepositoryForm, CreateRepoForm, AddUser
 from app.modhg.HGWeb import HGWeb
 import settings
 import modhg
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 import os
 from django.contrib import messages
 from hgate.app.modhg.repository import RepositoryException
+import app.modhg.usersb as users
+from django.core.exceptions import ValidationError
 
 def prepare_tree(tree, group=""):
     res = ""
@@ -75,3 +77,25 @@ def repo(request, repo_path):
 
     return render_to_response('form.html', model,
                               context_instance=RequestContext(request))
+
+def user(request, action, login):
+    if not action: # main user page
+        if request.method == 'POST':
+            form = AddUser(request.POST)
+            if(form.is_valid()):
+                login = form.cleaned_data['login']
+                password = form.cleaned_data['password2']
+                try:
+                    users.add(settings.AUTH_FILE, login, password)
+                except ValueError as detail:
+                    raise ValidationError(_(detail))
+        else:
+            form = AddUser()
+        user_list = users.list(settings.AUTH_FILE)
+        return render_to_response("users.html",{'form': form, "users": user_list},
+                              context_instance=RequestContext(request))
+    elif action == "delete":
+        users.remove(settings.AUTH_FILE,login)
+        return HttpResponseRedirect("../users") #todo: render via url
+    elif action == "edit":
+        return ""

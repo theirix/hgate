@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<form class="" action="{% url users %}" method="post">
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input class="submit" type="submit" value="{% trans "Create" %}" />
+</form>
+<table class="user_list">
+<tr><th>{% trans "Login" %}</th><th>{% trans "Action" %}</th></tr>
+{% for user in users %}
+<tr>
+    <td>{{ user }}</td>
+    <td><a href="/users/edit/{{ user }}"
+           title="{% trans "Change password and manage user's permissions" %}">{% trans "security" %}</a>
+        <a href="/users/delete/{{ user }}" title="{% trans "Remove user" %}">{% trans "delete" %}</a>
+    </td>
+{% endfor %}
+</table>
+{% endblock %}
