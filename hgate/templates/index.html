@@ -23,8 +23,11 @@
         <td>{{ gr_key }}</td>
         <td>{{ gr_path }}</td>
         <td>
-            <input type="button" value="edit" />
-            <input type="button" value="delete" />
+            <form action="/" method="post">
+                <input type="hidden" name="group_name" value="{{ gr_key }}" />
+                <input type="submit" name="edit_group" value="edit" />
+                <input type="submit" name="delete_group" value="delete" />
+            </form>
         </td>
     </tr>
 {% endfor %}

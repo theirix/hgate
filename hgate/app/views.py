@@ -44,7 +44,6 @@ def index(request):
                 name = groups_form.cleaned_data['name']
                 path = groups_form.cleaned_data['path']
                 if not (name in zip(*groups)[0]): # zip(*groups)[0] - groups is a list of tuples, so unzip it and take list of keys
-                    #todo: check if path ends with /* or /**
                     hgweb.add_paths(name, path)
                     messages.success(request, _("New group was added."))
                 else:
@@ -70,6 +69,13 @@ def index(request):
 
                 return HttpResponseRedirect('/' + redirect_path)
             groups_form = ManageGroupsForm()
+        elif ("delete_group" in request.POST) and ("group_name" in request.POST):
+            gr_name = request.POST.get("group_name")
+            hgweb.del_paths(gr_name)
+            messages.success(request, _("%s is deleted successfully." % (gr_name,)))
+            return HttpResponseRedirect('/')
+        elif "edit_group" in request.POST:
+            return HttpResponseRedirect('/')
     else:
         create_repo_form = CreateRepoForm(default_groups=groups)
         groups_form = ManageGroupsForm()

@@ -59,3 +59,9 @@ class CreateRepoForm(forms.Form):
 class ManageGroupsForm(forms.Form):
     name = forms.CharField(label = _("Group name"), max_length=100)
     path = forms.CharField(label = _("Path"))
+
+    def clean_path(self):
+        _path = self.cleaned_data['path'].strip()
+        if not re.search(r"([\/]\*{1,2})$", _path):
+            raise forms.ValidationError(_("Path shall be ended with /* or /**"))
+        return _path
