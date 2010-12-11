@@ -37,6 +37,12 @@ def index(request):
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     groups = hgweb.get_groups()
 
+    create_repo_form = CreateRepoForm(default_groups=groups)
+    groups_form = ManageGroupsForm()
+    change_group_form = ManageGroupsForm(prefix='change_group')
+
+    model = {"tree": tree, "groups": groups, "is_hide_change_group_form": True}
+    
     if request.method == 'POST':
         if "create_group" in request.POST:
             groups_form = ManageGroupsForm(request.POST)
@@ -49,7 +55,6 @@ def index(request):
                 else:
                     messages.warning(request, _("There is already a group with such a name. Group wasn`t added."))
                 return HttpResponseRedirect('/')
-            create_repo_form = CreateRepoForm(default_groups=groups)
         elif "create_repo" in request.POST:
             create_repo_form = CreateRepoForm(groups, request.POST)
             if create_repo_form.is_valid():
@@ -64,25 +69,40 @@ def index(request):
                         redirect_path = "repo/" + name
                     else:
                         redirect_path = "repo/" + group + "/" + name
-                except RepositoryException as e:
+                except Exception as e:
                     messages.warning(request, e.message)
+                    return HttpResponseRedirect('/')
 
                 return HttpResponseRedirect('/' + redirect_path)
-            groups_form = ManageGroupsForm()
         elif ("delete_group" in request.POST) and ("group_name" in request.POST):
             gr_name = request.POST.get("group_name")
             hgweb.del_paths(gr_name)
             messages.success(request, _("%s is deleted successfully." % (gr_name,)))
             return HttpResponseRedirect('/')
         elif "edit_group" in request.POST:
-            return HttpResponseRedirect('/')
-    else:
-        create_repo_form = CreateRepoForm(default_groups=groups)
-        groups_form = ManageGroupsForm()
+            change_group_form = ManageGroupsForm(request.POST, prefix='change_group')
+            if change_group_form.is_valid() and ("old_group_name" in request.POST):
+                name = change_group_form.cleaned_data['name']
+                path = change_group_form.cleaned_data['path']
+                old_gr_name = request.POST.get("old_group_name")
 
-    return render_to_response('index.html', {"tree": tree, "repo_form": create_repo_form, "groups_form": groups_form,
-                                             "groups": groups},
-                              context_instance=RequestContext(request))
+                if old_gr_name == name or (not name in zip(*groups)[0]):
+                    hgweb.del_paths(old_gr_name)
+                    hgweb.add_paths(name, path)
+                    messages.success(request, _("Group %s was added." % (name,)))
+                else:
+                    messages.warning(request,
+                                     _("There is already a group with such a name. Group %s wasn`t changed." % (name,)))
+                return HttpResponseRedirect('/')
+            else:
+                model["is_hide_change_group_form"] = False
+
+    model["groups_form"] = groups_form
+    model["change_group_form"] = change_group_form
+    model["repo_form"] = create_repo_form
+
+    return render_to_response('index.html', model, context_instance=RequestContext(request))
+    
 
 def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)

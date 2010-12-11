@@ -1,17 +1,48 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block head %}
+{{ block.super }}
+<script>
+function edit_group_click(name, path) {
+//    var name = $(edit_btn).parent().find(":hidden[name='group_name']").val();
+//    if( $("#old_group_name").val() == name ) {
+//        cancel_group_editing();
+//        return;
+//    }
+    $("#group_edit").show();
+    $("#old_group_name").val(name);
+    $("#group_edit input[name='change_group-name']").val(name);
+    $("#group_edit input[name='change_group-path']").val(path);
+}
+function cancel_group_editing() {
+    $("#group_edit").hide();
+    $("#old_group_name").val('');
+    $("#group_edit input[name='change_group-name']").val('');
+    $("#group_edit input[name='change_group-path']").val('');
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <br/>
 <h3>Create Repository</h3>
 <form class="" action="/" method="post">
     <div>
-        {{ repo_form.as_p }}
+        {{ repo_form.as_table }}
     </div>
     <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}" />
 </form>
 <hr style="margin: 15px 0 15px 0;" />
 <h3>Manage groups</h3>
+
+<form class="" action="/" method="post">
+    <div>
+        {{ groups_form.as_table }}
+    </div>
+    <input class="submit" type="submit" name="create_group" value="{% trans "Create" %}" />
+</form>
+
 <table border="1" cellpadding="5" cellspacing="0">
     <tr>
         <th>{% trans "Group key" %}</th>
@@ -25,18 +56,20 @@
         <td>
             <form action="/" method="post">
                 <input type="hidden" name="group_name" value="{{ gr_key }}" />
-                <input type="submit" name="edit_group" value="edit" />
-                <input type="submit" name="delete_group" value="delete" />
+                <input type="button" onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');" value="{% trans "edit" %}"/>
+                <input type="submit" name="delete_group" value="{% trans "delete" %}" />
             </form>
         </td>
     </tr>
 {% endfor %}
 </table>
-<form class="" action="/" method="post">
-    <div>
-        {{ groups_form.as_p }}
-    </div>
-    <input class="submit" type="submit" name="create_group" value="{% trans "Create" %}" />
-</form>
+<div class="group_edit" id="group_edit" {% if is_hide_change_group_form %} style="display: none;" {% endif %}>
+    <form id="group_edit_form" action="/" method="post" >
+        <input type="hidden" name="old_group_name" id="old_group_name" value="" />
+        {{ change_group_form.as_table }}
+        <input type="submit" name="edit_group" value="Save"  />
+    </form>
+    <input type="button" onclick="cancel_group_editing();" value="{% trans 'Cancel editing' %}"/>
+</div>
 
 {% endblock %}
