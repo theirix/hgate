@@ -49,9 +49,13 @@ class CreateRepoForm(forms.Form):
     def clean_name(self):
         _name = self.cleaned_data['name'].strip()
         if re.search(r"[\*\:\?\/\\]", _name): #found one of (*:?/\)
-            raise forms.ValidationError("Don`t use special characters any of (*:?/\)")
+            raise forms.ValidationError(_("Don`t use special characters any of (*:?/\)"))
         return _name
 
 
     name = forms.CharField(label = _("Repository name"), max_length=100)
     group = forms.ChoiceField(label = _("Group"))
+
+class ManageGroupsForm(forms.Form):
+    name = forms.CharField(label = _("Group name"), max_length=100)
+    path = forms.CharField(label = _("Path"))

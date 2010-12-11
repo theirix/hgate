@@ -2,13 +2,14 @@ import os
 import modhg
 import settings
 import app.modhg.usersb as users
-from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser
+from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageGroupsForm
 from app.modhg.HGWeb import HGWeb
 from app.modhg.repository import RepositoryException
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 
 def prepare_tree(tree, group=""):
     res = ""
@@ -37,27 +38,44 @@ def index(request):
     groups = hgweb.get_groups()
 
     if request.method == 'POST':
-        create_repo_form = CreateRepoForm(groups, request.POST)
-        if create_repo_form.is_valid():
-            redirect_path = ""
-            name = create_repo_form.cleaned_data['name']
-            group = create_repo_form.cleaned_data['group']
-            repo_path = prepare_path(name, group, groups)
-            try:
-                modhg.repository.create(repo_path, name, group == "-")
-                messages.success(request, 'New repository was created.')
-                if(group == "-"):
-                    redirect_path = "repo/" + name
+        if "create_group" in request.POST:
+            groups_form = ManageGroupsForm(request.POST)
+            if groups_form.is_valid():
+                name = groups_form.cleaned_data['name']
+                path = groups_form.cleaned_data['path']
+                if not (name in zip(*groups)[0]): # zip(*groups)[0] - groups is a list of tuples, so unzip it and take list of keys
+                    #todo: check if path ends with /* or /**
+                    hgweb.add_paths(name, path)
+                    messages.success(request, _("New group was added."))
                 else:
-                    redirect_path = "repo/" + group + "/" + name
-            except RepositoryException as e:
-                messages.warning(request, e.message)
-                
-            return HttpResponseRedirect('/' + redirect_path)
+                    messages.warning(request, _("There is already a group with such a name. Group wasn`t added."))
+                return HttpResponseRedirect('/')
+            create_repo_form = CreateRepoForm(default_groups=groups)
+        elif "create_repo" in request.POST:
+            create_repo_form = CreateRepoForm(groups, request.POST)
+            if create_repo_form.is_valid():
+                redirect_path = ""
+                name = create_repo_form.cleaned_data['name']
+                group = create_repo_form.cleaned_data['group']
+                repo_path = prepare_path(name, group, groups)
+                try:
+                    modhg.repository.create(repo_path, name, group == "-")
+                    messages.success(request, _("New repository was created."))
+                    if(group == "-"):
+                        redirect_path = "repo/" + name
+                    else:
+                        redirect_path = "repo/" + group + "/" + name
+                except RepositoryException as e:
+                    messages.warning(request, e.message)
+
+                return HttpResponseRedirect('/' + redirect_path)
+            groups_form = ManageGroupsForm()
     else:
         create_repo_form = CreateRepoForm(default_groups=groups)
+        groups_form = ManageGroupsForm()
 
-    return render_to_response('index.html', {"tree": tree, "repo_form": create_repo_form},
+    return render_to_response('index.html', {"tree": tree, "repo_form": create_repo_form, "groups_form": groups_form,
+                                             "groups": groups},
                               context_instance=RequestContext(request))
 
 def repo(request, repo_path):

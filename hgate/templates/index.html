@@ -2,12 +2,38 @@
 {% load i18n %}
 
 {% block content %}
-bla-bla-bla
 <br/>
-<form class="" action="." method="post">
+<h3>Create Repository</h3>
+<form class="" action="/" method="post">
     <div>
         {{ repo_form.as_p }}
     </div>
-    <input class="submit" type="submit" value="{% trans "Create" %}" />
+    <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}" />
 </form>
+<hr style="margin: 15px 0 15px 0;" />
+<h3>Manage groups</h3>
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>{% trans "Group key" %}</th>
+        <th>{% trans "Full path" %}</th>
+        <th>{% trans "Action" %}</th>
+    </tr>
+{% for gr_key, gr_path in groups %}
+    <tr>
+        <td>{{ gr_key }}</td>
+        <td>{{ gr_path }}</td>
+        <td>
+            <input type="button" value="edit" />
+            <input type="button" value="delete" />
+        </td>
+    </tr>
+{% endfor %}
+</table>
+<form class="" action="/" method="post">
+    <div>
+        {{ groups_form.as_p }}
+    </div>
+    <input class="submit" type="submit" name="create_group" value="{% trans "Create" %}" />
+</form>
+
 {% endblock %}
