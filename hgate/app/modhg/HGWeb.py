@@ -37,7 +37,7 @@ class HGWeb:
         self._parser.write(open(self._file_name, "w"))
 
     def get_web(self):
-        return self._parser.items["web"]
+        return self._parser.items("web")
 
     def set_web(self, key, value):
         self._parser.set("web", key, value)
