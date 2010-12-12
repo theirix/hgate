@@ -61,7 +61,7 @@ def get_tree(paths):
     tree = {}
     for (name, path) in paths:
         if path.endswith("*"):
-            tree[name] = _scan(path, path.endswith("*"))
+            tree[name] = _scan(path, path.endswith("**"))
         else:
             if is_repository(path):
                 tree[name.strip(os.sep)] = path
