@@ -14,19 +14,24 @@ function edit_group_click(name, path) {
     $("#old_group_name").val(name);
     $("#group_edit input[name='change_group-name']").val(name);
     $("#group_edit input[name='change_group-path']").val(path);
+    $("#group_edit span").text(name);
+    //remove error messages
+    $("#group_edit .errorlist").remove();
 }
 function cancel_group_editing() {
     $("#group_edit").hide();
     $("#old_group_name").val('');
     $("#group_edit input[name='change_group-name']").val('');
     $("#group_edit input[name='change_group-path']").val('');
+    //remove error messages
+    $("#group_edit .errorlist").remove();
 }
 </script>
 {% endblock %}
 
 {% block content %}
 <br/>
-<h3>Create Repository</h3>
+<h3>{% trans "Create repository" %}</h3>
 <form class="" action="/" method="post">
     <div>
         {{ repo_form.as_table }}
@@ -34,7 +39,7 @@ function cancel_group_editing() {
     <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}" />
 </form>
 <hr style="margin: 15px 0 15px 0;" />
-<h3>Manage groups</h3>
+<h3>{% trans "Manage groups" %}</h3>
 
 <form class="" action="/" method="post">
     <div>
@@ -63,9 +68,11 @@ function cancel_group_editing() {
     </tr>
 {% endfor %}
 </table>
+
 <div class="group_edit" id="group_edit" {% if is_hide_change_group_form %} style="display: none;" {% endif %}>
+    <br/>{% trans "Editing of " %} <span>{{ "edited_group" }}</span>:<br/>
     <form id="group_edit_form" action="/" method="post" >
-        <input type="hidden" name="old_group_name" id="old_group_name" value="" />
+        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ "edited_group" }}" />
         {{ change_group_form.as_table }}
         <input type="submit" name="edit_group" value="Save"  />
     </form>

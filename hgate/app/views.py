@@ -79,9 +79,9 @@ def index(request):
             hgweb.del_paths(gr_name)
             messages.success(request, _("%s is deleted successfully." % (gr_name,)))
             return HttpResponseRedirect('/')
-        elif "edit_group" in request.POST:
+        elif "edit_group" in request.POST  and ("old_group_name" in request.POST):
             change_group_form = ManageGroupsForm(request.POST, prefix='change_group')
-            if change_group_form.is_valid() and ("old_group_name" in request.POST):
+            if change_group_form.is_valid():
                 name = change_group_form.cleaned_data['name']
                 path = change_group_form.cleaned_data['path']
                 old_gr_name = request.POST.get("old_group_name")
@@ -96,6 +96,7 @@ def index(request):
                 return HttpResponseRedirect('/')
             else:
                 model["is_hide_change_group_form"] = False
+                model["edited_group"] = request.POST.get("old_group_name")
 
     model["groups_form"] = groups_form
     model["change_group_form"] = change_group_form
