@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block head %}
+{{ block.super }}
+<script>
+ $(document).ready(function(){
+    $(".permission_table tbody tr").hover(
+        function(){$(this).addClass("rowHover")},
+        function(){$(this).removeClass("rowHover");}
+     );
+  })
+</script>
+{% endblock %}
+
 {% block content %}
 <a class="back" href="{% url users %}">{% trans "<< Back to users list" %}</a><br />
 <h2>{% trans "User" %}: {{ login }}</h2>
@@ -14,4 +26,23 @@
     </table>
     
 </form>
+{% if permissions|length > 0 %}
+<h3>{% trans "Permissions" %}</h3>
+<table class="permission_table">
+<tr>
+    <th class="th_repository">{% trans "Repository" %}</th>
+    <th class="td_perm">
+        <div class="fll">{% trans "Read" %}</div><div class="flr">{% trans "Push" %}</div><div>/</div>
+    </th>
+</tr>
+{% for repository, perm in permissions.items %}
+    <tr class="{% cycle odd,even %}">
+        <td>{{ repository }}</td>
+        <td class="td_perm">
+            <div class="fll">{{ perm.read }}</div><div class="flr">{{ perm.push }}</div><div>/</div>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+{% endif %}
 {% endblock %}

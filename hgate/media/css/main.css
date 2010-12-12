@@ -131,12 +131,12 @@ h3{
     width: auto;
 }
 
-.user_list {
+.user_list, .permission_table {
     background-color:#fff;
     border-collapse:separate;
 }
 
-.user_list th{
+.user_list th, .permission_table th{
     text-align: left;
 }
 
@@ -144,18 +144,33 @@ h3{
     min-width:120px;
 }
 
-.user_list td, .user_list th{
+.permission_table .th_repository {
+    min-width:200px;
+}
+
+.user_list td, .user_list th, 
+.permission_table td, .permission_table th {
     background-color: #F4F4F4;
     padding: 2px 7px;
 }
 
-.user_list .rowHover td{
+.user_list .rowHover td, .permission_table .rowHover td {
     background-color: #cacac4 !important;
 }
 
-.user_list tr.odd td{
+.user_list tr.odd td, .permission_table tr.odd td{
     background-color: #e4e4e4;
 }
 
+.permission_table .td_perm{
+    text-align:center;
+    width:90px;
+}
 
+.fll {
+    float:left;
+}
 
+.flr {
+    float:right;
+}
