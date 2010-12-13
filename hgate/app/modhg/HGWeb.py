@@ -1,4 +1,4 @@
-from ConfigParser import ConfigParser
+from ConfigParser import ConfigParser, NoOptionError
 import os
 
 __author__ = 'Shedar'
@@ -38,6 +38,12 @@ class HGWeb:
 
     def get_web(self):
         return self._parser.items("web")
+
+    def get_web_key(self, key):
+        try:
+            return self._parser.get("web", key)
+        except NoOptionError:
+            return None
 
     def set_web(self, key, value):
         self._parser.set("web", key, value)

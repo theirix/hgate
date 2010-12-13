@@ -156,6 +156,6 @@ def user(request, action, login):
             form = EditUser()
         model["form"] = form
         model["login"] = login
-        model["permissions"] = users.permissions(settings.AUTH_FILE, login)
+        model["permissions"] = users.permissions(login)
         return render_to_response("useredit.html", model,
                               context_instance=RequestContext(request))
