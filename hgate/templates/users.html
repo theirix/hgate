@@ -26,13 +26,13 @@
     </table>
 </form>
 <h3>{% trans "Manage users" %}</h3>
-<table class="user_list">
+<table class="datagrid user_list">
 <tr><th>{% trans "Login" %}</th><th>{% trans "Action" %}</th></tr>
 {% for user in users %}
 <tr class="{% cycle odd,even %}">
     <td class="login">{{ user }}</td>
     <td><a href="/users/edit/{{ user }}"
-           title="{% trans "Change password and manage user's permissions" %}">{% trans "edit" %}</a>
+           title="{% trans "Change password and manage user's permissions" %}">{% trans "edit" %}</a>&nbsp;&nbsp;
         <a class="user_delete" href="/users/delete/{{ user }}" title="{% trans "Remove user" %}">{% trans "delete" %}</a>
     </td>
 {% endfor %}

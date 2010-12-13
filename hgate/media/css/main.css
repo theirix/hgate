@@ -13,7 +13,7 @@ body, table {
 
 a {
     text-decoration:underline;
-    color: inherit;
+    color: #505961;
 }
 
 a:hover{
@@ -109,6 +109,35 @@ h3{
     margin-bottom: 2px;
 }
 
+/* Datagrid Table */
+
+.datagrid {
+    background-color:#fff;
+    border-collapse:separate;
+}
+
+.datagrid th {
+    text-align: left;
+    background-color: #d3d9e5;
+    border-bottom: 1px solid #fff;
+}
+
+.datagrid td, .datagrid th {
+    padding: 3px 10px;
+}
+
+.datagrid tr.even td {
+    background-color: #e3e9f5;
+}
+
+.datagrid tr.odd td {
+    background-color: #e4e4e4;
+}
+
+.datagrid .rowHover td {
+    background-color: #cacac4 !important;
+}
+
 /* Users page */
 
 .user_create table, .user_edit table{
@@ -131,14 +160,6 @@ h3{
     width: auto;
 }
 
-.user_list, .permission_table {
-    background-color:#fff;
-    border-collapse:separate;
-}
-
-.user_list th, .permission_table th{
-    text-align: left;
-}
 
 .user_list .login {
     min-width:120px;
@@ -146,20 +167,6 @@ h3{
 
 .permission_table .th_repository {
     min-width:200px;
-}
-
-.user_list td, .user_list th, 
-.permission_table td, .permission_table th {
-    background-color: #F4F4F4;
-    padding: 2px 7px;
-}
-
-.user_list .rowHover td, .permission_table .rowHover td {
-    background-color: #cacac4 !important;
-}
-
-.user_list tr.odd td, .permission_table tr.odd td{
-    background-color: #e4e4e4;
 }
 
 .permission_table .td_perm{
