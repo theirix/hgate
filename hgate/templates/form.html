@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block menu_extra %}<li class="current"><a href="#">{% trans "Repository" %}</a></li>{% endblock %}
 {% block content %}
 repository: {{ repo_path }}
 <br/>
