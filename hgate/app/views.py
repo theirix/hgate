@@ -49,11 +49,11 @@ def index(request):
             if groups_form.is_valid():
                 name = groups_form.cleaned_data['name']
                 path = groups_form.cleaned_data['path']
-                if not (name in zip(*groups)[0]): # zip(*groups)[0] - groups is a list of tuples, so unzip it and take list of keys
-                    hgweb.add_paths(name, path)
+                try:
+                    modhg.repository.create_group(path, name)
                     messages.success(request, _("New group was added."))
-                else:
-                    messages.warning(request, _("There is already a group with such a name. Group wasn`t added."))
+                except Exception as e:
+                    messages.warning(request, e.message)
                 return HttpResponseRedirect('/')
         elif "create_repo" in request.POST:
             create_repo_form = CreateRepoForm(groups, request.POST)

@@ -13,6 +13,20 @@ class RepositoryException(Exception):
     """
     pass
 
+def create_group(path, name):
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    groups = hgweb.get_groups()
+    if not groups  or  not (name in zip(*groups)[0]): # zip(*groups)[0] - groups is a list of tuples, so unzip it and take list of keys
+        try:
+            _path = path.rstrip('*')
+            if not os.path.exists(_path):
+                os.makedirs(_path)
+            hgweb.add_paths(name, path)
+        except Exception as e: #probably more specific exception is needed
+            raise RepositoryException("Group wasn`t created because of error: %s" % (e.strerror, ))
+    else:
+        raise RepositoryException("There is already a group with such a name. Group wasn`t created")
+
 
 def create(path, name="", has_no_group=False):
     """
