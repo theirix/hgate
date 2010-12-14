@@ -133,6 +133,7 @@ def user(request, action, login):
                 login = form.cleaned_data['login']
                 password = form.cleaned_data['password2']
                 users.add(settings.AUTH_FILE, login, password)
+                messages.success(request, _("User '%s' was added.") % login)
                 form = AddUser()
         else:
             form = AddUser()
@@ -143,6 +144,7 @@ def user(request, action, login):
                               context_instance=RequestContext(request))
     elif action == "delete":
         users.remove(settings.AUTH_FILE,login)
+        messages.success(request, _("User '%s' was deleted.") % login)
         return HttpResponseRedirect("../users") #todo: render via url
     elif action == "edit":
         # todo: check if login exists
@@ -151,6 +153,7 @@ def user(request, action, login):
             if(form.is_valid()):
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
+                messages.success(request, _("Password changed successfully."))
                 form = EditUser()
         else:
             form = EditUser()
