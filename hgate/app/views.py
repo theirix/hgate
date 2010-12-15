@@ -15,7 +15,8 @@ def prepare_tree(tree, group=""):
     res = ""
     for (key, value) in tree.iteritems():
         if isinstance(value, dict):
-            res += "<li><span>" + key + "</span><ul>" + prepare_tree(value, group + key + "/") + "</ul></li>"
+            reps_in_group = len(value)
+            res += "<li><span>" + key + " ("+ str(reps_in_group) +")</span><ul>" + prepare_tree(value, group + key + "/") + "</ul></li>"
         else:
             res += "<li><a href='/repo/" + group + key + "'>" + key + "</a></li>"
     return res
@@ -32,16 +33,35 @@ def prepare_path(name, group, groups):
 
     return res
 
+def count_repos_in_group(groups, tree):
+    """
+    groups is a list of tuples of (name, path) values. this function adds "count of repos in group" into each tuple.
+     this method returns list of tuples of (name, path, count) values.
+    """
+    counts = []
+    if not groups: #no groups at all?
+        names = []
+        paths = []
+    else:
+        names, paths = zip(*groups)
+        
+    for name in names:
+        counts.append(len(tree[name]))
+
+    return zip(names, paths, counts)
+
+
 def index(request):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
+    _tree = modhg.repository.get_tree(hgweb.get_paths())
+    tree = prepare_tree(_tree)
     groups = hgweb.get_groups()
 
     create_repo_form = CreateRepoForm(default_groups=groups)
     groups_form = ManageGroupsForm()
     change_group_form = ManageGroupsForm(prefix='change_group')
 
-    model = {"tree": tree, "groups": groups, "is_hide_change_group_form": True}
+    model = {"tree": tree, "groups": count_repos_in_group(groups, _tree), "is_hide_change_group_form": True}
     
     if request.method == 'POST':
         if "create_group" in request.POST:
@@ -89,7 +109,7 @@ def index(request):
                 if old_gr_name == name or (not name in zip(*groups)[0]):
                     hgweb.del_paths(old_gr_name)
                     hgweb.add_paths(name, path)
-                    messages.success(request, _("Group %s was added." % (name,)))
+                    messages.success(request, _("Group %s was changed." % (name,)))
                 else:
                     messages.warning(request,
                                      _("There is already a group with such a name. Group %s wasn`t changed." % (name,)))
