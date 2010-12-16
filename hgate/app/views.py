@@ -44,10 +44,8 @@ def count_repos_in_group(groups, tree):
         paths = []
     else:
         names, paths = zip(*groups)
-        
     for name in names:
         counts.append(len(tree[name]))
-
     return zip(names, paths, counts)
 
 
@@ -94,10 +92,14 @@ def index(request):
                     return HttpResponseRedirect('/')
 
                 return HttpResponseRedirect('/' + redirect_path)
-        elif ("delete_group" in request.POST) and ("group_name" in request.POST):
+        elif ("delete_group" in request.POST):
             gr_name = request.POST.get("group_name")
-            hgweb.del_paths(gr_name)
-            messages.success(request, _("%s is deleted successfully." % (gr_name,)))
+            gr_path = request.POST.get("group_path")
+            try:
+                modhg.repository.delete_group(gr_path, gr_name)
+                messages.success(request, _("%s is deleted successfully." % (gr_name,)))
+            except Exception as e:
+                messages.warning(request, e.message)
             return HttpResponseRedirect('/')
         elif "edit_group" in request.POST  and ("old_group_name" in request.POST):
             change_group_form = ManageGroupsForm(request.POST, prefix='change_group')

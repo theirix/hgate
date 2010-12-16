@@ -13,6 +13,14 @@ class RepositoryException(Exception):
     """
     pass
 
+def delete_group(path, name):
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    try:
+        hgweb.del_paths(name)
+        shutil.rmtree(path.rstrip('*')) #, ignore_errors=True - to ignore any problem like "Permission denied"
+    except Exception as e:
+        raise RepositoryException("There is a problem while deleting the group: %s" % (e.strerror, ))
+
 def create_group(path, name):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     groups = hgweb.get_groups()
@@ -48,7 +56,7 @@ def delete(path, name="", has_no_group=False):
     if not is_repository(path):
         raise RepositoryException("There is no repository by path: [%s]" % (path, ) )
     try:
-        shutil.rmtree(path)
+        shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied"
     except Exception as e: #probably more specific exception is needed
         raise RepositoryException("Repository [%s] is not removed, because of error: %s" % (path, e.strerror))
     if has_no_group:
