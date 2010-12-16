@@ -77,7 +77,6 @@
 
                     <form action="/" name="delete_group_form" method="post">
                         <input type="hidden" name="group_name" value="{{ gr_key }}"/>
-                        <input type="hidden" name="group_path" value="{{ gr_path }}"/>
                         <input type="button" onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');"
                                value="{% trans "edit" %}"/>
                         <input type="submit" name="delete_group" value="{% trans "delete" %}"/>

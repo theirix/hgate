@@ -30,7 +30,6 @@ def prepare_path(name, group, groups):
             if(gr_name == group):
                 res = gr_path.replace("*", "") + name
                 break
-
     return res
 
 def count_repos_in_group(groups, tree):
@@ -94,7 +93,7 @@ def index(request):
                 return HttpResponseRedirect('/' + redirect_path)
         elif ("delete_group" in request.POST):
             gr_name = request.POST.get("group_name")
-            gr_path = request.POST.get("group_path")
+            gr_path = dict(groups)[gr_name]
             try:
                 modhg.repository.delete_group(gr_path, gr_name)
                 messages.success(request, _("%s is deleted successfully." % (gr_name,)))
