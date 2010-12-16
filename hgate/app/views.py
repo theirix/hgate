@@ -91,7 +91,7 @@ def index(request):
                     return HttpResponseRedirect('/')
 
                 return HttpResponseRedirect('/' + redirect_path)
-        elif ("delete_group" in request.POST):
+        elif "delete_group" in request.POST:
             gr_name = request.POST.get("group_name")
             gr_path = dict(groups)[gr_name]
             try:
