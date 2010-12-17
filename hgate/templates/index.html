@@ -49,19 +49,19 @@ $(document).ready(function() {
 {% block content %}
 <br/>
 <h3>{% trans "Create repository" %}</h3>
-<form class="" action="/" method="post">
-    <div>
+<form class="repository_create" action="/" method="post">
+    <table>
         {{ repo_form.as_table }}
-    </div>
+    </table>
     <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}"/>
 </form>
 <hr style="margin: 15px 0 15px 0;"/>
 <h3>{% trans "Manage groups" %}</h3>
 
-<form class="" action="/" method="post">
-    <div>
+<form class="group_create" action="/" method="post">
+    <table>
         {{ groups_form.as_table }}
-    </div>
+    </table>
     <input class="submit" type="submit" name="create_group" value="{% trans "Create" %}"/>
 </form>
 
@@ -75,7 +75,7 @@ $(document).ready(function() {
                 <input type="hidden" name="repos_count" value="{{ rep_count }}"/>
                 <form action="/" name="delete_group_form" method="post">
                     <input type="hidden" name="group_name" value="{{ gr_key }}"/>
-                    <span onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');" >{% trans "edit" %}</span>
+                    <span onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');" >{% trans "edit" %}</span>&nbsp;&nbsp;
                     <span class="delete_group">{% trans "delete" %}</span>
                     <input type="hidden" name="delete_group" value=""/>
                 </form>
@@ -85,11 +85,13 @@ $(document).ready(function() {
 </table>
 
 <div class="group_edit" id="group_edit" {% if is_hide_change_group_form %} style="display: none;" {% endif %}>
-    <br/>{% trans "Editing of " %} '<span>{{ edited_group }}</span>':<br/>
+    <br/>{% trans "Editing of group" %} '<span>{{ edited_group }}</span>':<br/>
 
     <form id="group_edit_form" action="/" method="post">
         <input type="hidden" name="old_group_name" id="old_group_name" value="{{ "edited_group" }}"/>
-        {{ change_group_form.as_table }}
+        <table>
+            {{ change_group_form.as_table }}
+        </table>
         <input type="submit" name="edit_group" value="Save"/>
     </form>
     <input type="button" name="cancel_editing" value="{% trans 'Cancel editing' %}"/>

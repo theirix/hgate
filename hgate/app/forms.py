@@ -63,5 +63,5 @@ class ManageGroupsForm(forms.Form):
     def clean_path(self):
         _path = self.cleaned_data['path'].strip()
         if not re.search(r"([\/]\*{1,2})$", _path):
-            raise forms.ValidationError(_("Path shall be ended with /* or /**"))
+            raise forms.ValidationError(_("Path should be ended with /* or /**"))
         return _path

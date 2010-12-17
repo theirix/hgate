@@ -96,7 +96,7 @@ def index(request):
             gr_path = dict(groups)[gr_name]
             try:
                 modhg.repository.delete_group(gr_path, gr_name)
-                messages.success(request, _("%s is deleted successfully." % (gr_name,)))
+                messages.success(request, _("Group '%s' was deleted successfully." % (gr_name,)))
             except Exception as e:
                 messages.warning(request, e.message)
             return HttpResponseRedirect('/')
@@ -105,15 +105,18 @@ def index(request):
             if change_group_form.is_valid():
                 name = change_group_form.cleaned_data['name']
                 path = change_group_form.cleaned_data['path']
-                old_gr_name = request.POST.get("old_group_name")
+                old_name = request.POST.get("old_group_name")
 
-                if old_gr_name == name or (not name in zip(*groups)[0]):
-                    hgweb.del_paths(old_gr_name)
-                    hgweb.add_paths(name, path)
-                    messages.success(request, _("Group %s was changed." % (name,)))
+                if old_name  == name or (not name in zip(*groups)[0]):
+                    hgweb.del_paths(old_name)
+                    try:
+                        modhg.repository.create_group(path, name)
+                        messages.success(request, _("Group '%s' was changed." % (name,)))
+                    except Exception as e:
+                        messages.warning(request, e.message)
                 else:
                     messages.warning(request,
-                                     _("There is already a group with such a name. Group %s wasn`t changed." % (name,)))
+                                     _("There is already a group with such a name. Group '%s' wasn`t changed." % (name,)))
                 return HttpResponseRedirect('/')
             else:
                 model["is_hide_change_group_form"] = False
