@@ -149,7 +149,7 @@ def _remove_hgrc_single(login, path):
             try:
                 login_list.remove(login)
                 logins = ",".join(login_list)
-                hgrc.set_web(key, logins)
+                hgrc.set_web_key(key, logins)
             except ValueError:
                 continue
 

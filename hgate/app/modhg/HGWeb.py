@@ -27,6 +27,11 @@ class HGWeb:
                 groups.append(path)
         return groups
 
+    def get_path(self, key):
+        try:
+            return self._parser.get("paths", key)
+        except NoOptionError:
+            return None
 
     def add_paths(self, key, path):
         self._parser.set("paths", key, path)
@@ -45,6 +50,6 @@ class HGWeb:
         except NoOptionError:
             return None
 
-    def set_web(self, key, value):
+    def set_web_key(self, key, value):
         self._parser.set("web", key, value)
         self._parser.write(open(self._file_name, "w"))

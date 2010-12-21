@@ -122,6 +122,7 @@ h3{
 .datagrid {
     background-color:#fff;
     border-collapse:separate;
+    border: solid 1px #c3c9d5;
 }
 
 .datagrid th {
@@ -207,4 +208,38 @@ h3{
 
 .flr {
     float:right;
+}
+
+/* Repository properties */
+.r_val_global {
+    color: #0044CC;
+}
+
+.r_val_local {
+    color: #00AA22;
+}
+
+.r_val_default {
+    color: #CC4400;
+}
+
+.repo_edit th{
+    text-align: left;
+    padding-right: 5px;
+}
+
+.repo_edit td input {
+    width: 300px;
+}
+
+.repo_edit .bottom {
+    text-align:right;
+}
+
+.repo_edit input.submit, .repo_edit #id_push_ssl{
+    width: auto;
+}
+.legend {
+    text-align: left;
+    font-weight: bold;
 }

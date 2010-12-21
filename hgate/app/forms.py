@@ -4,12 +4,31 @@ from django.utils.translation import ugettext_lazy as _
 import app.modhg.usersb as users
 import settings
 
+
 class RepositoryForm(forms.Form):
-    allow_read = forms.CharField(label= _("Allow read"), max_length=100)
-    allow_push = forms.CharField(label= _("Allow push"), max_length=100)
-    deny_read = forms.CharField(label= _("Deny read"), max_length=100)
-    deny_push = forms.CharField(label=_("Deny push"), max_length=100)
-    put_ssl = forms.BooleanField(label=_("Put ssl"))
+    allow_read = forms.CharField(label= _("allow_read"), initial=None)
+    allow_push = forms.CharField(label= _("allow_push"), initial=None)
+    deny_read = forms.CharField(label= _("deny_read"), initial=None)
+    deny_push = forms.CharField(label=_("deny_push"), initial=None)
+    push_ssl = forms.BooleanField(label=_("push_ssl"), initial=None)
+
+    classes = {}
+
+    def set_default(self, hgweb, hgrc):
+        for field in self.fields:
+            self.classes[field] = "r_val_default"
+        if hgweb is not None:
+            for field in self.fields:
+                self._set_value(hgweb, field, "r_val_global")
+        if hgrc is not None:
+            for field in self.fields:
+                self._set_value(hgrc, field, "r_val_local")
+
+    def _set_value(self, conf, field_name, css_class):
+        value = conf.get_web_key(field_name)
+        if value is not None:
+            self.fields[field_name].initial = value
+            self.classes[field_name] = css_class
 
 class AddUser(forms.Form):
     login = forms.CharField(label=_("Login"), max_length=40, required=True)

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load repository_extra %}
+
+{% block menu_extra %}<li class="current"><a href="#">{% trans "Repository" %}</a></li>{% endblock %}
+{% block content %}
+{% if repo_path %}
+<h2>Repository: {{ repo_path }}</h2>
+{% endif %}
+<form class="repo_edit" action="." method="post">
+    <table>
+        {% for field in form %}
+            <tr class="{{ form|field_class:field }}"><th>{{ field.label_tag }}</th><td>{{ field.errors }}{{ field }}</td></tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2" class="bottom">
+                <input class="submit" type="submit" value="{% trans "Save" %}" />
+            </td>
+        </tr>
+    </table>
+</form>
+<table class="legend">
+<tr><th>Colors:</th></tr>
+<tr><td class="r_val_local">Value is set in the local hgrc file</td></tr>
+<tr><td class="r_val_global">Value is set in the global hgweb config</td></tr>
+<tr><td class="r_val_default">Value not set in any config</td></tr>
+</table>
+{% endblock %}

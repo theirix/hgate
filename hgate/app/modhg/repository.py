@@ -79,6 +79,17 @@ def is_repository(path):
     path = os.path.join(path,".hg")
     return os.path.exists(path) and os.path.isdir(path)
 
+def get_absolute_repository_path(key):
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    path = hgweb.get_path(key)
+    if path:
+        return path
+    paths = hgweb.get_paths()
+    values = [key.replace(group, val.strip("*").rstrip("/")) for group, val in paths if key.startswith(group)]
+    if len(values) == 0:
+        raise RepositoryException("Invalid repository name.")
+    return values[0]
+
 def get_tree(paths):
     tree = {}
     for (name, path) in paths:

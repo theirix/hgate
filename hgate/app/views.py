@@ -4,7 +4,7 @@ import settings
 import app.modhg.usersb as users
 from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageGroupsForm
 from app.modhg.HGWeb import HGWeb
-from app.modhg.repository import RepositoryException
+from app.modhg.repository import RepositoryException, get_absolute_repository_path
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -132,18 +132,23 @@ def index(request):
 def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
-
+    repo_path = "/" + repo_path.strip("/")
     model = {"tree": tree, "repo_path": repo_path}
-
+    try:
+        full_repository_path = get_absolute_repository_path(repo_path)
+        hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
+        hgrc = HGWeb(hgrc_path)
+    except ValueError:
+        hgrc = None
     if request.method == 'POST':
         form = RepositoryForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/')
+            messages.success(request, _("Repository settings saved successfully."))
     else:
         form = RepositoryForm()
-        model["form"] = form
-
-    return render_to_response('form.html', model,
+        form.set_default(hgweb, hgrc)
+    model["form"] = form
+    return render_to_response('repository.html', model,
                               context_instance=RequestContext(request))
 
 def user(request, action, login):
