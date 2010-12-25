@@ -13,8 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 
 def prepare_tree(tree, group=""):
     res = ""
-    for (key, value) in tree.iteritems():
-        if isinstance(value, dict):
+    for (key, value) in tree:
+        if isinstance(value, list):
             reps_in_group = len(value)
             res += "<li><span>" + key + " ("+ str(reps_in_group) +")</span><ul>" + prepare_tree(value, group + key + "/") + "</ul></li>"
         else:
@@ -23,19 +23,20 @@ def prepare_tree(tree, group=""):
 
 def prepare_path(name, group, groups):
     res = ""
-    if(group == "-"):
+    if group == "-":
         res = settings.REPOSITORIES_ROOT + os.path.sep + name
     else:
         for (gr_name, gr_path) in  groups:
-            if(gr_name == group):
+            if gr_name == group:
                 res = gr_path.replace("*", "") + name
                 break
     return res
 
-def count_repos_in_group(groups, tree):
+def add_amount_of_repos_to_groups(groups, tree):
     """
     groups is a list of tuples of (name, path) values. this function adds "count of repos in group" into each tuple.
      this method returns list of tuples of (name, path, count) values.
+     @return [(name, path, count), ...]
     """
     counts = []
     if not groups: #no groups at all?
@@ -43,8 +44,9 @@ def count_repos_in_group(groups, tree):
         paths = []
     else:
         names, paths = zip(*groups)
+    _tree = dict(tree)
     for name in names:
-        counts.append(len(tree[name]))
+        counts.append(len(_tree[name]))
     return zip(names, paths, counts)
 
 
@@ -57,8 +59,8 @@ def index(request):
     create_repo_form = CreateRepoForm(default_groups=groups)
     groups_form = ManageGroupsForm()
     change_group_form = ManageGroupsForm(prefix='change_group')
-
-    model = {"tree": tree, "groups": count_repos_in_group(groups, _tree), "is_hide_change_group_form": True}
+    
+    model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree), "is_hide_change_group_form": True}
     
     if request.method == 'POST':
         if "create_group" in request.POST:
@@ -82,7 +84,7 @@ def index(request):
                 try:
                     modhg.repository.create(repo_path, name, group == "-")
                     messages.success(request, _("New repository was created."))
-                    if(group == "-"):
+                    if group == "-":
                         redirect_path = "repo/" + name
                     else:
                         redirect_path = "repo/" + group + "/" + name
@@ -153,7 +155,7 @@ def user(request, action, login):
     if not action: # main user page
         if request.method == "POST":
             form = AddUser(request.POST)
-            if(form.is_valid()):
+            if form.is_valid():
                 login = form.cleaned_data['login']
                 password = form.cleaned_data['password2']
                 users.add(settings.AUTH_FILE, login, password)
@@ -174,7 +176,7 @@ def user(request, action, login):
         # todo: check if login exists
         if request.method == "POST":
             form = EditUser(request.POST)
-            if(form.is_valid()):
+            if form.is_valid():
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))

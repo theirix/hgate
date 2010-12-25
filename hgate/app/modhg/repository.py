@@ -87,6 +87,7 @@ def get_tree(paths):
         else:
             if is_repository(path):
                 tree[name.strip(os.sep)] = path
+    tree = sorted(tree.items())
     return tree
 
 def _scan(dir, deep):
@@ -103,4 +104,5 @@ def _scan(dir, deep):
             sub_tree = _scan(path, deep)
             if len(sub_tree) > 0:
                 result[current_dir] = sub_tree
+    result = sorted(result.items())
     return result
