@@ -8,8 +8,8 @@
 function edit_group_click(name, path) {
     $("#group_edit").show();
     $("#old_group_name").val(name);
-    $("#group_edit input[name='change_group-name']").val(name);
-    $("#group_edit input[name='change_group-path']").val(path);
+    $("#group_edit input[name='edit_group-name']").val(name);
+    $("#group_edit input[name='edit_group-path']").val(path);
     $("#group_edit span").text(name);
     //remove error messages
     $("#group_edit .errorlist").remove();
@@ -22,8 +22,8 @@ $(document).ready(function() {
     $("#group_edit input[name='cancel_editing']").click(function() {
         $("#group_edit").hide();
         $("#old_group_name").val('');
-        $("#group_edit input[name='change_group-name']").val('');
-        $("#group_edit input[name='change_group-path']").val('');
+        $("#group_edit input[name='edit_group-name']").val('');
+        $("#group_edit input[name='edit_group-path']").val('');
         //remove error messages
         $("#group_edit .errorlist").remove();
     });
@@ -84,13 +84,13 @@ $(document).ready(function() {
     {% endfor %}
 </table>
 
-<div class="group_edit" id="group_edit" {% if is_hide_change_group_form %} style="display: none;" {% endif %}>
+<div class="group_edit" id="group_edit" {% if is_hide_edit_group_form %} style="display: none;" {% endif %}>
     <br/>{% trans "Editing of group" %} '<span>{{ edited_group }}</span>':<br/>
 
     <form id="group_edit_form" action="/" method="post">
         <input type="hidden" name="old_group_name" id="old_group_name" value="{{ "edited_group" }}"/>
         <table>
-            {{ change_group_form.as_table }}
+            {{ edit_group_form.as_table }}
         </table>
         <input type="submit" name="edit_group" value="Save"/>
     </form>
