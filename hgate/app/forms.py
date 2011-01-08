@@ -10,7 +10,7 @@ class RepositoryForm(forms.Form):
     allow_push = forms.CharField(label= _("allow_push"), initial=None, required=False)
     deny_read = forms.CharField(label= _("deny_read"), initial=None, required=False)
     deny_push = forms.CharField(label=_("deny_push"), initial=None, required=False)
-    push_ssl = forms.BooleanField(label=_("push_ssl"), initial=None, required=False)
+    push_ssl = forms.ChoiceField(label=_("push_ssl"), required=False, choices=(('true','true'),('false','false')))
 
     classes = {}
 
@@ -27,8 +27,23 @@ class RepositoryForm(forms.Form):
     def _set_value(self, conf, field_name, css_class):
         value = conf.get_web_key(field_name)
         if value is not None:
-            self.fields[field_name].initial = value
+            if self.fields[field_name] is forms.BooleanField:
+                if value == 'true':
+                    self.fields[field_name].initial = 'true'
+                else:
+                    self.fields[field_name].initial = 'false'
+            else:
+                self.fields[field_name].initial = value
             self.classes[field_name] = css_class
+
+    def export_values(self, hgrc, post):
+        for field in self.fields:
+            self._export_value(hgrc, field, post)
+
+    def _export_value(self, hgrc, field_name, post):
+        if field_name in post:
+            hgrc.set_web_key(field_name, self.cleaned_data[field_name])
+
 
 class AddUser(forms.Form):
     login = forms.CharField(label=_("Login"), max_length=40, required=True)

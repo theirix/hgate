@@ -140,16 +140,16 @@ def repo(request, repo_path):
     try:
         full_repository_path = get_absolute_repository_path(repo_path)
         hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
-        hgrc = HGWeb(hgrc_path)
+        hgrc = HGWeb(hgrc_path, True)
     except ValueError:
         hgrc = None
     if request.method == 'POST':
         form = RepositoryForm(request.POST)
         if form.is_valid():
+            form.export_values(hgrc, request.POST)
             messages.success(request, _("Repository settings saved successfully."))
-    else:
-        form = RepositoryForm()
-        form.set_default(hgweb, hgrc)
+    form = RepositoryForm()
+    form.set_default(hgweb, hgrc)
     model["form"] = form
     return render_to_response('repository.html', model,
                               context_instance=RequestContext(request))

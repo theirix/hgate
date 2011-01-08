@@ -6,13 +6,13 @@
 {{ block.super }}
 <script>
  $(document).ready(function(){
-    $(".repo_edit input").attr("disabled","disabled");
+    $(".repo_edit input, .repo_edit select").attr("disabled","disabled");
     $(".repo_edit input.submit").removeAttr("disabled");
     $(".repo_field_edit_link").click(function(){
         $(this).hide();
         var row = $(this).parents("tr:first");
         row.find(".repo_field_cancel_link").show();
-        var inp = row.find("input");
+        var inp = row.find("input, select");
         inp.removeAttr("disabled");
         inp.focus();
         return false;
@@ -21,7 +21,7 @@
         $(this).hide();
         var row = $(this).parents("tr:first");
         row.find(".repo_field_edit_link").show();
-        var inp = row.find("input");
+        var inp = row.find("input, select");
         inp.attr("disabled","disabled");
         return false;
     })
