@@ -29,11 +29,22 @@
 </script>
 {% endblock %}
 
+{% block menu_extra %}
+    {% if not global %}
+        <li class="current"><a href="#">{% trans "Repository" %}</a></li>
+    {% endif %}
+{% endblock %}
 
-{% block menu_extra %}<li class="current"><a href="#">{% trans "Repository" %}</a></li>{% endblock %}
+{% block menu_hgweb %}
+    {% if global %}current{% endif %}
+{% endblock %}
+
 {% block content %}
 {% if repo_path %}
-<h2>Repository: {{ repo_path }}</h2>
+<h2>{% trans "Repository" %}: {{ repo_path }}</h2>
+{% endif %}
+{% if global %}
+<h2>{% trans "HgWeb config" %}</h2>
 {% endif %}
 <form class="repo_edit" action="{% url repository repo_path %}" method="post">
     {% for hidden in form.hidden_fields %}
@@ -56,8 +67,15 @@
 </form>
 <table class="legend">
 <tr><th>Colors:</th></tr>
-<tr><td class="r_val_local">Value is set in the local hgrc file</td></tr>
-<tr><td class="r_val_global">Value is set in the global hgweb config</td></tr>
-<tr><td class="r_val_default">Value not set in any config</td></tr>
+{% if not global %}
+<tr><td class="r_val_local">{% trans "Value is set in the local hgrc file" %}</td></tr>
+{% endif %}
+<tr><td class="r_val_global">{% trans "Value is set in the hgweb config" %}</td></tr>
+{% if not global %}
+<tr><td class="r_val_default">{% trans "Value not set in any config" %}</td></tr>
+{% endif %}
+{% if global %}
+<tr><td class="r_val_default">{% trans "Value not set in hgweb config" %}</td></tr>
+{% endif %}
 </table>
 {% endblock %}

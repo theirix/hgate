@@ -33,13 +33,13 @@
 </head>
 <body>
 <div id="header" class="header">
-    <h1 id="" class="">hGate<sup>prealpha</sup></h1>
+    <h1 id="" class=""><a href="{% url index %}">hGate<sup>prealpha</sup></a></h1>
     <ul id="menu_main_horizontal" class="">
 {#        <li class=""><a href="{% url repository %}">{% trans "Repository" %}</a></li>#}
         {% block menu_extra %}{% endblock %}
         <li class="{% block menu_home %}{% endblock %}"><a href="{% url index %}">{% trans "Home" %}</a></li>
         <li class="{% block menu_users %}{% endblock %}"><a href="{% url users %}">{% trans "Users" %}</a></li>
-        <li class="{% block menu_hgweb %}{% endblock %}"><a href="#">{% trans "HgWeb" %}</a></li>
+        <li class="{% block menu_hgweb %}{% endblock %}"><a href="{% url repository "" %}">{% trans "HgWeb" %}</a></li>
         <li class=""><a href="#">{% trans "Help" %}</a></li>
     </ul>
 </div>

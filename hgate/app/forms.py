@@ -10,6 +10,9 @@ class RepositoryForm(forms.Form):
     allow_push = forms.CharField(label= _("allow_push"), initial=None, required=False)
     deny_read = forms.CharField(label= _("deny_read"), initial=None, required=False)
     deny_push = forms.CharField(label=_("deny_push"), initial=None, required=False)
+    style = forms.CharField(label=_("style"), initial=None, required=False)
+    allow_archive = forms.CharField(label=_("allow_archive"), initial=None, required=False)
+    baseurl = forms.CharField(label=_("baseurl"), initial=None, required=False)
     push_ssl = forms.ChoiceField(label=_("push_ssl"), required=False, choices=(('true','true'),('false','false')))
 
     classes = {}

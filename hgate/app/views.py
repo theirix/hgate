@@ -135,19 +135,27 @@ def index(request):
 def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
-    repo_path = "/" + repo_path.strip("/")
-    model = {"tree": tree, "repo_path": repo_path}
-    try:
-        full_repository_path = get_absolute_repository_path(repo_path)
-        hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
-        hgrc = HGWeb(hgrc_path, True)
-    except ValueError:
-        hgrc = None
+    is_global = repo_path == ""
+    hgrc = None
+    model = {"tree": tree, "global": is_global}
+    if not is_global:
+        try:
+            repo_path = "/" + repo_path.strip("/")
+            model["repo_path"] = repo_path
+            full_repository_path = get_absolute_repository_path(repo_path)
+            hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
+            hgrc = HGWeb(hgrc_path, True)
+        except ValueError:
+            hgrc = None
     if request.method == 'POST':
         form = RepositoryForm(request.POST)
         if form.is_valid():
-            form.export_values(hgrc, request.POST)
-            messages.success(request, _("Repository settings saved successfully."))
+            if is_global:
+                form.export_values(hgweb, request.POST)
+                messages.success(request, _("Global settings saved successfully."))
+            else:
+                form.export_values(hgrc, request.POST)
+                messages.success(request, _("Repository settings saved successfully."))
     form = RepositoryForm()
     form.set_default(hgweb, hgrc)
     model["form"] = form
