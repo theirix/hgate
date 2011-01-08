@@ -6,11 +6,11 @@ import settings
 
 
 class RepositoryForm(forms.Form):
-    allow_read = forms.CharField(label= _("allow_read"), initial=None)
-    allow_push = forms.CharField(label= _("allow_push"), initial=None)
-    deny_read = forms.CharField(label= _("deny_read"), initial=None)
-    deny_push = forms.CharField(label=_("deny_push"), initial=None)
-    push_ssl = forms.BooleanField(label=_("push_ssl"), initial=None)
+    allow_read = forms.CharField(label= _("allow_read"), initial=None, required=False)
+    allow_push = forms.CharField(label= _("allow_push"), initial=None, required=False)
+    deny_read = forms.CharField(label= _("deny_read"), initial=None, required=False)
+    deny_push = forms.CharField(label=_("deny_push"), initial=None, required=False)
+    push_ssl = forms.BooleanField(label=_("push_ssl"), initial=None, required=False)
 
     classes = {}
 

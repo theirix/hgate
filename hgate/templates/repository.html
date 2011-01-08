@@ -2,15 +2,50 @@
 {% load i18n %}
 {% load repository_extra %}
 
+{% block head %}
+{{ block.super }}
+<script>
+ $(document).ready(function(){
+    $(".repo_edit input").attr("disabled","disabled");
+    $(".repo_edit input.submit").removeAttr("disabled");
+    $(".repo_field_edit_link").click(function(){
+        $(this).hide();
+        var row = $(this).parents("tr:first");
+        row.find(".repo_field_cancel_link").show();
+        var inp = row.find("input");
+        inp.removeAttr("disabled");
+        inp.focus();
+        return false;
+    })
+    $(".repo_field_cancel_link").click(function(){
+        $(this).hide();
+        var row = $(this).parents("tr:first");
+        row.find(".repo_field_edit_link").show();
+        var inp = row.find("input");
+        inp.attr("disabled","disabled");
+        return false;
+    })
+  })
+</script>
+{% endblock %}
+
+
 {% block menu_extra %}<li class="current"><a href="#">{% trans "Repository" %}</a></li>{% endblock %}
 {% block content %}
 {% if repo_path %}
 <h2>Repository: {{ repo_path }}</h2>
 {% endif %}
-<form class="repo_edit" action="." method="post">
+<form class="repo_edit" action="{% url repository repo_path %}" method="post">
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
     <table>
-        {% for field in form %}
-            <tr class="{{ form|field_class:field }}"><th>{{ field.label_tag }}</th><td>{{ field.errors }}{{ field }}</td></tr>
+        {% for field in form.visible_fields %}
+            <tr class="{{ form|field_class:field }}">
+                <th>{{ field.label_tag }}</th>
+                <td>{{ field.errors }}{{ field }}</td>
+                <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#" class="repo_field_cancel_link">{% trans "Cancel" %}</a></td>
+            </tr>
         {% endfor %}
         <tr>
             <td colspan="2" class="bottom">
