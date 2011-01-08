@@ -19,7 +19,7 @@ def delete_group(path, name):
         hgweb.del_paths(name)
         shutil.rmtree(path.rstrip('*')) #, ignore_errors=True - to ignore any problem like "Permission denied"
     except Exception as e:
-        raise RepositoryException("There is a problem while deleting the group: %s" % (e.strerror, ))
+        raise RepositoryException("There is a problem while deleting the group: %s" % str(e))
 
 def create_group(path, name):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
@@ -31,7 +31,7 @@ def create_group(path, name):
                 os.makedirs(_path)
             hgweb.add_paths(name, path)
         except Exception as e: #probably more specific exception is needed
-            raise RepositoryException("Group wasn`t created because of error: %s" % (e.strerror, ))
+            raise RepositoryException("Group wasn`t created because of error: %s" % str(e) )
     else:
         raise RepositoryException("There is already a group with such a name. Group wasn`t created")
 
@@ -40,13 +40,13 @@ def create(path, name="", has_no_group=False):
     """
     http://mercurial.selenic.com/wiki/MercurialApi#Repositories
     """
-    if(is_repository(path)):
+    if is_repository(path):
         raise RepositoryException("There is already such repository.") #make here something more informative or exception
     uio = ui.ui()
     try:
         hg.repository(uio, path, create=True)
     except Exception as e: #probably more specific exception is needed
-        raise RepositoryException("Repository [%s] is not created, because of error: %s" % (path, e.strerror))
+        raise RepositoryException("Repository [%s] is not created, because of error: %s" % (path, str(e)))
 
     if has_no_group: #another one try-except block for this
         hgweb = HGWeb(settings.HGWEB_CONFIG)
@@ -58,7 +58,7 @@ def delete(path, name="", has_no_group=False):
     try:
         shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied"
     except Exception as e: #probably more specific exception is needed
-        raise RepositoryException("Repository [%s] is not removed, because of error: %s" % (path, e.strerror))
+        raise RepositoryException("Repository [%s] is not removed, because of error: %s" % (path, str(e)))
     if has_no_group:
         hgweb = HGWeb(settings.HGWEB_CONFIG)
         hgweb.del_paths(name)
@@ -69,7 +69,7 @@ def rename(old_path, new_path, name="", has_no_group=False):
     try:
         shutil.move(old_path, new_path)
     except Exception as e: #probably more specific exception is needed
-        raise RepositoryException("Repository [%s] is not moved to [%s], because of error: %s" % (old_path, new_path, e.strerror))
+        raise RepositoryException("Repository [%s] is not moved to [%s], because of error: %s" % (old_path, new_path, str(e)))
     if has_no_group:
         hgweb = HGWeb(settings.HGWEB_CONFIG)
         hgweb.del_paths(name)
@@ -98,6 +98,7 @@ def get_tree(paths):
         else:
             if is_repository(path):
                 tree[name.strip(os.sep)] = path
+    tree = sorted(tree.items())
     return tree
 
 def _scan(dir, deep):
@@ -114,4 +115,5 @@ def _scan(dir, deep):
             sub_tree = _scan(path, deep)
             if len(sub_tree) > 0:
                 result[current_dir] = sub_tree
+    result = sorted(result.items())
     return result

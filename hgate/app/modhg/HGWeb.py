@@ -25,6 +25,7 @@ class HGWeb:
         for path in paths:
             if path[1].endswith("*"):
                 groups.append(path)
+        groups = sorted(groups)
         return groups
 
     def get_path(self, key):

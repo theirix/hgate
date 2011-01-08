@@ -13,29 +13,30 @@ from django.utils.translation import ugettext_lazy as _
 
 def prepare_tree(tree, group=""):
     res = ""
-    for (key, value) in tree.iteritems():
-        if isinstance(value, dict):
+    for (key, value) in tree:
+        if isinstance(value, list):
             reps_in_group = len(value)
-            res += "<li><span>" + key + " ("+ str(reps_in_group) +")</span><ul>" + prepare_tree(value, group + key + "/") + "</ul></li>"
+            res += "<li><span>%s (%d)</span><ul>%s</ul></li>" % (key, reps_in_group, prepare_tree(value, group + key + "/"))
         else:
-            res += "<li><a href='/repo/" + group + key + "'>" + key + "</a></li>"
+             res += "<li><a href='/repo/%s%s'>%s</a></li>" % (group, key, key)
     return res
 
 def prepare_path(name, group, groups):
     res = ""
-    if(group == "-"):
+    if group == "-":
         res = settings.REPOSITORIES_ROOT + os.path.sep + name
     else:
         for (gr_name, gr_path) in  groups:
-            if(gr_name == group):
+            if gr_name == group:
                 res = gr_path.replace("*", "") + name
                 break
     return res
 
-def count_repos_in_group(groups, tree):
+def add_amount_of_repos_to_groups(groups, tree):
     """
     groups is a list of tuples of (name, path) values. this function adds "count of repos in group" into each tuple.
      this method returns list of tuples of (name, path, count) values.
+     @return [(name, path, count), ...]
     """
     counts = []
     if not groups: #no groups at all?
@@ -43,8 +44,9 @@ def count_repos_in_group(groups, tree):
         paths = []
     else:
         names, paths = zip(*groups)
+    _tree = dict(tree)
     for name in names:
-        counts.append(len(tree[name]))
+        counts.append(len(_tree[name]))
     return zip(names, paths, counts)
 
 
@@ -56,9 +58,10 @@ def index(request):
 
     create_repo_form = CreateRepoForm(default_groups=groups)
     groups_form = ManageGroupsForm()
-    change_group_form = ManageGroupsForm(prefix='change_group')
-
-    model = {"tree": tree, "groups": count_repos_in_group(groups, _tree), "is_hide_change_group_form": True}
+    edit_group_form_prefix="edit_group"
+    edit_group_form = ManageGroupsForm(prefix=edit_group_form_prefix)
+    
+    model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree), "is_hide_edit_group_form": True}
     
     if request.method == 'POST':
         if "create_group" in request.POST:
@@ -70,7 +73,7 @@ def index(request):
                     modhg.repository.create_group(path, name)
                     messages.success(request, _("New group was added."))
                 except Exception as e:
-                    messages.warning(request, e.message)
+                    messages.warning(request, str(e))
                 return HttpResponseRedirect('/')
         elif "create_repo" in request.POST:
             create_repo_form = CreateRepoForm(groups, request.POST)
@@ -82,48 +85,48 @@ def index(request):
                 try:
                     modhg.repository.create(repo_path, name, group == "-")
                     messages.success(request, _("New repository was created."))
-                    if(group == "-"):
+                    if group == "-":
                         redirect_path = "repo/" + name
                     else:
                         redirect_path = "repo/" + group + "/" + name
                 except Exception as e:
-                    messages.warning(request, e.message)
+                    messages.warning(request, str(e))
                     return HttpResponseRedirect('/')
 
                 return HttpResponseRedirect('/' + redirect_path)
         elif "delete_group" in request.POST:
-            gr_name = request.POST.get("group_name")
-            gr_path = dict(groups)[gr_name]
+            name = request.POST.get("group_name")
+            path = dict(groups)[name]
             try:
-                modhg.repository.delete_group(gr_path, gr_name)
-                messages.success(request, _("Group '%s' was deleted successfully." % (gr_name,)))
+                modhg.repository.delete_group(path, name)
+                messages.success(request, _("Group '%s' was deleted successfully.") % name)
             except Exception as e:
-                messages.warning(request, e.message)
+                messages.warning(request, str(e))
             return HttpResponseRedirect('/')
         elif "edit_group" in request.POST  and ("old_group_name" in request.POST):
-            change_group_form = ManageGroupsForm(request.POST, prefix='change_group')
-            if change_group_form.is_valid():
-                name = change_group_form.cleaned_data['name']
-                path = change_group_form.cleaned_data['path']
+            edit_group_form = ManageGroupsForm(request.POST, prefix=edit_group_form_prefix)
+            if edit_group_form.is_valid():
+                name = edit_group_form.cleaned_data['name']
+                path = edit_group_form.cleaned_data['path']
                 old_name = request.POST.get("old_group_name")
 
                 if old_name  == name or (not name in zip(*groups)[0]):
                     hgweb.del_paths(old_name)
                     try:
                         modhg.repository.create_group(path, name)
-                        messages.success(request, _("Group '%s' was changed." % (name,)))
+                        messages.success(request, _("Group '%s' was changed." % name))
                     except Exception as e:
-                        messages.warning(request, e.message)
+                        messages.warning(request, str(e))
                 else:
                     messages.warning(request,
-                                     _("There is already a group with such a name. Group '%s' wasn`t changed." % (name,)))
+                                     _("There is already a group with such a name. Group '%s' wasn`t changed.") % name)
                 return HttpResponseRedirect('/')
             else:
-                model["is_hide_change_group_form"] = False
+                model["is_hide_edit_group_form"] = False
                 model["edited_group"] = request.POST.get("old_group_name")
 
     model["groups_form"] = groups_form
-    model["change_group_form"] = change_group_form
+    model["edit_group_form"] = edit_group_form
     model["repo_form"] = create_repo_form
 
     return render_to_response('index.html', model, context_instance=RequestContext(request))
@@ -158,7 +161,7 @@ def user(request, action, login):
     if not action: # main user page
         if request.method == "POST":
             form = AddUser(request.POST)
-            if(form.is_valid()):
+            if form.is_valid():
                 login = form.cleaned_data['login']
                 password = form.cleaned_data['password2']
                 users.add(settings.AUTH_FILE, login, password)
@@ -179,7 +182,7 @@ def user(request, action, login):
         # todo: check if login exists
         if request.method == "POST":
             form = EditUser(request.POST)
-            if(form.is_valid()):
+            if form.is_valid():
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))
