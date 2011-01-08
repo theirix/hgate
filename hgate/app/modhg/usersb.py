@@ -87,7 +87,7 @@ def _extract_permission(login, path):
     hgrc_path = os.path.join(path,".hg","hgrc")
     if not os.path.exists(hgrc_path):
         return False
-    hgrc = HGWeb(hgrc_path) #todo: replace with local config class
+    hgrc = HGWeb(hgrc_path)
     web = hgrc.get_web()
     allow_read = not _is_in_list(web, "deny_read", login) and \
                  _is_in_list(web, "allow_read", login)
@@ -98,6 +98,8 @@ def _extract_permission(login, path):
     return False
 
 def _is_in_list(web, key, login):
+    if web is None:
+        return False
     res = [value for (name, value) in web if name==key]
     if len(res) > 0:
         value = res[0]

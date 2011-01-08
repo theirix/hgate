@@ -52,7 +52,10 @@ class HGWeb:
         self._parser.write(open(self._file_name, "w"))
 
     def get_web(self):
-        return self._parser.items("web")
+        try:
+            return self._parser.items("web")
+        except (NoOptionError, NoSectionError):
+            return None
 
     def get_web_key(self, key):
         try:
