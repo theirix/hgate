@@ -5,8 +5,6 @@ import repository
 import settings
 from app.modhg.HGWeb import HGWeb
 
-__author__ = 'Shedar'
-
 def list(filename):
     lines = _get_rows(filename)
     login_list = []
@@ -53,20 +51,21 @@ def update(filename, login, new_password):
 def permissions(login, path_as_key = False):
     #check is login exists
     permission_list = {}
-    hgweb = HGWeb(settings.HGWEB_CONFIG) # todo: refactor to remove settings usage here
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    global_web = hgweb.get_web()
     paths = hgweb.get_paths()
     for (name, path) in paths:
         if path.endswith("*"):
-            permission_list.update(_scan(name, path, path.endswith("**"), login, path_as_key))
+            permission_list.update(_scan(name, path, path.endswith("**"), login, path_as_key, global_web))
         else:
             if repository.is_repository(path):
-                perm = _extract_permission(login, path)
+                perm = _extract_permission(login, path, global_web)
                 if perm:
                     key = path if path_as_key else name.strip(os.sep)
                     permission_list[key] = perm
     return  permission_list
 
-def _scan(name, dir, deep, login, path_as_key):
+def _scan(name, dir, deep, login, path_as_key, global_web):
     permission_list = {}
     dir = dir.rstrip("*")
     if not os.path.exists(dir):
@@ -75,47 +74,64 @@ def _scan(name, dir, deep, login, path_as_key):
     for current_dir in dir_list:
         path = os.path.join(dir, current_dir)
         if repository.is_repository(path):
-            perm = _extract_permission(login, path)
+            perm = _extract_permission(login, path, global_web)
             if perm:
                 key = path if path_as_key else os.path.join(name, current_dir)
                 permission_list[key] = perm
         elif deep:
-            permission_list.update(_scan(os.path.join(name, current_dir), path, deep, login, path_as_key))
+            permission_list.update(_scan(os.path.join(name, current_dir), path, deep, login, path_as_key, global_web))
     return permission_list
 
-def _extract_permission(login, path):
+def _extract_permission(login, path, global_web):
     hgrc_path = os.path.join(path,".hg","hgrc")
     if not os.path.exists(hgrc_path):
         return False
     hgrc = HGWeb(hgrc_path)
     web = hgrc.get_web()
-    allow_read = not _is_in_list(web, "deny_read", login) and \
-                 _is_in_list(web, "allow_read", login)
-    allow_push = not _is_in_list(web, "deny_push", login) and \
-                 _is_in_list(web, "allow_push", login)
+    allow_read = not _is_in_list(web, global_web, "deny_read", login) and \
+                 _is_in_list(web, global_web, "allow_read", login)
+    allow_push = not _is_in_list(web, global_web, "deny_push", login) and \
+                 _is_in_list(web, global_web, "allow_push", login)
     if allow_read or allow_push:
         return {"read": allow_read, "push": allow_push}
     return False
 
-def _is_in_list(web, key, login):
+
+def _is_in_list_single(web, key, login, is_global=False):
     if web is None:
-        return False
-    res = [value for (name, value) in web if name==key]
-    if len(res) > 0:
-        value = res[0]
-        if value.find("*")>=0:
+        if is_global and key=="allow_read":
             return True
-        else:
-            raw_login_list = value.split(",")
-            login_list = [ item.strip() for item in raw_login_list]
-            try:
-                login_list.index(login)
-                return True
-            except ValueError:
-                return False
+        raise ValueError()
+    res = [value for (name, value) in web if name==key]
+    if len(res) == 0:
+        if is_global and key=="allow_read":
+            return True
+        raise ValueError()
+    value = res[0].strip()
+    if value.find("*")>=0:
+        return True
+    if value=="" and key=="allow_read":
+        return True
+    raw_login_list = value.split(",")
+    login_list = [ item.strip() for item in raw_login_list]
+    try:
+        login_list.index(login)
+        return True
+    except ValueError:
+        return False
+
+def _is_in_list(web, global_web, key, login):
+    try:
+        return _is_in_list_single(web, key, login)
+    except ValueError:
+        try:
+            return _is_in_list_single(global_web, key, login, True)
+        except ValueError:
+            return False
 
 def _remove_from_hgrc(login):
-    hgweb = HGWeb(settings.HGWEB_CONFIG) # todo: refactor to remove settings usage here
+    _remove_hgrc_single(login, settings.HGWEB_CONFIG)
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
     paths = hgweb.get_paths()
     for (name, path) in paths:
         if path.endswith("*"):
@@ -136,13 +152,16 @@ def _remove_from_hgrc_int(name, dir, deep, login):
             _remove_from_hgrc_int(os.path.join(name, current_dir), path, deep, login)
 
 def _remove_hgrc_single(login, path):
-    if not repository.is_repository(path):
-        return
-    hgrc_path = os.path.join(path,".hg","hgrc")
-    if not os.path.exists(hgrc_path):
-        return
+    if os.path.isfile(path):
+        hgrc = HGWeb(path)
+    else:
+        if not repository.is_repository(path):
+            return
+        hgrc_path = os.path.join(path,".hg","hgrc")
+        if not os.path.exists(hgrc_path):
+            return
+        hgrc = HGWeb(hgrc_path)
     required_keys = ["allow_read", "allow_push", "deny_read", "deny_push"]
-    hgrc = HGWeb(hgrc_path)
     for key in required_keys:
         val = hgrc.get_web_key(key)
         if not val is None:
