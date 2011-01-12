@@ -95,17 +95,20 @@ def get_absolute_repository_path(key):
 
 def get_tree(paths):
     tree = {}
+    groups_tree = {}
     for (name, path) in paths:
         if path.endswith("*"):
-            tree[name] = _scan(path, path.endswith("**"))
+            groups_tree[name] = _scan(path, path.endswith("**"))
         else:
             if is_repository(path):
                 tree[name.strip(os.sep)] = path
+    groups_tree = sorted(groups_tree.items())
     tree = sorted(tree.items())
-    return tree
+    return groups_tree + tree
 
 def _scan(dir, deep):
     result = {}
+    groups_tree = {}
     dir = dir.rstrip("*")
     if not os.path.exists(dir):
         return result
@@ -117,6 +120,7 @@ def _scan(dir, deep):
         elif deep:
             sub_tree = _scan(path, deep)
             if len(sub_tree) > 0:
-                result[current_dir] = sub_tree
+                groups_tree[current_dir] = sub_tree
+    groups_tree = sorted(groups_tree.items())
     result = sorted(result.items())
-    return result
+    return groups_tree + result
