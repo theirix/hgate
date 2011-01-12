@@ -88,7 +88,7 @@ $(document).ready(function() {
     <br/>{% trans "Editing of group" %} '<span>{{ edited_group }}</span>':<br/>
 
     <form id="group_edit_form" action="/" method="post">
-        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ "edited_group" }}"/>
+        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ edited_group }}"/>
         <table>
             {{ edit_group_form.as_table }}
         </table>

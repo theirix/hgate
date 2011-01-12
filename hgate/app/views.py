@@ -105,10 +105,10 @@ def index(request):
             return HttpResponseRedirect('/')
         elif "edit_group" in request.POST  and ("old_group_name" in request.POST):
             edit_group_form = ManageGroupsForm(request.POST, prefix=edit_group_form_prefix)
+            old_name = request.POST.get("old_group_name")
             if edit_group_form.is_valid():
                 name = edit_group_form.cleaned_data['name']
                 path = edit_group_form.cleaned_data['path']
-                old_name = request.POST.get("old_group_name")
 
                 if old_name  == name or (not name in zip(*groups)[0]):
                     hgweb.del_paths(old_name)
@@ -123,7 +123,7 @@ def index(request):
                 return HttpResponseRedirect('/')
             else:
                 model["is_hide_edit_group_form"] = False
-                model["edited_group"] = request.POST.get("old_group_name")
+                model["edited_group"] = old_name
 
     model["groups_form"] = groups_form
     model["edit_group_form"] = edit_group_form
