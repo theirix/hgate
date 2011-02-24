@@ -20,7 +20,7 @@
 
 {% block content %}
 <h3>{% trans "Create user" %}</h3>
-<form class="user_create" action="{% url users %}" method="post">
+<form class="user_create" action="{% url users_index %}" method="post">
     <table>
         {{ form.as_table }}
     <tr><td colspan="2" class="bottom"><input class="submit" type="submit" value="{% trans "Create" %}" /></td></tr>
@@ -32,9 +32,9 @@
 {% for user in users %}
 <tr class="{% cycle odd,even %}">
     <td class="login">{{ user }}</td>
-    <td><a href="/users/edit/{{ user }}"
+    <td><a href="{% url users "edit" user %}"
            title="{% trans "Change password and manage user's permissions" %}">{% trans "edit" %}</a>&nbsp;&nbsp;
-        <a class="user_delete" href="/users/delete/{{ user }}" title="{% trans "Remove user" %}">{% trans "delete" %}</a>
+        <a class="user_delete" href="{% url users "delete" user %}" title="{% trans "Remove user" %}">{% trans "delete" %}</a>
     </td>
 {% endfor %}
 </table>

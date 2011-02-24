@@ -2,15 +2,14 @@
 <html>
 <head>
 {% block head %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/jquery-1.4.4.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/jquery.treeview.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/main.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/jquery.treeview.css" />
+
     {% comment %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.4.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.treeview.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/main.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/main.css" />
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jquery.treeview.css" />
-     {% endcomment %}
-
 
     <script type="text/javascript" src="/js/jquery-1.4.4.js"></script>
     <script type="text/javascript" src="/js/jquery.treeview.js"></script>
@@ -18,6 +17,7 @@
     
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/css/jquery.treeview.css" />
+     {% endcomment %}
     <title>{% block title %}hGate{% endblock %}</title>
 
 
@@ -38,7 +38,7 @@
 {#        <li class=""><a href="{% url repository %}">{% trans "Repository" %}</a></li>#}
         {% block menu_extra %}{% endblock %}
         <li class="{% block menu_home %}{% endblock %}"><a href="{% url index %}">{% trans "Home" %}</a></li>
-        <li class="{% block menu_users %}{% endblock %}"><a href="{% url users %}">{% trans "Users" %}</a></li>
+        <li class="{% block menu_users %}{% endblock %}"><a href="{% url users_index %}">{% trans "Users" %}</a></li>
         <li class="{% block menu_hgweb %}{% endblock %}"><a href="{% url repository "" %}">{% trans "HgWeb" %}</a></li>
         <li class=""><a href="https://bitbucket.org/shedar/hgate/wiki/" target="_blank">{% trans "Help" %}</a></li>
     </ul>

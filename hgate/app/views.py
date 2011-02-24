@@ -5,6 +5,7 @@ import app.modhg.usersb as users
 from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageGroupsForm
 from app.modhg.HGWeb import HGWeb
 from app.modhg.repository import RepositoryException, get_absolute_repository_path
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -18,7 +19,7 @@ def prepare_tree(tree, group=""):
             reps_in_group = len(value)
             res += "<li><span>%s (%d)</span><ul>%s</ul></li>" % (key, reps_in_group, prepare_tree(value, group + key + "/"))
         else:
-             res += "<li><a href='/repo/%s%s'>%s</a></li>" % (group, key, key)
+             res += "<li><a href='%s'>%s</a></li>" % (reverse("repository", args=[group+key]), key)
     return res
 
 def prepare_path(name, group, groups):
@@ -162,27 +163,31 @@ def repo(request, repo_path):
     return render_to_response('repository.html', model,
                               context_instance=RequestContext(request))
 
+def user_index(request, action=None, login=None):
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
+    model = {"tree": tree}
+    if request.method == "POST":
+        form = AddUser(request.POST)
+        if form.is_valid():
+            login = form.cleaned_data['login']
+            password = form.cleaned_data['password2']
+            users.add(settings.AUTH_FILE, login, password)
+            messages.success(request, _("User '%s' was added.") % login)
+            form = AddUser()
+    else:
+        form = AddUser()
+    user_list = users.list(settings.AUTH_FILE)
+    model["form"] = form
+    model["users"] = user_list
+    return render_to_response("users.html", model,
+                          context_instance=RequestContext(request))
+
 def user(request, action, login):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
-    if not action: # main user page
-        if request.method == "POST":
-            form = AddUser(request.POST)
-            if form.is_valid():
-                login = form.cleaned_data['login']
-                password = form.cleaned_data['password2']
-                users.add(settings.AUTH_FILE, login, password)
-                messages.success(request, _("User '%s' was added.") % login)
-                form = AddUser()
-        else:
-            form = AddUser()
-        user_list = users.list(settings.AUTH_FILE)
-        model["form"] = form
-        model["users"] = user_list
-        return render_to_response("users.html", model,
-                              context_instance=RequestContext(request))
-    elif action == "delete":
+    if action == "delete":
         users.remove(settings.AUTH_FILE,login)
         messages.success(request, _("User '%s' was deleted.") % login)
         return HttpResponseRedirect("../users") #todo: render via url
