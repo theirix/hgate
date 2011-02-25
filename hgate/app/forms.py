@@ -62,7 +62,7 @@ class AddUser(forms.Form):
 
     def clean_login(self):
         login = self.cleaned_data["login"]
-        if(users.exists(settings.AUTH_FILE, login)):
+        if users.exists(settings.AUTH_FILE, login):
             raise forms.ValidationError(_("User exists"))
         return login
 
@@ -85,8 +85,8 @@ class CreateRepoForm(forms.Form):
 
     def clean_name(self):
         _name = self.cleaned_data['name'].strip()
-        if re.search(r"[\*\:\?\/\\]", _name): #found one of (*:?/\)
-            raise forms.ValidationError(_("Don`t use special characters any of (*:?/\)"))
+        if re.search(r"([\*\:\?\/\\]|^\.$|^\.\.$)", _name): #found one of (*:?/\) or . or ..
+            raise forms.ValidationError(_("Don`t use special characters any of *:?/\ or names '.' and '..'"))
         return _name
 
 
