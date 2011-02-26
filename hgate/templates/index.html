@@ -49,7 +49,7 @@ $(document).ready(function() {
 {% block content %}
 <br/>
 <h3>{% trans "Create repository" %}</h3>
-<form class="repository_create" action="/" method="post">
+<form class="repository_create" action="{% url index %}" method="post">
     <table>
         {{ repo_form.as_table }}
     </table>
@@ -58,7 +58,7 @@ $(document).ready(function() {
 <hr style="margin: 15px 0 15px 0;"/>
 <h3>{% trans "Manage groups" %}</h3>
 
-<form class="group_create" action="/" method="post">
+<form class="group_create" action="{% url index %}" method="post">
     <table>
         {{ groups_form.as_table }}
     </table>
@@ -73,7 +73,7 @@ $(document).ready(function() {
             <td>{{ gr_path }}</td>
             <td class="action">
                 <input type="hidden" name="repos_count" value="{{ rep_count }}"/>
-                <form action="/" name="delete_group_form" method="post">
+                <form action="{% url index %}" name="delete_group_form" method="post">
                     <input type="hidden" name="group_name" value="{{ gr_key }}"/>
                     <span onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');" >{% trans "edit" %}</span>&nbsp;&nbsp;
                     <span class="delete_group">{% trans "delete" %}</span>
@@ -87,7 +87,7 @@ $(document).ready(function() {
 <div class="group_edit" id="group_edit" {% if is_hide_edit_group_form %} style="display: none;" {% endif %}>
     <br/>{% trans "Editing of group" %} '<span>{{ edited_group }}</span>':<br/>
 
-    <form id="group_edit_form" action="/" method="post">
+    <form id="group_edit_form" action="{% url index %}" method="post">
         <input type="hidden" name="old_group_name" id="old_group_name" value="{{ edited_group }}"/>
         <table>
             {{ edit_group_form.as_table }}
