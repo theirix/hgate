@@ -75,7 +75,7 @@ def index(request):
                     messages.success(request, _("New group was added."))
                 except Exception as e:
                     messages.warning(request, str(e))
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('.')
         elif "create_repo" in request.POST:
             create_repo_form = CreateRepoForm(groups, request.POST)
             if create_repo_form.is_valid():
@@ -92,9 +92,9 @@ def index(request):
                         redirect_path = "repo/" + group + "/" + name
                 except Exception as e:
                     messages.warning(request, str(e))
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect('.')
 
-                return HttpResponseRedirect('/' + redirect_path)
+                return HttpResponseRedirect('./' + redirect_path)
         elif "delete_group" in request.POST:
             name = request.POST.get("group_name")
             path = dict(groups)[name]
@@ -103,7 +103,7 @@ def index(request):
                 messages.success(request, _("Group '%s' was deleted successfully.") % name)
             except Exception as e:
                 messages.warning(request, str(e))
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('.')
         elif "edit_group" in request.POST  and ("old_group_name" in request.POST):
             edit_group_form = ManageGroupsForm(request.POST, prefix=edit_group_form_prefix)
             old_name = request.POST.get("old_group_name")
@@ -121,7 +121,7 @@ def index(request):
                 else:
                     messages.warning(request,
                                      _("There is already a group with such a name. Group '%s' wasn`t changed.") % name)
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('.')
             else:
                 model["is_hide_edit_group_form"] = False
                 model["edited_group"] = old_name
