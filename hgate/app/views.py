@@ -12,6 +12,8 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
+#helper functions
+
 def prepare_tree(tree, group=""):
     res = ""
     for (key, value) in tree:
@@ -50,8 +52,35 @@ def add_amount_of_repos_to_groups(groups, tree):
         counts.append(len(_tree[name]))
     return zip(names, paths, counts)
 
+def check_paths(request):
+    """
+    checks existing and 'rwx' of next files:
+    - root directory and 'rx';
+    - global hg config and 'rw'.
+    adds error message if any.
+    @return False if any error, True if all ok
+    """
+    #todo what is global config: /etc/mercurial/hgrc or /etc/mercirual/hgweb.config
+    retVal = True
+    if not os.access(settings.HGWEB_CONFIG, os.F_OK):
+        messages.error(request, _("Main configuration file does not exist by specified path: ") + settings.HGWEB_CONFIG)
+        retVal = False
+    elif not os.access(settings.HGWEB_CONFIG, os.R_OK or os.W_OK):
+        messages.error(request, _("No access to read or write mercurial`s global configuration file by path: ") + settings.HGWEB_CONFIG)
+        retVal = False
+    if not os.access(settings.REPOSITORIES_ROOT, os.F_OK):
+        messages.error(request, _("Root directory of repositories does not exist by path: ") + settings.REPOSITORIES_ROOT)
+        retVal = False
+    elif not os.access(settings.REPOSITORIES_ROOT, os.R_OK or os.X_OK):
+        messages.error(request, _("No read or execute access to the root directory of repositories by path: ") + settings.REPOSITORIES_ROOT)
+        retVal = False
+    return retVal
+
+#page handlers
 
 def index(request):
+    if not check_paths(request):
+        return render_to_response('index.html', None, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     _tree = modhg.repository.get_tree(hgweb.get_paths())
     tree = prepare_tree(_tree)
@@ -134,6 +163,18 @@ def index(request):
     
 
 def repo(request, repo_path):
+    if not check_paths(request):
+        return render_to_response('repository.html', None, context_instance=RequestContext(request))
+    messages.success(request, repo_path)
+#    retVal = True
+#    if not os.access(, os.F_OK):
+#        messages.error(request, _("Main configuration file does not exist by specified path: ") + settings.HGWEB_CONFIG)
+#        retVal = False
+#    elif not os.access(settings.HGWEB_CONFIG, os.R_OK or os.W_OK):
+#        messages.error(request, _("No access to read or write mercurial`s global configuration file by path: ") + settings.HGWEB_CONFIG)
+#        retVal = False
+
+
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     is_global = repo_path == ""
@@ -164,6 +205,8 @@ def repo(request, repo_path):
                               context_instance=RequestContext(request))
 
 def user_index(request, action=None, login=None):
+    if not check_paths(request):
+        return render_to_response('users.html', None, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
@@ -184,6 +227,8 @@ def user_index(request, action=None, login=None):
                           context_instance=RequestContext(request))
 
 def user(request, action, login):
+    if not check_paths(request):
+        return render_to_response('useredit.html', None, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
