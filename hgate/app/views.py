@@ -165,15 +165,14 @@ def index(request):
 def repo(request, repo_path):
     if not check_paths(request):
         return render_to_response('repository.html', None, context_instance=RequestContext(request))
-    messages.success(request, repo_path)
-#    retVal = True
-#    if not os.access(, os.F_OK):
-#        messages.error(request, _("Main configuration file does not exist by specified path: ") + settings.HGWEB_CONFIG)
-#        retVal = False
-#    elif not os.access(settings.HGWEB_CONFIG, os.R_OK or os.W_OK):
-#        messages.error(request, _("No access to read or write mercurial`s global configuration file by path: ") + settings.HGWEB_CONFIG)
-#        retVal = False
-
+    def check_access_local_hgrc(hgrc_path, request):
+        hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
+        if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
+            messages.error(request, _("No hgrc for this repository. No write access to create hgrc by path: ") + hgdir)
+        elif not os.access(hgrc_path, os.W_OK):
+            messages.error(request, _("No access to write mercurial`s local configuration file by path: ") + hgrc_path)
+        elif not os.access(hgrc_path, os.R_OK):
+            messages.warning(request, _("No access to read mercurial`s local configuration file by path: ") + hgrc_path)
 
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
@@ -186,6 +185,7 @@ def repo(request, repo_path):
             model["repo_path"] = repo_path
             full_repository_path = get_absolute_repository_path(repo_path)
             hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
+            check_access_local_hgrc(hgrc_path, request)
             hgrc = HGWeb(hgrc_path, True)
         except ValueError:
             hgrc = None
@@ -229,6 +229,14 @@ def user_index(request, action=None, login=None):
 def user(request, action, login):
     if not check_paths(request):
         return render_to_response('useredit.html', None, context_instance=RequestContext(request))
+    def check_users_file(request):
+        if not os.access(settings.AUTH_FILE, os.F_OK or os.R_OK):
+            messages.error(request, _("No users file or no read access by path: ") + settings.AUTH_FILE)
+        elif not os.access(settings.AUTH_FILE, os.W_OK):
+            messages.warning(request, _("No no write access for users file by path: ") + settings.AUTH_FILE)
+
+    check_users_file(request)
+    
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
