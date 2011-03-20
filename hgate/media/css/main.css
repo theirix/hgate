@@ -21,6 +21,7 @@ a:hover{
 }
 
 a img { border: none; }
+img { margin: 0; padding: 0; }
 
 h1{
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -250,4 +251,8 @@ h3{
 }
 .repo_field_cancel_link{
     display: none;
+}
+
+img.tooltip {
+    margin-bottom: -2px;
 }

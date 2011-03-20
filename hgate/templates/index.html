@@ -41,7 +41,12 @@ $(document).ready(function() {
                 return true;
         }
         return false;
-    })
+    });
+    $(".tooltip").tooltip({
+                delay: 0,
+                showBody: " : ",
+                showURL: false
+            });
 })
 </script>
 {% endblock %}
@@ -54,6 +59,9 @@ $(document).ready(function() {
         {{ repo_form.as_table }}
     </table>
     <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}"/>
+    <img src="{{ MEDIA_URL }}/images/tooltip_icon.png" alt="about"
+         title="{% trans "Creates new repository : path: default path if no group is specified or concrete group path.<br>name: specified name.<br>This action creates dir with repository name and makes 'hg init' in that dir." %}"
+         class="tooltip" />
 </form>
 <hr style="margin: 15px 0 15px 0;"/>
 <h3>{% trans "Manage groups" %}</h3>
@@ -63,6 +71,9 @@ $(document).ready(function() {
         {{ groups_form.as_table }}
     </table>
     <input class="submit" type="submit" name="create_group" value="{% trans "Create" %}"/>
+    <img src="{{ MEDIA_URL }}/images/tooltip_icon.png" alt="about"
+         title="{% trans "Creates new group : creates all missing directories in the group path. Adds record about this group to the hgweb.config." %}"
+         class="tooltip" />
 </form>
 
 <table class="datagrid group_list">
@@ -76,7 +87,7 @@ $(document).ready(function() {
                 <form action="{% url index %}" name="delete_group_form" method="post">
                     <input type="hidden" name="group_name" value="{{ gr_key }}"/>
                     <span onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');" >{% trans "edit" %}</span>&nbsp;&nbsp;
-                    <span class="delete_group">{% trans "delete" %}</span>
+                    <span class="delete_group" title="deletes the group!">{% trans "delete" %}</span>
                     <input type="hidden" name="delete_group" value=""/>
                 </form>
             </td>
