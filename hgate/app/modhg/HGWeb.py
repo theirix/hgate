@@ -68,3 +68,8 @@ class HGWeb:
             self._parser.add_section("web")
         self._parser.set("web", key, value)
         self._parser.write(open(self._file_name, "w"))
+
+    def del_web_key(self, key):
+        self._parser.remove_option("web", key)
+        self._parser.write(open(self._file_name, "w"))
+

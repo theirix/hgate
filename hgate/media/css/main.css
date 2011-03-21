@@ -245,6 +245,17 @@ h3{
 .repo_edit input.submit, .repo_edit #id_push_ssl{
     width: auto;
 }
+.repo_field_delete_link{
+    display:none;
+}
+.r_val_local .repo_field_delete_link{
+    display: block;
+    width: 16px;
+    height: 16px;
+    background:url('/images/remove-icon.png') no-repeat;
+    position:absolute;
+    margin-top:-19px;margin-left:282px
+}
 .legend {
     text-align: left;
     font-weight: bold;
