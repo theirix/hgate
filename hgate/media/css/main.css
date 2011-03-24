@@ -172,6 +172,18 @@ h3{
     text-align: left;
 }
 
+.repository_create table input, .group_create table input, #group_edit_form table input[type=text] {
+    width: 200px;
+}
+
+.repository_create .bottom, .group_create .bottom, #group_edit_form .bottom {
+    text-align: right;
+}
+
+.repository_create table input.submit, .group_create table input.submit {
+    width: auto;
+}
+
 /* Users page */
 
 .user_create table, .user_edit table{
@@ -264,6 +276,11 @@ h3{
     display: none;
 }
 
-img.tooltip {
-    margin-bottom: -2px;
+.tooltip {
+    border: 1px solid #E3E3E3;
+    background-color: #FDFDFD;
+    color: #003CFF;
+    cursor: default;
+    font-size: smaller;
+    text-decoration: none;
 }

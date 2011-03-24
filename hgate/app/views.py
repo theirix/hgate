@@ -52,7 +52,7 @@ def add_amount_of_repos_to_groups(groups, tree):
         counts.append(len(_tree[name]))
     return zip(names, paths, counts)
 
-def check_paths(request):
+def check_configs_access(request):
     """
     checks existing and 'rwx' of next files:
     - root directory and 'rx';
@@ -79,7 +79,8 @@ def check_paths(request):
 #page handlers
 
 def index(request):
-    if not check_paths(request):
+    #todo try to make this method smaller
+    if not check_configs_access(request):
         return render_to_response('index.html', None, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     _tree = modhg.repository.get_tree(hgweb.get_paths())
@@ -170,7 +171,7 @@ def hgrc_delete(request, parameter, repo_path):
     return HttpResponseRedirect(reverse("repository", args=[repo_path]))
 
 def repo(request, repo_path):
-    if not check_paths(request):
+    if not check_configs_access(request):
         return render_to_response('repository.html', None, context_instance=RequestContext(request))
     def check_access_local_hgrc(hgrc_path, request):
         hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
@@ -212,7 +213,7 @@ def repo(request, repo_path):
                               context_instance=RequestContext(request))
 
 def user_index(request, action=None, login=None):
-    if not check_paths(request):
+    if not check_configs_access(request):
         return render_to_response('users.html', None, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
@@ -234,7 +235,7 @@ def user_index(request, action=None, login=None):
                           context_instance=RequestContext(request))
 
 def user(request, action, login):
-    if not check_paths(request):
+    if not check_configs_access(request):
         return render_to_response('useredit.html', None, context_instance=RequestContext(request))
     def check_users_file(request):
         if not os.access(settings.AUTH_FILE, os.F_OK or os.R_OK):

@@ -13,7 +13,12 @@
     $(".user_delete").click(function(){
         var login = $(this).parents("tr").find("td.login").text();
         return confirm("{% trans "Delete user" %} '"+login+"'?")
-    })
+    });
+    $(".tooltip").tooltip({
+                delay: 1000,
+                showBody: " : ",
+                showURL: false
+            });
   })
 </script>
 {% endblock %}
@@ -23,7 +28,10 @@
 <form class="user_create" action="{% url users_index %}" method="post">
     <table>
         {{ form.as_table }}
-    <tr><td colspan="2" class="bottom"><input class="submit" type="submit" value="{% trans "Create" %}" /></td></tr>
+    <tr><td colspan="2" class="bottom">
+        <input class="submit" type="submit" value="{% trans "Create" %}" />
+        <span title="{% trans 'Add new user : Modifies users file, adds line user_name:crypted_password.' %}" class="tooltip">[ ? ]</span>
+    </td></tr>
     </table>
 </form>
 <h3>{% trans "Manage users" %}</h3>
