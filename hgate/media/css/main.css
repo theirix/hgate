@@ -154,10 +154,11 @@ h3{
 }
 
 /* Index page */
-.group_list td form {
+.group_list td form, .group_list input {
     margin: 0;
     padding: 0;
 }
+
 .group_list .action span {
     text-decoration:underline;
     color: #505961;

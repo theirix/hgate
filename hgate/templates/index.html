@@ -5,16 +5,61 @@
 {% block head %}
     {{ block.super }}
     <script>
-        function edit_group_click(name, path) {
-            $("#group_edit").show();
-            $("#old_group_name").val(name);
-            $("#group_edit input[name='edit_group-name']").val(name);
-            $("#group_edit input[name='edit_group-path']").val(path);
-            $("#editing_group_name").text(name);
-            //remove error messages
-            $("#group_edit .errorlist").remove();
+        function delete_group(name, reps_count) {
+            var do_delete = false;
+            if (confirm("{% trans "Are you sure you want to delete group" %} '" + name + "'?")) {
+                var repository_word = "{% trans "repositories" %}";
+                if (reps_count == 0) {
+                    do_delete = true;
+                } else if (reps_count == 1) {
+                    repository_word = "{% trans "repository" %}";
+                    if (confirm("{% trans "This group is not empty.\n It has " %} " + reps_count + " " + repository_word + ". {% trans "Delete anyway" %}?"))
+                        do_delete = true;
+                }
+            }
+            if (do_delete) {
+                $("#delete_group_form input[name='group_name']").val(name);
+                $("#delete_group_form").submit();
+            } else {
+                $("#delete_group_form input[name='group_name']").val('');
+            }
         }
         $(document).ready(function() {
+            $("td.action span:first-child").click(function () {//edit
+                $(this).nextAll().show();
+                $(this).hide();
+                var tdpath = $(this).parent().prev();
+                var tdname = $(this).parent().prev().prev();
+                var path = tdpath.html();
+                var name = tdname.html();
+                var path_width = tdpath.width();
+                var name_width = tdname.width();
+                tdpath.html('');
+                var new_path = $("<input type='text' value='" + path + "' />").filter("input")
+                        .width(path_width)
+                        .end().appendTo(tdpath);
+                tdname.html('');
+                var new_name = $("<input type='text' value='" + name + "' />").filter("input")
+                        .width(name_width)
+                        .end().appendTo(tdname);
+
+                $("<span>cancel</span>").filter("span").click(
+                        function() {
+                            tdpath.html(path);
+                            tdname.html(name);
+                            $(this).prev().prev().show();
+                            $(this).prev().remove();
+                            $(this).remove();
+                        }).end().insertAfter(this);
+                $("<span style='padding-right:10pt;'>save</span>").filter("span").click(
+                        function() {
+                            $("#old_group_name").val(name);
+                            $("#old_group_path").val(path);
+                            $("#id_edit_group-name").val(new_name.val());
+                            $("#id_edit_group-path").val(new_path.val());
+                            $("#group_edit_form").submit();
+                        }).end().insertAfter(this);
+            });
             $(".group_list tbody tr").hover(
                     function() {
                         $(this).addClass("rowHover")
@@ -23,29 +68,6 @@
                         $(this).removeClass("rowHover");
                     }
             );
-            $("#group_edit input[name='cancel_editing']").click(function() {
-                $("#group_edit").hide();
-                $("#old_group_name").val('');
-                $("#group_edit input[name='edit_group-name']").val('');
-                $("#group_edit input[name='edit_group-path']").val('');
-                //remove error messages
-                $("#group_edit .errorlist").remove();
-            });
-            $("span.delete_group").click(function () {
-                $(this).parent("form").submit();
-            });
-            $("form[name='delete_group_form']").submit(function() {
-                var group_name = $(this).find("input[name='group_name']").val();
-                if (confirm("{% trans "Are you sure you want to delete group" %} '" + group_name + "'?")) {
-                    var cnt = $(this).prev("input[name='repos_count']").val();
-                    var repository_word = "{% trans "repositories" %}";
-                    if (cnt == 0) return true;
-                    else if (cnt == 1) repository_word = "{% trans "repository" %}";
-                    if (confirm("{% trans "This group is not empty.\n It has " %} " + cnt + " " + repository_word + ". {% trans "Delete anyway" %}?"))
-                        return true;
-                }
-                return false;
-            });
             $(".tooltip").tooltip({
                         delay: 1000,
                         showBody: " : ",
@@ -86,6 +108,16 @@
         </table>
     </form>
 
+    <form action="{% url index %}" id="delete_group_form" name="delete_group_form" method="post">
+        <input type="hidden" name="group_name" value=""/>
+        <input type="hidden" name="delete_group" value=""/>
+    </form>
+    <form id="group_edit_form" action="{% url index %}" style="display:none;" method="post">
+        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ edited_group }}"/>
+        <input type="hidden" name="old_group_path" id="old_group_path" value="{{ edited_group }}"/>
+        {{ edit_group_form.as_p }}
+    </form>
+    {{ edit_group_error_list }}
     <table class="datagrid group_list">
         <tr>
             <th>{% trans "Group name" %}</th>
@@ -97,40 +129,17 @@
                 <td>{{ gr_key }}</td>
                 <td>{{ gr_path }}</td>
                 <td class="action">
-                    <input type="hidden" name="repos_count" value="{{ rep_count }}"/>
-
-                    <form action="{% url index %}" name="delete_group_form" method="post">
-                        <input type="hidden" name="group_name" value="{{ gr_key }}"/>
-                        <span onclick="edit_group_click('{{ gr_key }}', '{{ gr_path }}');"
-                              title="{% trans 'Click to start editing this group: you can change name and path.' %}">
-                            {% trans "edit" %}
-                        </span>&nbsp;&nbsp;
-                        <span class="delete_group"
-                              title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
+                    <span title="{% trans 'Click to start editing this group: you can change name and path.' %}">
+                        {% trans "edit" %}
+                    </span>&nbsp;&nbsp;
+                    <span class="delete_group"
+                          onclick="delete_group('{{ gr_key }}', '{{ rep_count }}');"
+                          title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
                          {% trans "delete" %}
-                        </span>
-                        <input type="hidden" name="delete_group" value=""/>
-                    </form>
+                    </span>
                 </td>
             </tr>
         {% endfor %}
     </table>
 
-    <div class="group_edit" id="group_edit" {% if is_hide_edit_group_form %} style="display: none;" {% endif %}>
-        <br/>{% trans "Editing of group" %} '<span id="editing_group_name">{{ edited_group }}</span>':<br/>
-
-        <form id="group_edit_form" action="{% url index %}" method="post">
-            <input type="hidden" name="old_group_name" id="old_group_name" value="{{ edited_group }}"/>
-            <table>
-                {{ edit_group_form.as_table }}
-                <tr>
-                    <td colspan="2" class="bottom">
-                        <input type="button" name="cancel_editing" value="{% trans 'Cancel editing' %}"/>
-                        <input type="submit" name="edit_group" value="{% trans 'Save' %}"/>
-                        <span title="{% trans 'Save : Saves changed name and path to hgweb.config.' %}" class="tooltip">[ ? ]</span>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
 {% endblock %}

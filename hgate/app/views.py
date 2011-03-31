@@ -60,7 +60,6 @@ def check_configs_access(request):
     adds error message if any.
     @return False if any error, True if all ok
     """
-    #todo what is global config: /etc/mercurial/hgrc or /etc/mercirual/hgweb.config
     retVal = True
     if not os.access(settings.HGWEB_CONFIG, os.F_OK):
         messages.error(request, _("Main configuration file does not exist by specified path: ") + settings.HGWEB_CONFIG)
@@ -92,7 +91,7 @@ def index(request):
     edit_group_form_prefix="edit_group"
     edit_group_form = ManageGroupsForm(prefix=edit_group_form_prefix)
     
-    model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree), "is_hide_edit_group_form": True}
+    model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree)}
     
     if request.method == 'POST':
         if "create_group" in request.POST:
@@ -134,27 +133,28 @@ def index(request):
             except Exception as e:
                 messages.warning(request, str(e))
             return HttpResponseRedirect('.')
-        elif "edit_group" in request.POST  and ("old_group_name" in request.POST):
+        elif "old_group_name" in request.POST:
             edit_group_form = ManageGroupsForm(request.POST, prefix=edit_group_form_prefix)
             old_name = request.POST.get("old_group_name")
+            old_path = request.POST.get("old_group_path")
             if edit_group_form.is_valid():
                 name = edit_group_form.cleaned_data['name']
                 path = edit_group_form.cleaned_data['path']
-
-                if old_name  == name or (not name in zip(*groups)[0]):
+                if (old_name != name and name not in zip(*groups)[0]) or (name == old_name and path != old_path):
                     hgweb.del_paths(old_name)
                     try:
                         modhg.repository.create_group(path, name)
-                        messages.success(request, _("Group '%s' was changed." % name))
+                        messages.success(request, _("Group '%s' was changed." % old_name))
                     except Exception as e:
                         messages.warning(request, str(e))
+                elif name == old_name and path == old_path:
+                    pass
                 else:
                     messages.warning(request,
-                                     _("There is already a group with such a name. Group '%s' wasn`t changed.") % name)
+                                     _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
                 return HttpResponseRedirect('.')
             else:
-                model["is_hide_edit_group_form"] = False
-                model["edited_group"] = old_name
+                model["edit_group_error_list"] = edit_group_form.errors
 
     model["groups_form"] = groups_form
     model["edit_group_form"] = edit_group_form
