@@ -46,9 +46,11 @@
         <li class=""><a href="https://bitbucket.org/shedar/hgate/wiki/" target="_blank">{% trans "Help" %}</a></li>
     </ul>
 </div>
+{% block tree %}
 <div class="tree">
 {% include 'tree.html' %}
 </div>
+{% endblock %}
 <div class="main">
 {% if messages %}
 <ul class="messages">

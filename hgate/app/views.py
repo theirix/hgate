@@ -80,7 +80,7 @@ def check_configs_access(request):
 def index(request):
     #todo try to make this method smaller
     if not check_configs_access(request):
-        return render_to_response('index.html', None, context_instance=RequestContext(request))
+        return render_to_response('errors.html', {"menu" : "home"}, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     _tree = modhg.repository.get_tree(hgweb.get_paths())
     tree = prepare_tree(_tree)
@@ -172,7 +172,11 @@ def hgrc_delete(request, parameter, repo_path):
 
 def repo(request, repo_path):
     if not check_configs_access(request):
-        return render_to_response('repository.html', None, context_instance=RequestContext(request))
+        return render_to_response('errors.html',
+                                  {"menu": (lambda is_global: {True: "hgweb", False: "repository"}[is_global])(
+                                      repo_path == "")},
+                                  context_instance=RequestContext(request))
+
     def check_access_local_hgrc(hgrc_path, request):
         hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
         if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
@@ -214,7 +218,7 @@ def repo(request, repo_path):
 
 def user_index(request, action=None, login=None):
     if not check_configs_access(request):
-        return render_to_response('users.html', None, context_instance=RequestContext(request))
+        return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
@@ -236,7 +240,7 @@ def user_index(request, action=None, login=None):
 
 def user(request, action, login):
     if not check_configs_access(request):
-        return render_to_response('useredit.html', None, context_instance=RequestContext(request))
+        return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
     def check_users_file(request):
         if not os.access(settings.AUTH_FILE, os.F_OK or os.R_OK):
             messages.error(request, _("No users file or no read access by path: ") + settings.AUTH_FILE)

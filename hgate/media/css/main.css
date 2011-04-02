@@ -43,6 +43,15 @@ h3{
     margin-bottom: 6px;
 }
 
+.tooltip {
+    border: 1px solid #E3E3E3;
+    background-color: #FDFDFD;
+    color: #003CFF;
+    cursor: default;
+    font-size: smaller;
+    text-decoration: none;
+}
+
 /*classes for messages*/
 .messages {
     padding: 0;
@@ -154,7 +163,7 @@ h3{
 }
 
 /* Index page */
-.group_list td form, .group_list input {
+.group_list input {
     margin: 0;
     padding: 0;
 }
@@ -277,11 +286,7 @@ h3{
     display: none;
 }
 
-.tooltip {
-    border: 1px solid #E3E3E3;
-    background-color: #FDFDFD;
-    color: #003CFF;
-    cursor: default;
-    font-size: smaller;
-    text-decoration: none;
+/*Errors page*/
+.text {
+    text-align: center;
 }
