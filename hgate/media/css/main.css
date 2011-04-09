@@ -121,6 +121,11 @@ h3{
     border-bottom: 7px solid;
 }
 
+#menu_langs {
+    top: 20pt;
+    right: 10pt;
+    position: absolute;
+}
 
 
 /* Form errors*/

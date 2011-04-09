@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'hgrc/delete/(?P<parameter>[^/]*)/(?P<repo_path>.*)', hgrc_delete, name='hgrc_delete'),
     url(r'users/?$', user_index, name='users_index'),
     url(r'users/(?P<action>[^/]+)/(?P<login>.*)', user, name='users'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     # Example:
     # (r'^hgate/', include('hgate.foo.urls')),

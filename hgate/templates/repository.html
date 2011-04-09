@@ -27,7 +27,7 @@
     });
     $(".repo_field_delete_link").click(function(){
         var field = $(this).parents("tr:first").find("th").text();
-        return confirm("{% trans "Are you sure you want to delete parameter \\\"{0}\\\" from hgrc file" %}".format(field));
+        return confirm("{% trans "Are you sure you want to delete parameter \\\"{0}\\\" from hgrc file" %}".format(field)); //todo can not localize it
     });
     $(".tooltip").tooltip({
                 delay: 1000,

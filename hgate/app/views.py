@@ -123,7 +123,7 @@ def index(request):
                     messages.warning(request, str(e))
                     return HttpResponseRedirect('.')
 
-                return HttpResponseRedirect('./' + redirect_path)
+                return HttpResponseRedirect(redirect_path)
         elif "delete_group" in request.POST:
             name = request.POST.get("group_name")
             path = dict(groups)[name]
@@ -181,9 +181,9 @@ def repo(request, repo_path):
         hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
         if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
             messages.error(request, _("No hgrc for this repository. No write access to create hgrc by path: ") + hgdir)
-        elif not os.access(hgrc_path, os.W_OK):
+        elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.W_OK):
             messages.error(request, _("No access to write mercurial`s local configuration file by path: ") + hgrc_path)
-        elif not os.access(hgrc_path, os.R_OK):
+        elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.R_OK):
             messages.warning(request, _("No access to read mercurial`s local configuration file by path: ") + hgrc_path)
 
     hgweb = HGWeb(settings.HGWEB_CONFIG)
@@ -245,7 +245,7 @@ def user(request, action, login):
         if not os.access(settings.AUTH_FILE, os.F_OK or os.R_OK):
             messages.error(request, _("No users file or no read access by path: ") + settings.AUTH_FILE)
         elif not os.access(settings.AUTH_FILE, os.W_OK):
-            messages.warning(request, _("No no write access for users file by path: ") + settings.AUTH_FILE)
+            messages.warning(request, _("No write access for users file by path: ") + settings.AUTH_FILE)
 
     check_users_file(request)
     

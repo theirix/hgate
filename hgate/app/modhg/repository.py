@@ -87,7 +87,7 @@ def get_absolute_repository_path(key):
         return path
     paths = hgweb.get_paths()
     repo_key = key.lstrip("/")
-    values = [key.replace(path_item, val.strip("*").rstrip("/"), 1) \
+    values = [repo_key.replace(path_item, val.strip("*").rstrip("/"), 1) \
               for path_item, val in paths \
               if repo_key == path_item or repo_key.startswith(path_item.strip("/")+"/")]
     if len(values) == 0:

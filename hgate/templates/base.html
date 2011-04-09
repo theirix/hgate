@@ -30,6 +30,9 @@
                 persist: "location",
                 collapsed: true
             });
+            $("#menu_langs select").change(function() {
+                $("#menu_langs").submit();
+            });
         });
     </script>
 {% endblock %}
@@ -37,6 +40,17 @@
 <body>
 <div id="header" class="header">
     <h1 id="" class=""><a href="{% url index %}">hGate<sup>alpha</sup></a></h1>
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_available_languages as LANGUAGES %}
+    <form action="/i18n/setlang/" method="post" id="menu_langs">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="."/>
+        <select name="language">
+            {% for lang in LANGUAGES %}
+                <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %} >{{ lang.1 }}</option>
+            {% endfor %}
+        </select>
+    </form>
     <ul id="menu_main_horizontal" class="">
 {#        <li class=""><a href="{% url repository %}">{% trans "Repository" %}</a></li>#}
         {% block menu_extra %}{% endblock %}

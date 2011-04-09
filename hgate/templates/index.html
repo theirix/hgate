@@ -8,11 +8,12 @@
         function delete_group(name, reps_count) {
             var do_delete = false;
             if (confirm("{% trans "Are you sure you want to delete group" %} '" + name + "'?")) {
-                var repository_word = "{% trans "repositories" %}";
                 if (reps_count == 0) {
                     do_delete = true;
-                } else if (reps_count == 1) {
-                    repository_word = "{% trans "repository" %}";
+                } else {
+                    var repository_word = "{% trans "repositories" %}";
+                    if (reps_count == 1)
+                        repository_word = "{% trans "repository" %}";
                     if (confirm("{% trans "This group is not empty.\n It has " %} " + reps_count + " " + repository_word + ". {% trans "Delete anyway" %}?"))
                         do_delete = true;
                 }
@@ -43,7 +44,7 @@
                         .width(name_width)
                         .end().appendTo(tdname);
 
-                $("<span>cancel</span>").filter("span").click(
+                $("<span>{% trans 'cancel' %}</span>").filter("span").click(
                         function() {
                             tdpath.html(path);
                             tdname.html(name);
@@ -51,7 +52,7 @@
                             $(this).prev().remove();
                             $(this).remove();
                         }).end().insertAfter(this);
-                $("<span style='padding-right:10pt;'>save</span>").filter("span").click(
+                $("<span style='padding-right:10pt;'>{% trans 'save' %}</span>").filter("span").click(
                         function() {
                             $("#old_group_name").val(name);
                             $("#old_group_path").val(path);
@@ -113,8 +114,8 @@
         <input type="hidden" name="delete_group" value=""/>
     </form>
     <form id="group_edit_form" action="{% url index %}" style="display:none;" method="post">
-        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ edited_group }}"/>
-        <input type="hidden" name="old_group_path" id="old_group_path" value="{{ edited_group }}"/>
+        <input type="hidden" name="old_group_name" id="old_group_name" value=""/>
+        <input type="hidden" name="old_group_path" id="old_group_path" value=""/>
         {{ edit_group_form.as_p }}
     </form>
     {{ edit_group_error_list }}

@@ -45,7 +45,12 @@ TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'#en-us
+
+LANGUAGES = (
+    ('ru-ru', 'ru'),
+    ('en-us', 'en'),
+)
 
 SITE_ID = 1
 
@@ -94,6 +99,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'hgate.urls'

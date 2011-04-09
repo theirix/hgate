@@ -1,0 +1,388 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-04-08 01:39+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: app/forms.py:9
+msgid "allow_read"
+msgstr ""
+
+#: app/forms.py:10
+msgid "allow_push"
+msgstr ""
+
+#: app/forms.py:11
+msgid "deny_read"
+msgstr ""
+
+#: app/forms.py:12
+msgid "deny_push"
+msgstr ""
+
+#: app/forms.py:13
+msgid "style"
+msgstr ""
+
+#: app/forms.py:14
+msgid "allow_archive"
+msgstr ""
+
+#: app/forms.py:15
+msgid "baseurl"
+msgstr ""
+
+#: app/forms.py:16
+msgid "push_ssl"
+msgstr ""
+
+#: app/forms.py:52 templates/users.html:39
+msgid "Login"
+msgstr ""
+
+#: app/forms.py:53 app/forms.py:70
+msgid "Password"
+msgstr ""
+
+#: app/forms.py:54 app/forms.py:71
+msgid "Re-enter password"
+msgstr ""
+
+#: app/forms.py:60 app/forms.py:77
+msgid "Passwords should be the same"
+msgstr ""
+
+#: app/forms.py:66
+msgid "User exists"
+msgstr ""
+
+#: app/forms.py:89
+msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
+msgstr ""
+
+#: app/forms.py:93
+msgid "Repository name"
+msgstr ""
+
+#: app/forms.py:94
+msgid "Group"
+msgstr ""
+
+#: app/forms.py:97 templates/index.html:124
+msgid "Group name"
+msgstr ""
+
+#: app/forms.py:98
+msgid "Path"
+msgstr ""
+
+#: app/forms.py:103
+msgid "Path should be ended with /* or /**"
+msgstr ""
+
+#: app/views.py:65
+msgid "Main configuration file does not exist by specified path: "
+msgstr ""
+
+#: app/views.py:68
+msgid ""
+"No access to read or write mercurial`s global configuration file by path: "
+msgstr ""
+
+#: app/views.py:71
+msgid "Root directory of repositories does not exist by path: "
+msgstr ""
+
+#: app/views.py:74
+msgid ""
+"No read or execute access to the root directory of repositories by path: "
+msgstr ""
+
+#: app/views.py:104
+msgid "New group was added."
+msgstr ""
+
+#: app/views.py:117
+msgid "New repository was created."
+msgstr ""
+
+#: app/views.py:132
+#, python-format
+msgid "Group '%s' was deleted successfully."
+msgstr ""
+
+#: app/views.py:147
+#, python-format
+msgid "Group '%s' was changed."
+msgstr ""
+
+#: app/views.py:154
+#, python-format
+msgid "There is already a group with such a name. Group '%s' wasn`t changed."
+msgstr ""
+
+#: app/views.py:183
+msgid "No hgrc for this repository. No write access to create hgrc by path: "
+msgstr ""
+
+#: app/views.py:185
+msgid "No access to write mercurial`s local configuration file by path: "
+msgstr ""
+
+#: app/views.py:187
+msgid "No access to read mercurial`s local configuration file by path: "
+msgstr ""
+
+#: app/views.py:209
+msgid "Global settings saved successfully."
+msgstr ""
+
+#: app/views.py:212
+msgid "Repository settings saved successfully."
+msgstr ""
+
+#: app/views.py:231
+#, python-format
+msgid "User '%s' was added."
+msgstr ""
+
+#: app/views.py:246
+msgid "No users file or no read access by path: "
+msgstr ""
+
+#: app/views.py:248
+msgid "No write access for users file by path: "
+msgstr ""
+
+#: app/views.py:257
+#, python-format
+msgid "User '%s' was deleted."
+msgstr ""
+
+#: app/views.py:266
+msgid "Password changed successfully."
+msgstr ""
+
+#: templates/base.html:43
+msgid "Home"
+msgstr ""
+
+#: templates/base.html:44
+msgid "Users"
+msgstr ""
+
+#: templates/base.html:45
+msgid "HgWeb"
+msgstr ""
+
+#: templates/base.html:46
+msgid "Help"
+msgstr ""
+
+#: templates/errors.html:13 templates/repository.html:43
+#: templates/repository.html.py:53 templates/useredit.html:40
+msgid "Repository"
+msgstr ""
+
+#: templates/errors.html:32
+msgid "Fix the above problem"
+msgstr ""
+
+#: templates/errors.html:33
+msgid "to continue work!"
+msgstr ""
+
+#: templates/index.html:10
+msgid "Are you sure you want to delete group"
+msgstr ""
+
+#: templates/index.html:14
+msgid "repositories"
+msgstr ""
+
+#: templates/index.html:16
+msgid "repository"
+msgstr ""
+
+#: templates/index.html:17
+msgid "This group is not empty.\\n It has "
+msgstr ""
+
+#: templates/index.html:17
+msgid "Delete anyway"
+msgstr ""
+
+#: templates/index.html:47
+msgid "cancel"
+msgstr ""
+
+#: templates/index.html:55
+msgid "save"
+msgstr ""
+
+#: templates/index.html:83
+msgid "Create repository"
+msgstr ""
+
+#: templates/index.html:89 templates/index.html.py:104 templates/users.html:32
+msgid "Create"
+msgstr ""
+
+#: templates/index.html:90
+msgid ""
+"Create new repository : Path: default path if no group is specified or "
+"concrete group path.<br>Name: specified name.<br>This action creates dir "
+"with repository name and makes &apos;hg init&apos; in that dir."
+msgstr ""
+
+#: templates/index.html:97
+msgid "Manage groups"
+msgstr ""
+
+#: templates/index.html:105
+msgid ""
+"Create new group : Creates all missing directories in the group path."
+"<br>Adds record about this group to the hgweb.config."
+msgstr ""
+
+#: templates/index.html:125
+msgid "Full path"
+msgstr ""
+
+#: templates/index.html:126 templates/users.html:39
+msgid "Action"
+msgstr ""
+
+#: templates/index.html:133
+msgid "Click to start editing this group: you can change name and path."
+msgstr ""
+
+#: templates/index.html:134 templates/users.html:44
+msgid "edit"
+msgstr ""
+
+#: templates/index.html:138
+msgid ""
+"Delete the group: removes record about this group from hgweb.config. Deletes "
+"group`s dir and all it`s subdirectories."
+msgstr ""
+
+#: templates/index.html:139 templates/users.html:45
+msgid "delete"
+msgstr ""
+
+#: templates/repository.html:30
+msgid "Are you sure you want to delete parameter '{0}' from hgrc file"
+msgstr ""
+
+#: templates/repository.html:56
+msgid "HgWeb config"
+msgstr ""
+
+#: templates/repository.html:66
+msgid "Delete parameter : remove this parameter from the local hgrc file"
+msgstr ""
+
+#: templates/repository.html:67
+msgid "Edit"
+msgstr ""
+
+#: templates/repository.html:67
+msgid "Cancel"
+msgstr ""
+
+#: templates/repository.html:72 templates/useredit.html:30
+msgid "Save"
+msgstr ""
+
+#: templates/repository.html:74
+msgid "Save global configuration : Modifies [web] section in the hgweb.config."
+msgstr ""
+
+#: templates/repository.html:77
+msgid ""
+"Save repository configuration : Modifies [web] section of the hgrc of the "
+"repository."
+msgstr ""
+
+#: templates/repository.html:87
+msgid "Value is set in the local hgrc file"
+msgstr ""
+
+#: templates/repository.html:89
+msgid "Value is set in the hgweb config"
+msgstr ""
+
+#: templates/repository.html:91
+msgid "Value not set in any config"
+msgstr ""
+
+#: templates/repository.html:94
+msgid "Value not set in hgweb config"
+msgstr ""
+
+#: templates/useredit.html:23
+msgid "<< Back to users list"
+msgstr ""
+
+#: templates/useredit.html:24
+msgid "User"
+msgstr ""
+
+#: templates/useredit.html:25
+msgid "Change password"
+msgstr ""
+
+#: templates/useredit.html:31
+msgid "Change passwrod : Modifies users file, changes password for the user."
+msgstr ""
+
+#: templates/useredit.html:37
+msgid "Permissions"
+msgstr ""
+
+#: templates/useredit.html:42
+msgid "Read"
+msgstr ""
+
+#: templates/useredit.html:42
+msgid "Push"
+msgstr ""
+
+#: templates/users.html:15
+msgid "Delete user"
+msgstr ""
+
+#: templates/users.html:27
+msgid "Create user"
+msgstr ""
+
+#: templates/users.html:33
+msgid ""
+"Add new user : Modifies users file, adds line user_name:crypted_password."
+msgstr ""
+
+#: templates/users.html:37
+msgid "Manage users"
+msgstr ""
+
+#: templates/users.html:44
+msgid "Change password and manage user's permissions"
+msgstr ""
+
+#: templates/users.html:45
+msgid "Remove user"
+msgstr ""
