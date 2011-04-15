@@ -114,11 +114,10 @@
         <input type="hidden" name="delete_group" value=""/>
     </form>
     <form id="group_edit_form" action="{% url index %}" style="display:none;" method="post">
-        <input type="hidden" name="old_group_name" id="old_group_name" value=""/>
-        <input type="hidden" name="old_group_path" id="old_group_path" value=""/>
+        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ old_group_name }}"/>
+        <input type="hidden" name="old_group_path" id="old_group_path" value="{{ old_group_path }}"/>
         {{ edit_group_form.as_p }}
     </form>
-    {{ edit_group_error_list }}
     <table class="datagrid group_list">
         <tr>
             <th>{% trans "Group name" %}</th>
@@ -138,6 +137,21 @@
                           title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
                          {% trans "delete" %}
                     </span>
+                    {% if gr_key == old_group_name and gr_path == old_group_path %}
+                        <div id="error_here">
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#error_here").prev().prev().click();
+                                    var td_path_html = $("#error_here").parent().prev().html();
+                                    var td_name_html = $("#error_here").parent().prev().prev().html();
+                                    //todo show error values in inputs
+                                    $("#error_here").parent().prev().html('{{ edit_group_error_list.path|escape }}' + td_path_html);
+                                    $("#error_here").parent().prev().prev().html('{{ edit_group_error_list.name|escape }}' + td_name_html);
+                                    $("#error_here").remove();
+                                });
+                            </script>
+                        </div>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

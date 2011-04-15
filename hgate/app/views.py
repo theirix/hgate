@@ -148,12 +148,16 @@ def index(request):
                     except Exception as e:
                         messages.warning(request, str(e))
                 elif name == old_name and path == old_path:
-                    pass
+                    pass#do nothing
                 else:
                     messages.warning(request,
                                      _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
                 return HttpResponseRedirect('.')
             else:
+                model["old_group_name"] = old_name
+                model["old_group_path"] = old_path
+                model["bad_group_name"] = request.POST.get(edit_group_form_prefix + "-name")
+                model["bad_group_path"] = request.POST.get(edit_group_form_prefix + "-path")
                 model["edit_group_error_list"] = edit_group_form.errors
 
     model["groups_form"] = groups_form
