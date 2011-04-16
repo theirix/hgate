@@ -56,8 +56,12 @@
                         function() {
                             $("#old_group_name").val(name);
                             $("#old_group_path").val(path);
-                            $("#id_edit_group-name").val(new_name.val());
-                            $("#id_edit_group-path").val(new_path.val());
+                            //getting td with name
+                            var new_name_val = $(this).parent().prev().prev().find("input").val();
+                            //getting td with path
+                            var new_path_val = $(this).parent().prev().find("input").val();
+                            $("#id_edit_group-name").val(new_name_val);
+                            $("#id_edit_group-path").val(new_path_val);
                             $("#group_edit_form").submit();
                         }).end().insertAfter(this);
             });
@@ -144,7 +148,10 @@
                                     $("#error_here").prev().prev().click();
                                     var td_path_html = $("#error_here").parent().prev().html();
                                     var td_name_html = $("#error_here").parent().prev().prev().html();
-                                    //todo show error values in inputs
+
+                                    td_path_html = td_path_html.replace("{{ old_group_path }}", "{{ bad_group_path }}");
+                                    td_name_html = td_name_html.replace("{{ old_group_name }}", "{{ bad_group_name }}");
+
                                     $("#error_here").parent().prev().html('{{ edit_group_error_list.path|escape }}' + td_path_html);
                                     $("#error_here").parent().prev().prev().html('{{ edit_group_error_list.name|escape }}' + td_name_html);
                                     $("#error_here").remove();
