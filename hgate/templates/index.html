@@ -118,10 +118,11 @@
         <input type="hidden" name="delete_group" value=""/>
     </form>
     <form id="group_edit_form" action="{% url index %}" style="display:none;" method="post">
-        <input type="hidden" name="old_group_name" id="old_group_name" value="{{ old_group_name }}"/>
-        <input type="hidden" name="old_group_path" id="old_group_path" value="{{ old_group_path }}"/>
+        <input type="hidden" name="old_group_name" id="old_group_name" value=""/>
+        <input type="hidden" name="old_group_path" id="old_group_path" value=""/>
         {{ edit_group_form.as_p }}
     </form>
+    {{ edit_group_form.non_field_errors }}
     <table class="datagrid group_list">
         <tr>
             <th>{% trans "Group name" %}</th>
@@ -149,11 +150,11 @@
                                     var td_path_html = $("#error_here").parent().prev().html();
                                     var td_name_html = $("#error_here").parent().prev().prev().html();
 
-                                    td_path_html = td_path_html.replace("{{ old_group_path }}", "{{ bad_group_path }}");
-                                    td_name_html = td_name_html.replace("{{ old_group_name }}", "{{ bad_group_name }}");
+                                    td_path_html = td_path_html.replace("{{ old_group_path }}", $('{{ edit_group_form.path }}').val());
+                                    td_name_html = td_name_html.replace("{{ old_group_name }}", $('{{ edit_group_form.name }}').val());
 
-                                    $("#error_here").parent().prev().html('{{ edit_group_error_list.path|escape }}' + td_path_html);
-                                    $("#error_here").parent().prev().prev().html('{{ edit_group_error_list.name|escape }}' + td_name_html);
+                                    $("#error_here").parent().prev().html('{{ edit_group_form.path.errors|escape }}' + td_path_html);
+                                    $("#error_here").parent().prev().prev().html('{{ edit_group_form.name.errors|escape }}' + td_name_html);
                                     $("#error_here").remove();
                                 });
                             </script>

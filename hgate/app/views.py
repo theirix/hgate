@@ -156,9 +156,6 @@ def index(request):
             else:
                 model["old_group_name"] = old_name
                 model["old_group_path"] = old_path
-                model["bad_group_name"] = request.POST.get(edit_group_form_prefix + "-name")
-                model["bad_group_path"] = request.POST.get(edit_group_form_prefix + "-path")
-                model["edit_group_error_list"] = edit_group_form.errors
 
     model["groups_form"] = groups_form
     model["edit_group_form"] = edit_group_form
