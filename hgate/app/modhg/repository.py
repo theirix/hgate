@@ -86,10 +86,9 @@ def get_absolute_repository_path(key):
     if path:
         return path
     paths = hgweb.get_paths()
-    repo_key = key.lstrip("/")
-    values = [repo_key.replace(path_item, val.strip("*").rstrip("/"), 1) \
+    values = [key.replace(path_item, val.strip("*").rstrip("/"), 1) \
               for path_item, val in paths \
-              if repo_key == path_item or repo_key.startswith(path_item.strip("/")+"/")]
+              if key == path_item or key.startswith(path_item)]
     if len(values) == 0:
         raise RepositoryException("Invalid repository name.")
     return values[0]

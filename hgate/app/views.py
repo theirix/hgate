@@ -194,7 +194,6 @@ def repo(request, repo_path):
     model = {"tree": tree, "global": is_global}
     if not is_global:
         try:
-            repo_path = "/" + repo_path.strip("/")
             model["repo_path"] = repo_path
             full_repository_path = get_absolute_repository_path(repo_path)
             hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
