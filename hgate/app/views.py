@@ -164,7 +164,6 @@ def index(request):
     return render_to_response('index.html', model, context_instance=RequestContext(request))
     
 def hgrc_delete(request, parameter, repo_path):
-    repo_path = "/" + repo_path.strip("/")
     full_repository_path = get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
     hgrc = HGWeb(hgrc_path, True)

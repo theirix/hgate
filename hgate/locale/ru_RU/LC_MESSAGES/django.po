@@ -345,7 +345,7 @@ msgstr "Значение установлено в локальном hgrc фа�
 
 #: templates/repository.html:89
 msgid "Value is set in the hgweb config"
-msgstr "Значение установлено в локальном файле настроек hgweb"
+msgstr "Значение установлено в файле настроек hgweb"
 
 #: templates/repository.html:91
 msgid "Value not set in any config"
