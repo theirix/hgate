@@ -89,7 +89,7 @@ def get_absolute_repository_path(key):
     values = [key.replace(path_item, val.strip("*").rstrip("/"), 1) \
               for path_item, val in paths \
               if key == path_item or key.startswith(path_item)]
-    if len(values) == 0:
+    if not len(values):
         raise RepositoryException("Invalid repository name.")
     return values[0]
 
@@ -110,7 +110,7 @@ def _scan(dir, deep):
     result = {}
     groups_tree = {}
     dir = dir.rstrip("*")
-    if not os.path.exists(dir):
+    if not os.path.exists(dir) or not os.path.isdir(dir):
         return result
     dir_list = os.listdir(dir)
     for current_dir in dir_list:
