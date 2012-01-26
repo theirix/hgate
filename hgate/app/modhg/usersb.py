@@ -5,6 +5,8 @@ import repository
 import settings
 from app.modhg.HGWeb import HGWeb
 
+LOGIN_PASSWD_SEP = ":"
+
 def list(filename):
     lines = _get_rows(filename)
     login_list = []
@@ -16,7 +18,7 @@ def list(filename):
 
 def exists(filename,login):
     lines = _get_rows(filename)
-    match = [line for line in lines if line.startswith(login)]
+    match = [line for line in lines if line.split(LOGIN_PASSWD_SEP)[0] == login]
     if match:
         return True
     return False
@@ -24,7 +26,7 @@ def exists(filename,login):
 
 def add(filename,login,password):
     lines = _get_rows(filename)
-    match = [line for line in lines if line.startswith(login)]
+    match = [line for line in lines if line.split(LOGIN_PASSWD_SEP)[0] == login]
     if match:
         raise ValueError("User exists")
     row = _form_file_row(login, password)
@@ -35,7 +37,7 @@ def remove(filename, login):
     # todo: check is user exists in hgrc files
     _remove_from_hgrc(login)
     lines = open(filename, 'r').readlines()
-    matches = [line for line in lines if not line.startswith(login)]
+    matches = [line for line in lines if not line.split(LOGIN_PASSWD_SEP)[0] == login]
     open(filename,'w+').writelines(matches)
 
 def update(filename, login, new_password):
@@ -103,7 +105,7 @@ def _is_in_list_single(web, key, login, is_global=False):
             return True
         raise ValueError()
     res = [value for (name, value) in web if name==key]
-    if len(res) == 0:
+    if not len(res):
         if is_global and key=="allow_read":
             return True
         raise ValueError()
