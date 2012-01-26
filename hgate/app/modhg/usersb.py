@@ -143,7 +143,7 @@ def _remove_from_hgrc(login):
 
 def _remove_from_hgrc_int(name, dir, deep, login):
     dir = dir.rstrip("*")
-    if not os.path.exists(dir):
+    if not os.path.exists(dir) or not os.path.isdir(dir):
         return
     dir_list = os.listdir(dir)
     for current_dir in dir_list:
