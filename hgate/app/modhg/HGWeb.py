@@ -24,10 +24,25 @@ class HGWeb:
         self._parser.read(path)
 
     def get_paths(self):
-        return self._parser.items("paths")
+        """finds all paths from section [paths] and paths with appended /** from section [collection]"""
+        _paths = []
+        if self._parser.has_section("paths"):
+            _paths = self._parser.items("paths")
+        if self._parser.has_section("collections"):
+            # todo: this exposes collections as paths with /** suffix. simple support of collections.
+            _collections = self._parser.items("collections")
+            _paths += [ (name, path + "/**") for name, path in _collections]
+        return _paths
+
+    def get_paths_only(self):
+        """ finds all paths from section [paths] """
+        if self._parser.has_section("paths"):
+            return self._parser.items("paths")
+        else :
+            return []
 
     def get_groups(self):
-        paths = self.get_paths()
+        paths = self.get_paths_only()
         groups = []
         for path in paths:
             if path[1].endswith("*"):
