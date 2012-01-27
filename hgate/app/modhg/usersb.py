@@ -70,7 +70,7 @@ def permissions(login, path_as_key = False):
 def _scan(name, dir, deep, login, path_as_key, global_web):
     permission_list = {}
     dir = dir.rstrip("*")
-    if not os.path.exists(dir):
+    if not os.path.exists(dir) or not os.path.isdir(dir):
         return permission_list
     dir_list = os.listdir(dir)
     for current_dir in dir_list:
