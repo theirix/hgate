@@ -60,20 +60,30 @@ def check_configs_access(request):
     adds error message if any.
     @return False if any error, True if all ok
     """
-    retVal = True
+    ret_val = True
     if not os.access(settings.HGWEB_CONFIG, os.F_OK):
         messages.error(request, _("Main configuration file does not exist by specified path: ") + settings.HGWEB_CONFIG)
-        retVal = False
+        ret_val = False
     elif not os.access(settings.HGWEB_CONFIG, os.R_OK or os.W_OK):
         messages.error(request, _("No access to read or write mercurial`s global configuration file by path: ") + settings.HGWEB_CONFIG)
-        retVal = False
+        ret_val = False
     if not os.access(settings.REPOSITORIES_ROOT, os.F_OK):
         messages.error(request, _("Root directory of repositories does not exist by path: ") + settings.REPOSITORIES_ROOT)
-        retVal = False
+        ret_val = False
     elif not os.access(settings.REPOSITORIES_ROOT, os.R_OK or os.X_OK):
         messages.error(request, _("No read or execute access to the root directory of repositories by path: ") + settings.REPOSITORIES_ROOT)
-        retVal = False
-    return retVal
+        ret_val = False
+    if not os.access(settings.AUTH_FILE, os.F_OK or os.R_OK):
+        messages.error(request, _("No users file or no read access by path: ") + settings.AUTH_FILE)
+        ret_val = False
+    return ret_val
+
+def check_users_file(request):
+    ret_val = True
+    if not os.access(settings.AUTH_FILE, os.W_OK):
+        messages.warning(request, _("No write access for users file by path: ") + settings.AUTH_FILE)
+        ret_val = False
+    return ret_val
 
 #page handlers
 
@@ -108,7 +118,6 @@ def index(request):
         elif "create_repo" in request.POST:
             create_repo_form = CreateRepoForm(groups, request.POST)
             if create_repo_form.is_valid():
-                redirect_path = ""
                 name = create_repo_form.cleaned_data['name']
                 group = create_repo_form.cleaned_data['group']
                 repo_path = prepare_path(name, group, groups)
@@ -215,15 +224,16 @@ def repo(request, repo_path):
     return render_to_response('repository.html', model,
                               context_instance=RequestContext(request))
 
-def user_index(request, action=None, login=None):
+def user_index(request):
     if not check_configs_access(request):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
+    is_w_access = check_users_file(request)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
     if request.method == "POST":
         form = AddUser(request.POST)
-        if form.is_valid():
+        if form.is_valid() and is_w_access:
             login = form.cleaned_data['login']
             password = form.cleaned_data['password2']
             users.add(settings.AUTH_FILE, login, password)
@@ -240,26 +250,21 @@ def user_index(request, action=None, login=None):
 def user(request, action, login):
     if not check_configs_access(request):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
-    def check_users_file(request):
-        if not os.access(settings.AUTH_FILE, os.F_OK or os.R_OK):
-            messages.error(request, _("No users file or no read access by path: ") + settings.AUTH_FILE)
-        elif not os.access(settings.AUTH_FILE, os.W_OK):
-            messages.warning(request, _("No write access for users file by path: ") + settings.AUTH_FILE)
 
-    check_users_file(request)
-    
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
     model = {"tree": tree}
+    is_w_access = check_users_file(request)
     if action == "delete":
-        users.remove(settings.AUTH_FILE,login)
-        messages.success(request, _("User '%s' was deleted.") % login)
+        if is_w_access:
+            users.remove(settings.AUTH_FILE,login)
+            messages.success(request, _("User '%s' was deleted.") % login)
         return HttpResponseRedirect("../users") #todo: render via url
     elif action == "edit":
         # todo: check if login exists
         if request.method == "POST":
             form = EditUser(request.POST)
-            if form.is_valid():
+            if form.is_valid() and is_w_access:
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))
