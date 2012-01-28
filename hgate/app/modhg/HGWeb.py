@@ -23,32 +23,36 @@ class HGWeb:
         self._parser = ConfigParser()
         self._parser.read(path)
 
-    def get_paths(self):
+    def get_paths_and_collections(self):
         """finds all paths from section [paths] and paths with appended /** from section [collection]"""
-        _paths = []
-        if self._parser.has_section("paths"):
-            _paths = self._parser.items("paths")
-        if self._parser.has_section("collections"):
-            # todo: this exposes collections as paths with /** suffix. simple support of collections.
-            _collections = self._parser.items("collections")
-            _paths += [ (name, path + "/**") for name, path in _collections]
-        return _paths
+        ret_val = self.get_paths() + self.get_collections()
 
-    def get_paths_only(self):
+        return ret_val
+
+    def get_paths(self):
         """ finds all paths from section [paths] """
         if self._parser.has_section("paths"):
             return self._parser.items("paths")
         else :
             return []
 
+    def get_collections(self):
+        if self._parser.has_section("collections"):
+            # todo: this exposes collections as paths with /** suffix. simple support of collections.
+            collections = self._parser.items("collections")
+            collections = [ (name, path + "/**") for name, path in collections]
+            return collections
+        else :
+            return []
+
     def get_groups(self):
-        paths = self.get_paths_only()
+        paths = self.get_paths()
         groups = []
         for path in paths:
             if path[1].endswith("*"):
                 groups.append(path)
         groups = sorted(groups)
-        return groups
+        return groups + self.get_collections()
 
     def get_path(self, key):
         try:

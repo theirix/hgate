@@ -134,14 +134,16 @@
                 <td>{{ gr_key }}</td>
                 <td>{{ gr_path }}</td>
                 <td class="action">
-                    <span title="{% trans 'Click to start editing this group: you can change name and path.' %}">
-                        {% trans "edit" %}
-                    </span>&nbsp;&nbsp;
-                    <span class="delete_group"
-                          onclick="delete_group('{{ gr_key }}', '{{ rep_count }}');"
-                          title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
-                         {% trans "delete" %}
-                    </span>
+                    {% if gr_key not in collections %}
+                        <span title="{% trans 'Click to start editing this group: you can change name and path.' %}">
+                            {% trans "edit" %}
+                        </span>&nbsp;&nbsp;
+                        <span class="delete_group"
+                              onclick="delete_group('{{ gr_key }}', '{{ rep_count }}');"
+                              title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
+                             {% trans "delete" %}
+                        </span>
+                    {% endif %}
                     {% if gr_key == old_group_name and gr_path == old_group_path %}
                         <div id="error_here">
                             <script type="text/javascript">

@@ -55,7 +55,7 @@ def permissions(login, path_as_key = False):
     permission_list = {}
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     global_web = hgweb.get_web()
-    paths = hgweb.get_paths()
+    paths = hgweb.get_paths_and_collections()
     for (name, path) in paths:
         if path.endswith("*"):
             permission_list.update(_scan(name, path, path.endswith("**"), login, path_as_key, global_web))
@@ -134,7 +134,7 @@ def _is_in_list(web, global_web, key, login):
 def _remove_from_hgrc(login):
     _remove_hgrc_single(login, settings.HGWEB_CONFIG)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    paths = hgweb.get_paths()
+    paths = hgweb.get_paths_and_collections()
     for (name, path) in paths:
         if path.endswith("*"):
             _remove_from_hgrc_int(name, path, path.endswith("**"), login)

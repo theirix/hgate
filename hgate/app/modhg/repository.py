@@ -37,7 +37,7 @@ def create_group(path, name):
         raise RepositoryException("There is already a group with such a name. Group wasn`t created")
 
 
-def create(path, name="", has_no_group=False):
+def create(path, name, has_no_group=False):
     """
     http://mercurial.selenic.com/wiki/MercurialApi#Repositories
     """
@@ -85,7 +85,7 @@ def get_absolute_repository_path(key):
     path = hgweb.get_path(key)
     if path:
         return path
-    paths = hgweb.get_paths()
+    paths = hgweb.get_paths_and_collections()
     values = [key.replace(path_item, val.strip("*").rstrip("/"), 1) \
               for path_item, val in paths \
               if key == path_item or key.startswith(path_item)]

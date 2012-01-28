@@ -92,16 +92,18 @@ def index(request):
     if not check_configs_access(request):
         return render_to_response('errors.html', {"menu" : "home"}, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    _tree = modhg.repository.get_tree(hgweb.get_paths())
+    _tree = modhg.repository.get_tree(hgweb.get_paths_and_collections())
     tree = prepare_tree(_tree)
     groups = hgweb.get_groups()
+    collections = zip(*hgweb.get_collections())[0]
 
     create_repo_form = CreateRepoForm(default_groups=groups)
     groups_form = ManageGroupsForm()
     edit_group_form_prefix="edit_group"
     edit_group_form = ManageGroupsForm(prefix=edit_group_form_prefix)
-    
-    model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree)}
+
+    model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree),
+             "collections": collections}
     
     if request.method == 'POST':
         if "create_group" in request.POST:
@@ -186,7 +188,7 @@ def repo(request, repo_path):
                                       repo_path == "")},
                                   context_instance=RequestContext(request))
 
-    def check_access_local_hgrc(hgrc_path, request):
+    def check_access_local_hgrc(request, hgrc_path):
         hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
         if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
             messages.error(request, _("No hgrc for this repository. No write access to create hgrc by path: ") + hgdir)
@@ -196,7 +198,7 @@ def repo(request, repo_path):
             messages.warning(request, _("No access to read mercurial`s local configuration file by path: ") + hgrc_path)
 
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     is_global = repo_path == ""
     hgrc = None
     model = {"tree": tree, "global": is_global}
@@ -205,7 +207,7 @@ def repo(request, repo_path):
             model["repo_path"] = repo_path
             full_repository_path = get_absolute_repository_path(repo_path)
             hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
-            check_access_local_hgrc(hgrc_path, request)
+            check_access_local_hgrc(request, hgrc_path)
             hgrc = HGWeb(hgrc_path, True)
         except ValueError:
             hgrc = None
@@ -229,7 +231,7 @@ def user_index(request):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
     is_w_access = check_users_file(request)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     model = {"tree": tree}
     if request.method == "POST":
         form = AddUser(request.POST)
@@ -252,7 +254,7 @@ def user(request, action, login):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
 
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     model = {"tree": tree}
     is_w_access = check_users_file(request)
     if action == "delete":
