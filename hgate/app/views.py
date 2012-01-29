@@ -4,7 +4,7 @@ import settings
 import app.modhg.usersb as users
 from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageGroupsForm
 from app.modhg.HGWeb import HGWeb
-from app.modhg.repository import RepositoryException, get_absolute_repository_path
+from app.modhg.repository import get_absolute_repository_path
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -21,7 +21,7 @@ def prepare_tree(tree, group=""):
             reps_in_group = len(value)
             res += "<li><span>%s (%d)</span><ul>%s</ul></li>" % (key, reps_in_group, prepare_tree(value, group + key + "/"))
         else:
-             res += "<li><a href='%s'>%s</a></li>" % (reverse("repository", args=[group+key]), key)
+            res += "<li><a href='%s'>%s</a></li>" % (reverse("repository", args=[group+key]), key)
     return res
 
 def prepare_path(name, group, groups):
@@ -99,7 +99,7 @@ def index(request):
 
     create_repo_form = CreateRepoForm(default_groups=groups)
     groups_form = ManageGroupsForm()
-    edit_group_form_prefix="edit_group"
+    edit_group_form_prefix = "edit_group"
     edit_group_form = ManageGroupsForm(prefix=edit_group_form_prefix)
 
     model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree),
@@ -114,7 +114,7 @@ def index(request):
                 try:
                     modhg.repository.create_group(path, name)
                     messages.success(request, _("New group was added."))
-                except Exception as e:
+                except modhg.repository.RepositoryException as e:
                     messages.warning(request, str(e))
                 return HttpResponseRedirect('.')
         elif "create_repo" in request.POST:
@@ -130,7 +130,7 @@ def index(request):
                         redirect_path = "repo/" + name
                     else:
                         redirect_path = "repo/" + group + "/" + name
-                except Exception as e:
+                except modhg.repository.RepositoryException as e:
                     messages.warning(request, str(e))
                     return HttpResponseRedirect('.')
 
@@ -141,7 +141,7 @@ def index(request):
             try:
                 modhg.repository.delete_group(path, name)
                 messages.success(request, _("Group '%s' was deleted successfully.") % name)
-            except Exception as e:
+            except modhg.repository.RepositoryException as e:
                 messages.warning(request, str(e))
             return HttpResponseRedirect('.')
         elif "old_group_name" in request.POST:
@@ -156,7 +156,7 @@ def index(request):
                     try:
                         modhg.repository.create_group(path, name)
                         messages.success(request, _("Group '%s' was changed." % old_name))
-                    except Exception as e:
+                    except modhg.repository.RepositoryException as e:
                         messages.warning(request, str(e))
                 elif name == old_name and path == old_path:
                     pass#do nothing
@@ -175,8 +175,10 @@ def index(request):
     return render_to_response('index.html', model, context_instance=RequestContext(request))
     
 def hgrc_delete(request, parameter, repo_path):
+    if not check_configs_access(request):
+        return render_to_response('errors.html', {"menu" : "home"}, context_instance=RequestContext(request))
     full_repository_path = get_absolute_repository_path(repo_path)
-    hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
+    hgrc_path = os.path.join(full_repository_path, ".hg","hgrc")
     hgrc = HGWeb(hgrc_path, True)
     hgrc.del_web_key(parameter)
     return HttpResponseRedirect(reverse("repository", args=[repo_path]))
@@ -243,7 +245,7 @@ def user_index(request):
             form = AddUser()
     else:
         form = AddUser()
-    user_list = users.list(settings.AUTH_FILE)
+    user_list = users.login_list(settings.AUTH_FILE)
     model["form"] = form
     model["users"] = user_list
     return render_to_response("users.html", model,
@@ -259,7 +261,7 @@ def user(request, action, login):
     is_w_access = check_users_file(request)
     if action == "delete":
         if is_w_access:
-            users.remove(settings.AUTH_FILE,login)
+            users.remove(settings.AUTH_FILE, login)
             messages.success(request, _("User '%s' was deleted.") % login)
         return HttpResponseRedirect("../users") #todo: render via url
     elif action == "edit":

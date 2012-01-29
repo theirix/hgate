@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url, include
 from app.views import index, hgrc_delete, repo, user, user_index
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin

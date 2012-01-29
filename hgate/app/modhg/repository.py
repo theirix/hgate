@@ -1,5 +1,5 @@
 import os
-from mercurial import hg,ui
+from mercurial import hg, ui
 import shutil
 from app.modhg.HGWeb import HGWeb
 import settings
@@ -55,7 +55,7 @@ def create(path, name, has_no_group=False):
 
 def delete(path, name="", has_no_group=False):
     if not is_repository(path):
-        raise RepositoryException("There is no repository by path: [%s]" % (path, ) )
+        raise RepositoryException("There is no repository by path: [%s]" % path )
     try:
         shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied"
     except shutil.Error as e: #probably more specific exception is needed
@@ -66,7 +66,7 @@ def delete(path, name="", has_no_group=False):
 
 def rename(old_path, new_path, name="", has_no_group=False):
     if not is_repository(old_path):
-        raise RepositoryException("There is no repository by path: [%s]" % (old_path, ))
+        raise RepositoryException("There is no repository by path: [%s]" % old_path)
     try:
         shutil.move(old_path, new_path)
     except shutil.Error as e: #probably more specific exception is needed
@@ -106,15 +106,15 @@ def get_tree(paths):
     tree = sorted(tree.items())
     return groups_tree + tree
 
-def _scan(dir, deep):
+def _scan(dir_path, deep):
     result = {}
     groups_tree = {}
-    dir = dir.rstrip("*")
-    if not os.path.exists(dir) or not os.path.isdir(dir):
+    dir_path = dir_path.rstrip("*")
+    if not os.path.exists(dir_path) or not os.path.isdir(dir_path):
         return result
-    dir_list = os.listdir(dir)
+    dir_list = os.listdir(dir_path)
     for current_dir in dir_list:
-        path = os.path.join(dir, current_dir)
+        path = os.path.join(dir_path, current_dir)
         if is_repository(path):
             result[current_dir] = current_dir
         elif deep:
