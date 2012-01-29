@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-08 01:39+0300\n"
+"POT-Creation-Date: 2012-01-29 19:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,7 +83,7 @@ msgstr "Имя репозитория"
 msgid "Group"
 msgstr "Группа"
 
-#: app/forms.py:97 templates/index.html:124
+#: app/forms.py:97 templates/index.html:128
 msgid "Group name"
 msgstr "Имя группы"
 
@@ -115,88 +115,90 @@ msgid ""
 "No read or execute access to the root directory of repositories by path: "
 msgstr "Нет прав на чтение или выполнение корневой директории: "
 
-#: app/views.py:104
+#: app/views.py:77
+msgid "No users file or no read access by path: "
+msgstr "Нет файла users или прав на чтение по пути: "
+
+#: app/views.py:84
+msgid "No write access for users file by path: "
+msgstr "Нет прав на запись файла users по пути: "
+
+#: app/views.py:116
+#, fuzzy
 msgid "New group was added."
 msgstr "Новая группа добавлена."
 
-#: app/views.py:117
+#: app/views.py:128
+#, fuzzy
 msgid "New repository was created."
 msgstr "Создан новый репозиторий."
 
-#: app/views.py:132
+#: app/views.py:143
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr "Группа '%s' успешно удалена."
 
-#: app/views.py:147
+#: app/views.py:158
 #, python-format
 msgid "Group '%s' was changed."
 msgstr "Группа '%s' изменена."
 
-#: app/views.py:154
+#: app/views.py:165
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
 
-#: app/views.py:183
+#: app/views.py:196
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 "Нет hgrc для данного репозитория. Нет прав на запись для создания hgrc по "
 "пути: "
 
-#: app/views.py:185
+#: app/views.py:198
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на запись локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views.py:187
+#: app/views.py:200
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на чтение локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views.py:209
+#: app/views.py:221
 msgid "Global settings saved successfully."
 msgstr "Глабальные настройки успешно сохранены."
 
-#: app/views.py:212
+#: app/views.py:224
 msgid "Repository settings saved successfully."
 msgstr "Настройки репозитория успешно сохранены."
 
-#: app/views.py:231
+#: app/views.py:244
 #, python-format
 msgid "User '%s' was added."
 msgstr "Пользователь '%s' добавлен."
 
-#: app/views.py:246
-msgid "No users file or no read access by path: "
-msgstr "Нет файла users или прав на чтение по пути: "
-
-#: app/views.py:248
-msgid "No write access for users file by path: "
-msgstr "Нет прав на запись файла users по пути: "
-
-#: app/views.py:257
+#: app/views.py:265
 #, python-format
 msgid "User '%s' was deleted."
 msgstr "Пользователь '%s' удалён."
 
-#: app/views.py:266
+#: app/views.py:274
 msgid "Password changed successfully."
 msgstr "Пароль успешно изменён."
 
-#: templates/base.html:43
+#: templates/base.html:58
 msgid "Home"
 msgstr "Главная"
 
-#: templates/base.html:44
+#: templates/base.html:59
 msgid "Users"
 msgstr "Пользователи"
 
-#: templates/base.html:45
+#: templates/base.html:60
 msgid "HgWeb"
 msgstr "Настройки HgWeb"
 
-#: templates/base.html:46
+#: templates/base.html:61
 msgid "Help"
 msgstr "Помощь"
 
@@ -241,15 +243,15 @@ msgstr "отменить"
 msgid "save"
 msgstr "сохранить"
 
-#: templates/index.html:83
+#: templates/index.html:87
 msgid "Create repository"
 msgstr "Создать репозиторий"
 
-#: templates/index.html:89 templates/index.html.py:104 templates/users.html:32
+#: templates/index.html:93 templates/index.html.py:108 templates/users.html:32
 msgid "Create"
 msgstr "Создать"
 
-#: templates/index.html:90
+#: templates/index.html:94
 msgid ""
 "Create new repository : Path: default path if no group is specified or "
 "concrete group path.<br>Name: specified name.<br>This action creates dir "
@@ -259,11 +261,11 @@ msgstr ""
 "или путь выбранной группы.<br>Имя: указанное имя.<br>Это действие создаёт "
 "директорию с именем репозитория и выполняет &apos;hg init&apos; в ней."
 
-#: templates/index.html:97
+#: templates/index.html:101
 msgid "Manage groups"
 msgstr "Управление группами"
 
-#: templates/index.html:105
+#: templates/index.html:109
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
@@ -271,24 +273,24 @@ msgstr ""
 "Создание новой группы : Создаёт необходимые директории, если необходимо, для "
 "пути группы.<br>Добавляет запись об этой группе в hgweb.config."
 
-#: templates/index.html:125
+#: templates/index.html:129
 msgid "Full path"
 msgstr "Абсолютный путь"
 
-#: templates/index.html:126 templates/users.html:39
+#: templates/index.html:130 templates/users.html:39
 msgid "Action"
 msgstr "Действие"
 
-#: templates/index.html:133
+#: templates/index.html:138
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 "Клик для начала редактирования данной группы: вы можете изменить имя и путь."
 
-#: templates/index.html:134 templates/users.html:44
+#: templates/index.html:139 templates/users.html:44
 msgid "edit"
 msgstr "редактировать"
 
-#: templates/index.html:138
+#: templates/index.html:143
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
@@ -296,13 +298,17 @@ msgstr ""
 "Удалить группу : удаляет запись об это группе из hgweb.config. "
 "Удаляетдиректорию группы и всё её содержимое."
 
-#: templates/index.html:139 templates/users.html:45
+#: templates/index.html:144 templates/users.html:45
 msgid "delete"
 msgstr "удалить"
 
 #: templates/repository.html:30
-msgid "Are you sure you want to delete parameter '{0}' from hgrc file"
-msgstr "Вы уверены удалить параметр '{0}' из файла настроек hgrc"
+msgid "Are you sure you want to delete parameter "
+msgstr "Вы уверены, что хотите удалить параметр "
+
+#: templates/repository.html:30
+msgid " from hgrc file"
+msgstr " из файла hgrc"
 
 #: templates/repository.html:56
 msgid "HgWeb config"
@@ -409,3 +415,9 @@ msgstr "Изменение пароля и управление правами �
 #: templates/users.html:45
 msgid "Remove user"
 msgstr "Удалить пользователя"
+
+#, fuzzy
+#~ msgid ""
+#~ " Are you sure you want to delete parameter \" + field + \" from hgrc "
+#~ "file? "
+#~ msgstr "Вы уверены удалить параметр \" + field + \" из файла настроек hgrc?"
