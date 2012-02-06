@@ -279,9 +279,10 @@ h3{
     display: block;
     width: 16px;
     height: 16px;
-    background:url('/images/remove-icon.png') no-repeat;
+    background:transparent url('../images/remove-icon.png') no-repeat;
     position:absolute;
-    margin-top:-19px;margin-left:282px
+    margin-top:-22px;
+    margin-left:280px
 }
 .legend {
     text-align: left;

@@ -4,6 +4,21 @@ from django.utils.translation import ugettext_lazy as _
 import app.modhg.usersb as users
 import settings
 
+class BaseForm(forms.Form):
+    file_hash = forms.CharField(widget=forms.HiddenInput())
+
+    def __init__(self, file_hash="", *args, **kwargs):
+        super(BaseForm, self).__init__(*args, **kwargs)
+        self.fields['file_hash'].widget.attrs['value'] = file_hash
+
+    def clean(self):
+        old_hash = self.cleaned_data['file_hash']
+        new_hash = self.fields['file_hash'].widget.attrs['value']
+        if old_hash != new_hash:
+            self.data = self.data.copy() # make QueryDict mutable
+            self.data['file_hash'] = new_hash
+            raise forms.ValidationError(_("Configuration file was changed, please try again."))
+        return self.cleaned_data
 
 class RepositoryForm(forms.Form):
     allow_read = forms.CharField(label= _("allow_read"), initial=None, required=False)
@@ -77,10 +92,9 @@ class EditUser(forms.Form):
             raise forms.ValidationError(_("Passwords should be the same"))
         return password2
 
-class CreateRepoForm(forms.Form):
-    def __init__(self, default_groups, *args, **kwargs):
-        super(CreateRepoForm, self).__init__(*args, **kwargs)
-
+class CreateRepoForm(BaseForm):
+    def __init__(self, default_groups, file_hash, *args, **kwargs):
+        super(CreateRepoForm, self).__init__(file_hash, *args, **kwargs)
         self.fields['group'].choices = [("-","-")] + default_groups
 
     def clean_name(self):
@@ -93,9 +107,12 @@ class CreateRepoForm(forms.Form):
     name = forms.CharField(label = _("Repository name"), max_length=100)
     group = forms.ChoiceField(label = _("Group"))
 
-class ManageGroupsForm(forms.Form):
+class ManageGroupsForm(BaseForm):
     name = forms.CharField(label = _("Group name"), max_length=100)
     path = forms.CharField(label = _("Path"))
+
+    def __init__(self, file_hash, *args, **kwargs):
+        super(ManageGroupsForm, self).__init__(file_hash, *args, **kwargs)
 
     def clean_path(self):
         _path = self.cleaned_data['path'].strip()

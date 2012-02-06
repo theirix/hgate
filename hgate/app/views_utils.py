@@ -1,3 +1,4 @@
+import hashlib
 import os
 import settings
 from django.contrib import messages
@@ -86,4 +87,15 @@ def check_users_file(request):
         messages.warning(request, _("No write access for users file by path: ") + settings.AUTH_FILE)
         ret_val = False
     return ret_val
+
+def md5_for_file(file_name, block_size=2**20):
+    f = open(file_name, "rb")
+    md5 = hashlib.md5()
+    while True:
+        data = f.read(block_size)
+        if not data:
+            break
+        md5.update(data)
+    f.close()
+    return md5.hexdigest()
 

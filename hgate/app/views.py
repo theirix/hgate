@@ -11,7 +11,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from app.views_utils import add_amount_of_repos_to_groups, prepare_path, check_users_file, prepare_tree, check_configs_access
+from app.views_utils import add_amount_of_repos_to_groups, prepare_path, check_users_file, prepare_tree, check_configs_access, md5_for_file
 
 #page handlers
 
@@ -25,17 +25,19 @@ def index(request):
     groups = hgweb.get_groups()
     collections = zip(*hgweb.get_collections())[0]
 
-    create_repo_form = CreateRepoForm(default_groups=groups)
-    groups_form = ManageGroupsForm()
+    hgweb_cfg_hash = md5_for_file(settings.HGWEB_CONFIG)
+
+    create_repo_form = CreateRepoForm(groups, hgweb_cfg_hash)
+    groups_form = ManageGroupsForm(hgweb_cfg_hash)
     edit_group_form_prefix = "edit_group"
-    edit_group_form = ManageGroupsForm(prefix=edit_group_form_prefix)
+    edit_group_form = ManageGroupsForm(hgweb_cfg_hash, prefix=edit_group_form_prefix)
 
     model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree),
              "collections": collections}
     
     if request.method == 'POST':
         if "create_group" in request.POST:
-            groups_form = ManageGroupsForm(request.POST)
+            groups_form = ManageGroupsForm(hgweb_cfg_hash, request.POST)
             if groups_form.is_valid():
                 name = groups_form.cleaned_data['name']
                 path = groups_form.cleaned_data['path']
@@ -46,7 +48,7 @@ def index(request):
                     messages.warning(request, str(e))
                 return HttpResponseRedirect('.')
         elif "create_repo" in request.POST:
-            create_repo_form = CreateRepoForm(groups, request.POST)
+            create_repo_form = CreateRepoForm(groups, hgweb_cfg_hash, request.POST)
             if create_repo_form.is_valid():
                 name = create_repo_form.cleaned_data['name']
                 group = create_repo_form.cleaned_data['group']
@@ -72,8 +74,8 @@ def index(request):
             except modhg.repository.RepositoryException as e:
                 messages.warning(request, str(e))
             return HttpResponseRedirect('.')
-        elif "old_group_name" in request.POST:
-            edit_group_form = ManageGroupsForm(request.POST, prefix=edit_group_form_prefix)
+        elif "old_group_name" in request.POST: # edit group request
+            edit_group_form = ManageGroupsForm(hgweb_cfg_hash, request.POST, prefix=edit_group_form_prefix)
             old_name = request.POST.get("old_group_name")
             old_path = request.POST.get("old_group_path")
             if edit_group_form.is_valid():
