@@ -64,11 +64,13 @@ class HGWeb:
         if "paths" not in self._parser.sections():
             self._parser.add_section("paths")
         self._parser.set("paths", key, path)
-        self._parser.write(open(self._file_name, "w"))
+        with open(self._file_name, "w") as f:
+            self._parser.write(f)
 
     def del_paths(self, key):
         self._parser.remove_option("paths", key)
-        self._parser.write(open(self._file_name, "w"))
+        with open(self._file_name, "w") as f:
+            self._parser.write(f)
 
     def get_web(self):
         try:
@@ -86,9 +88,11 @@ class HGWeb:
         if "web" not in self._parser.sections():
             self._parser.add_section("web")
         self._parser.set("web", key, value)
-        self._parser.write(open(self._file_name, "w"))
+        with open(self._file_name, "w") as f:
+            self._parser.write(f)
 
     def del_web_key(self, key):
         self._parser.remove_option("web", key)
-        self._parser.write(open(self._file_name, "w"))
+        with open(self._file_name, "w") as f:
+            self._parser.write(f)
 

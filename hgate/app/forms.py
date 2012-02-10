@@ -4,11 +4,11 @@ from django.utils.translation import ugettext_lazy as _
 import app.modhg.usersb as users
 import settings
 
-class BaseForm(forms.Form):
+class FileHashForm(forms.Form):
     file_hash = forms.CharField(widget=forms.HiddenInput())
 
     def __init__(self, file_hash="", *args, **kwargs):
-        super(BaseForm, self).__init__(*args, **kwargs)
+        super(FileHashForm, self).__init__(*args, **kwargs)
         self.fields['file_hash'].widget.attrs['value'] = file_hash
 
     def clean(self):
@@ -20,7 +20,7 @@ class BaseForm(forms.Form):
             raise forms.ValidationError(_("Configuration file was changed, please try again."))
         return self.cleaned_data
 
-class RepositoryForm(forms.Form):
+class RepositoryForm(FileHashForm):
     allow_read = forms.CharField(label= _("allow_read"), initial=None, required=False)
     allow_push = forms.CharField(label= _("allow_push"), initial=None, required=False)
     deny_read = forms.CharField(label= _("deny_read"), initial=None, required=False)
@@ -32,14 +32,20 @@ class RepositoryForm(forms.Form):
 
     classes = {}
 
+    def __init__(self, file_hash, *args, **kwargs):
+        super(RepositoryForm, self).__init__(file_hash, *args, **kwargs)
+        self.filtered_keys = self.fields.keys()
+        # file hash field does not play in repository form logic.
+        self.filtered_keys.remove('file_hash')
+
     def set_default(self, hgweb, hgrc):
-        for field in self.fields:
+        for field in self.filtered_keys:
             self.classes[field] = "r_val_default"
         if hgweb is not None:
-            for field in self.fields:
+            for field in self.filtered_keys:
                 self._set_value(hgweb, field, "r_val_global")
         if hgrc is not None:
-            for field in self.fields:
+            for field in self.filtered_keys:
                 self._set_value(hgrc, field, "r_val_local")
 
     def _set_value(self, conf, field_name, css_class):
@@ -55,7 +61,7 @@ class RepositoryForm(forms.Form):
             self.classes[field_name] = css_class
 
     def export_values(self, hgrc, post):
-        for field in self.fields:
+        for field in self.filtered_keys:
             self._export_value(hgrc, field, post)
 
     def _export_value(self, hgrc, field_name, post):
@@ -63,10 +69,13 @@ class RepositoryForm(forms.Form):
             hgrc.set_web_key(field_name, self.cleaned_data[field_name])
 
 
-class AddUser(forms.Form):
+class AddUser(FileHashForm):
     login = forms.CharField(label=_("Login"), max_length=40, required=True)
     password1 = forms.CharField(label=_("Password"), max_length=20, required=True, widget=forms.PasswordInput)
     password2 = forms.CharField(label=_("Re-enter password"), max_length=20, required=True, widget=forms.PasswordInput)
+
+    def __init__(self, file_hash, *args, **kwargs):
+        super(AddUser, self).__init__(file_hash, *args, **kwargs)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1", "")
@@ -81,9 +90,12 @@ class AddUser(forms.Form):
             raise forms.ValidationError(_("User exists"))
         return login
 
-class EditUser(forms.Form):
+class EditUser(FileHashForm):
     password1 = forms.CharField(label=_("Password"), max_length=20, required=True, widget=forms.PasswordInput)
     password2 = forms.CharField(label=_("Re-enter password"), max_length=20, required=True, widget=forms.PasswordInput)
+
+    def __init__(self, file_hash, *args, **kwargs):
+        super(EditUser, self).__init__(file_hash, *args, **kwargs)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1", "")
@@ -92,7 +104,7 @@ class EditUser(forms.Form):
             raise forms.ValidationError(_("Passwords should be the same"))
         return password2
 
-class CreateRepoForm(BaseForm):
+class CreateRepoForm(FileHashForm):
     def __init__(self, default_groups, file_hash, *args, **kwargs):
         super(CreateRepoForm, self).__init__(file_hash, *args, **kwargs)
         self.fields['group'].choices = [("-","-")] + default_groups
@@ -107,7 +119,7 @@ class CreateRepoForm(BaseForm):
     name = forms.CharField(label = _("Repository name"), max_length=100)
     group = forms.ChoiceField(label = _("Group"))
 
-class ManageGroupsForm(BaseForm):
+class ManageGroupsForm(FileHashForm):
     name = forms.CharField(label = _("Group name"), max_length=100)
     path = forms.CharField(label = _("Path"))
 

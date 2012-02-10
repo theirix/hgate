@@ -133,6 +133,7 @@ def repo(request, repo_path):
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     is_global = repo_path == ""
     hgrc = None
+    form = None
     model = {"tree": tree, "global": is_global}
     if not is_global:
         try:
@@ -141,10 +142,14 @@ def repo(request, repo_path):
             hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
             check_access_local_hgrc(request, hgrc_path)
             hgrc = HGWeb(hgrc_path, True)
+            file_hash = md5_for_file(hgrc_path)
         except ValueError:
             hgrc = None
+            file_hash = None
+    else:
+        file_hash = md5_for_file(settings.HGWEB_CONFIG)
     if request.method == 'POST':
-        form = RepositoryForm(request.POST)
+        form = RepositoryForm(file_hash, request.POST)
         if form.is_valid():
             if is_global:
                 form.export_values(hgweb, request.POST)
@@ -152,7 +157,12 @@ def repo(request, repo_path):
             else:
                 form.export_values(hgrc, request.POST)
                 messages.success(request, _("Repository settings saved successfully."))
-    form = RepositoryForm()
+    # re-set errors if any occurs in the is_valid method.
+    errors = None
+    if form is not None:
+        errors = form._errors
+    form = RepositoryForm(file_hash)
+    form._errors = errors
     form.set_default(hgweb, hgrc)
     model["form"] = form
     return render_to_response('repository.html', model,
@@ -162,19 +172,20 @@ def user_index(request):
     if not check_configs_access(request):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
     is_w_access = check_users_file(request)
+    users_file_hash = md5_for_file(settings.AUTH_FILE)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     model = {"tree": tree}
     if request.method == "POST":
-        form = AddUser(request.POST)
+        form = AddUser(users_file_hash, request.POST)
         if form.is_valid() and is_w_access:
             login = form.cleaned_data['login']
             password = form.cleaned_data['password2']
             users.add(settings.AUTH_FILE, login, password)
             messages.success(request, _("User '%s' was added.") % login)
-            form = AddUser()
+            form = AddUser(users_file_hash)
     else:
-        form = AddUser()
+        form = AddUser(users_file_hash)
     user_list = users.login_list(settings.AUTH_FILE)
     model["form"] = form
     model["users"] = user_list
@@ -185,6 +196,7 @@ def user(request, action, login):
     if not check_configs_access(request):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
 
+    users_file_hash = md5_for_file(settings.AUTH_FILE)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     model = {"tree": tree}
@@ -197,14 +209,14 @@ def user(request, action, login):
     elif action == "edit":
         # todo: check if login exists
         if request.method == "POST":
-            form = EditUser(request.POST)
+            form = EditUser(users_file_hash, request.POST)
             if form.is_valid() and is_w_access:
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))
-                form = EditUser()
+                form = EditUser(users_file_hash)
         else:
-            form = EditUser()
+            form = EditUser(users_file_hash)
         model["form"] = form
         model["login"] = login
         model["permissions"] = users.permissions(login)

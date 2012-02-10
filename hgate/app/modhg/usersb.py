@@ -31,14 +31,17 @@ def add(filename, login, password):
         raise ValueError("User exists")
     row = _form_file_row(login, password)
     lines.append(row)
-    open(filename,'w+').writelines(lines)
+    with open(filename,'w+') as f:
+        f.writelines(lines)
 
 def remove(filename, login):
     # todo: check is user exists in hgrc files
     _remove_from_hgrc(login)
-    lines = open(filename, 'r').readlines()
+    with open(filename, 'r') as f:
+        lines = f.readlines()
     matches = [line for line in lines if not line.split(LOGIN_PASSWD_SEP)[0] == login]
-    open(filename,'w+').writelines(matches)
+    with open(filename,'w+') as f:
+        f.writelines(matches)
 
 def update(filename, login, new_password):
     lines = _get_rows(filename)
@@ -48,7 +51,8 @@ def update(filename, login, new_password):
     matches = [line for line in lines if not line.startswith(login)]
     row = _form_file_row(login, new_password)
     matches.append(row)
-    open(filename,'w+').writelines(matches)
+    with open(filename,'w+') as f:
+        f.writelines(matches)
 
 def permissions(login, path_as_key = False):
     #check is login exists
@@ -184,5 +188,6 @@ def _form_file_row(login, password):
     return login + ":" + crypt.crypt(password, _salt()) + os.linesep
 
 def _get_rows(filename):
-    lines = open(filename, 'r').readlines()
-    return [line.strip("\r\n") + os.linesep for line in lines]
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        return [line.strip("\r\n") + os.linesep for line in lines]
