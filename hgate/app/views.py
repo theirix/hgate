@@ -1,8 +1,9 @@
 import os
+from hgate.app.forms import FileHashForm
 import modhg
 import settings
 import app.modhg.usersb as users
-from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageGroupsForm
+from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageGroupsForm, FileHashForm
 from app.modhg.HGWeb import HGWeb
 from app.modhg.repository import get_absolute_repository_path
 from django.core.urlresolvers import reverse
@@ -24,11 +25,11 @@ def index(request):
     tree = prepare_tree(_tree)
     groups = hgweb.get_groups()
     collections = zip(*hgweb.get_collections())[0]
-
     hgweb_cfg_hash = md5_for_file(settings.HGWEB_CONFIG)
 
     create_repo_form = CreateRepoForm(groups, hgweb_cfg_hash)
     groups_form = ManageGroupsForm(hgweb_cfg_hash)
+    delete_group_form = FileHashForm(hgweb_cfg_hash)
     edit_group_form_prefix = "edit_group"
     edit_group_form = ManageGroupsForm(hgweb_cfg_hash, prefix=edit_group_form_prefix)
 
@@ -46,7 +47,7 @@ def index(request):
                     messages.success(request, _("New group was added."))
                 except modhg.repository.RepositoryException as e:
                     messages.warning(request, str(e))
-                return HttpResponseRedirect('.')
+                return HttpResponseRedirect(reverse('index'))
         elif "create_repo" in request.POST:
             create_repo_form = CreateRepoForm(groups, hgweb_cfg_hash, request.POST)
             if create_repo_form.is_valid():
@@ -57,23 +58,25 @@ def index(request):
                     modhg.repository.create(repo_path, name, group == "-")
                     messages.success(request, _("New repository was created."))
                     if group == "-":
-                        redirect_path = "repo/" + name
+                        redirect_path = reverse("repository", args=[name])
                     else:
-                        redirect_path = "repo/" + group + "/" + name
+                        redirect_path = reverse("repository", args=[group + os.path.sep + name])
                 except modhg.repository.RepositoryException as e:
                     messages.warning(request, str(e))
-                    return HttpResponseRedirect('.')
+                    return HttpResponseRedirect(reverse('index'))
 
                 return HttpResponseRedirect(redirect_path)
         elif "delete_group" in request.POST:
-            name = request.POST.get("group_name")
-            path = dict(groups)[name]
-            try:
-                modhg.repository.delete_group(path, name)
-                messages.success(request, _("Group '%s' was deleted successfully.") % name)
-            except modhg.repository.RepositoryException as e:
-                messages.warning(request, str(e))
-            return HttpResponseRedirect('.')
+            delete_group_form = FileHashForm(hgweb_cfg_hash, request.POST)
+            if delete_group_form.is_valid():
+                name = request.POST.get("group_name")
+                path = dict(groups)[name]
+                try:
+                    modhg.repository.delete_group(path, name)
+                    messages.success(request, _("Group '%s' was deleted successfully.") % name)
+                except modhg.repository.RepositoryException as e:
+                    messages.warning(request, str(e))
+                return HttpResponseRedirect(reverse('index'))
         elif "old_group_name" in request.POST: # edit group request
             edit_group_form = ManageGroupsForm(hgweb_cfg_hash, request.POST, prefix=edit_group_form_prefix)
             old_name = request.POST.get("old_group_name")
@@ -93,7 +96,7 @@ def index(request):
                 else:
                     messages.warning(request,
                                      _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
-                return HttpResponseRedirect('.')
+                return HttpResponseRedirect(reverse('index'))
             else:
                 model["old_group_name"] = old_name
                 model["old_group_path"] = old_path
@@ -101,6 +104,7 @@ def index(request):
     model["groups_form"] = groups_form
     model["edit_group_form"] = edit_group_form
     model["repo_form"] = create_repo_form
+    model["delete_group_form"] = delete_group_form
 
     return render_to_response('index.html', model, context_instance=RequestContext(request))
     
@@ -173,20 +177,29 @@ def user_index(request):
         return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
     is_w_access = check_users_file(request)
     users_file_hash = md5_for_file(settings.AUTH_FILE)
+    form = AddUser(users_file_hash)
+    delete_user_form = FileHashForm(users_file_hash)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     model = {"tree": tree}
     if request.method == "POST":
-        form = AddUser(users_file_hash, request.POST)
-        if form.is_valid() and is_w_access:
-            login = form.cleaned_data['login']
-            password = form.cleaned_data['password2']
-            users.add(settings.AUTH_FILE, login, password)
-            messages.success(request, _("User '%s' was added.") % login)
-            form = AddUser(users_file_hash)
-    else:
-        form = AddUser(users_file_hash)
+        if "delete_user" in request.POST:
+            delete_user_form = FileHashForm(users_file_hash, request.POST)
+            if delete_user_form.is_valid() and is_w_access:
+                login = request.POST.get("login")
+                users.remove(settings.AUTH_FILE, login)
+                messages.success(request, _("User '%s' was deleted.") % login)
+                return HttpResponseRedirect(reverse('users_index'))
+        elif "add_user" in request.POST:
+            form = AddUser(users_file_hash, request.POST)
+            if form.is_valid() and is_w_access:
+                login = form.cleaned_data['login']
+                password = form.cleaned_data['password2']
+                users.add(settings.AUTH_FILE, login, password)
+                messages.success(request, _("User '%s' was added.") % login)
+                return HttpResponseRedirect(reverse('users_index'))
     user_list = users.login_list(settings.AUTH_FILE)
+    model["delete_user_form"] = delete_user_form
     model["form"] = form
     model["users"] = user_list
     return render_to_response("users.html", model,
@@ -201,12 +214,7 @@ def user(request, action, login):
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     model = {"tree": tree}
     is_w_access = check_users_file(request)
-    if action == "delete":
-        if is_w_access:
-            users.remove(settings.AUTH_FILE, login)
-            messages.success(request, _("User '%s' was deleted.") % login)
-        return HttpResponseRedirect("../users") #todo: render via url
-    elif action == "edit":
+    if action == "edit":
         # todo: check if login exists
         if request.method == "POST":
             form = EditUser(users_file_hash, request.POST)
@@ -214,7 +222,7 @@ def user(request, action, login):
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))
-                form = EditUser(users_file_hash)
+                return HttpResponseRedirect(reverse('users:action:login', kwargs={'action': action, "login": login}))
         else:
             form = EditUser(users_file_hash)
         model["form"] = form

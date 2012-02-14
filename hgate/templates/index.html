@@ -36,11 +36,11 @@
                 var path_width = tdpath.width();
                 var name_width = tdname.width();
                 tdpath.html('');
-                var new_path = $("<input type='text' value='" + path + "' />").filter("input")
+                $("<input type='text' value='" + path + "' />").filter("input")
                         .width(path_width)
                         .end().appendTo(tdpath);
                 tdname.html('');
-                var new_name = $("<input type='text' value='" + name + "' />").filter("input")
+                $("<input type='text' value='" + name + "' />").filter("input")
                         .width(name_width)
                         .end().appendTo(tdname);
 
@@ -114,6 +114,10 @@
     </form>
 
     <form action="{% url index %}" id="delete_group_form" name="delete_group_form" method="post">
+        {{ delete_group_form.non_field_errors }}
+        {% for hidden in delete_group_form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
         <input type="hidden" name="group_name" value=""/>
         <input type="hidden" name="delete_group" value=""/>
     </form>
