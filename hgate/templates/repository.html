@@ -27,14 +27,17 @@
     });
     $(".repo_field_delete_link").click(function(){
         var field = $(this).parents("tr:first").find("th").text();
-        return confirm("{% trans "Are you sure you want to delete parameter " %}" + "\"" + field + "\"" + "{% trans " from hgrc file" %}" + "?");
+        if (confirm("{% trans "Are you sure you want to delete parameter " %}" + "\"" + field + "\"" + "{% trans " from hgrc file" %}" + "?")) {
+            $('#repo_field_delete_form #parameter').val(field);
+            $('#repo_field_delete_form').submit();
+        }
     });
     $(".tooltip").tooltip({
                 delay: 1000,
                 showBody: " : ",
                 showURL: false
             });
-  })
+    })
 </script>
 {% endblock %}
 
@@ -55,6 +58,16 @@
 {% if global %}
 <h2>{% trans "HgWeb config" %}</h2>
 {% endif %}
+
+<form action="{% url repository repo_path %}" id="repo_field_delete_form" name="repo_field_delete_form" method="post">
+    {{ repo_field_delete_form.non_field_errors }}
+    {% for hidden in repo_field_delete_form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    <input type="hidden" name="parameter" id="parameter" value="" />
+    <input type="hidden" name="delete_field" />
+</form>
+
 <form class="repo_edit" action="{% url repository repo_path %}" method="post">
     {{ form.non_field_errors }}
     {% for hidden in form.hidden_fields %}
@@ -64,13 +77,13 @@
         {% for field in form.visible_fields %}
             <tr class="{{ form|field_class:field }}">
                 <th>{{ field.label_tag }}</th>
-                <td>{{ field.errors }}{{ field }}<a href="{% url hgrc_delete field.name repo_path %}" title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}" class="tooltip repo_field_delete_link"></a></td>
+                <td class="action">{{ field.errors }}{{ field }}<span title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}" class="tooltip repo_field_delete_link"></span></td>
                 <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#" class="repo_field_cancel_link">{% trans "Cancel" %}</a></td>
             </tr>
         {% endfor %}
         <tr>
             <td colspan="2" class="bottom">
-                <input class="submit" type="submit" value="{% trans "Save" %}" />
+                <input class="submit" type="submit" name="save" value="{% trans "Save" %}" />
                 {% if global %}
                     <span title="{% trans 'Save global configuration : Modifies [web] section in the hgweb.config.' %}"
                           class="tooltip">[ ? ]</span>

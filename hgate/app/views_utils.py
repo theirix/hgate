@@ -88,6 +88,15 @@ def check_users_file(request):
         ret_val = False
     return ret_val
 
+def check_access_local_hgrc(request, hgrc_path):
+    hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
+    if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
+        messages.error(request, _("No hgrc for this repository. No write access to create hgrc by path: ") + hgdir)
+    elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.W_OK):
+        messages.error(request, _("No access to write mercurial`s local configuration file by path: ") + hgrc_path)
+    elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.R_OK):
+        messages.warning(request, _("No access to read mercurial`s local configuration file by path: ") + hgrc_path)
+
 def md5_for_file(file_name, block_size=2**20):
     f = open(file_name, "rb")
     md5 = hashlib.md5()

@@ -12,7 +12,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from app.views_utils import add_amount_of_repos_to_groups, prepare_path, check_users_file, prepare_tree, check_configs_access, md5_for_file
+from app.views_utils import check_access_local_hgrc, add_amount_of_repos_to_groups, prepare_path, check_users_file, prepare_tree, check_configs_access, md5_for_file
 
 #page handlers
 
@@ -107,15 +107,6 @@ def index(request):
     model["delete_group_form"] = delete_group_form
 
     return render_to_response('index.html', model, context_instance=RequestContext(request))
-    
-def hgrc_delete(request, parameter, repo_path):
-    if not check_configs_access(request):
-        return render_to_response('errors.html', {"menu" : "home"}, context_instance=RequestContext(request))
-    full_repository_path = get_absolute_repository_path(repo_path)
-    hgrc_path = os.path.join(full_repository_path, ".hg","hgrc")
-    hgrc = HGWeb(hgrc_path, True)
-    hgrc.del_web_key(parameter)
-    return HttpResponseRedirect(reverse("repository", args=[repo_path]))
 
 def repo(request, repo_path):
     if not check_configs_access(request):
@@ -123,21 +114,12 @@ def repo(request, repo_path):
                                   {"menu": (lambda is_global: {True: "hgweb", False: "repository"}[is_global])(
                                       repo_path == "")},
                                   context_instance=RequestContext(request))
-
-    def check_access_local_hgrc(request, hgrc_path):
-        hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
-        if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
-            messages.error(request, _("No hgrc for this repository. No write access to create hgrc by path: ") + hgdir)
-        elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.W_OK):
-            messages.error(request, _("No access to write mercurial`s local configuration file by path: ") + hgrc_path)
-        elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.R_OK):
-            messages.warning(request, _("No access to read mercurial`s local configuration file by path: ") + hgrc_path)
-
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     is_global = repo_path == ""
     hgrc = None
     form = None
+    hgrc_path = None
     model = {"tree": tree, "global": is_global}
     if not is_global:
         try:
@@ -152,15 +134,29 @@ def repo(request, repo_path):
             file_hash = None
     else:
         file_hash = md5_for_file(settings.HGWEB_CONFIG)
+
+    repo_field_delete_form = FileHashForm(file_hash)
+
     if request.method == 'POST':
-        form = RepositoryForm(file_hash, request.POST)
-        if form.is_valid():
-            if is_global:
-                form.export_values(hgweb, request.POST)
-                messages.success(request, _("Global settings saved successfully."))
-            else:
-                form.export_values(hgrc, request.POST)
-                messages.success(request, _("Repository settings saved successfully."))
+        if 'save' in request.POST:
+            form = RepositoryForm(file_hash, request.POST)
+            if form.is_valid():
+                if is_global:
+                    form.export_values(hgweb, request.POST)
+                    messages.success(request, _("Global settings saved successfully."))
+                else:
+                    form.export_values(hgrc, request.POST)
+                    file_hash = md5_for_file(hgrc_path)
+                    repo_field_delete_form = FileHashForm(file_hash)
+                    messages.success(request, _("Repository settings saved successfully."))
+        elif 'delete_field' in request.POST and hgrc is not None:
+            if request.method == 'POST':
+                repo_field_delete_form = FileHashForm(file_hash, request.POST)
+                if repo_field_delete_form.is_valid():
+                    parameter = request.POST.get('parameter')
+                    print parameter
+                    hgrc.del_web_key(parameter)
+                    return HttpResponseRedirect(reverse("repository", args=[repo_path]))
     # re-set errors if any occurs in the is_valid method.
     errors = None
     if form is not None:
@@ -168,7 +164,9 @@ def repo(request, repo_path):
     form = RepositoryForm(file_hash)
     form._errors = errors
     form.set_default(hgweb, hgrc)
+
     model["form"] = form
+    model["repo_field_delete_form"] = repo_field_delete_form
     return render_to_response('repository.html', model,
                               context_instance=RequestContext(request))
 
