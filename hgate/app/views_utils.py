@@ -107,4 +107,3 @@ def md5_for_file(file_name, block_size=2**20):
         md5.update(data)
     f.close()
     return md5.hexdigest()
-

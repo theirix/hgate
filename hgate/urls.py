@@ -12,8 +12,6 @@ urlpatterns = patterns('',
     url(r'users/(?P<action>[^/]+)/(?P<login>.*)', user, name='users'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    # Example:
-    # (r'^hgate/', include('hgate.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
