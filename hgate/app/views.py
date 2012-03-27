@@ -24,7 +24,12 @@ def index(request):
     _tree = modhg.repository.get_tree(hgweb.get_paths_and_collections())
     tree = prepare_tree(_tree)
     groups = hgweb.get_groups()
-    collections = zip(*hgweb.get_collections())[0]
+    # unzipping collections
+    unzipped_collections = zip(*hgweb.get_collections())
+    if unzipped_collections:
+        collections = unzipped_collections[0]
+    else:
+        collections = []
     hgweb_cfg_hash = md5_for_file(settings.HGWEB_CONFIG)
 
     create_repo_form = CreateRepoForm(groups, hgweb_cfg_hash)
