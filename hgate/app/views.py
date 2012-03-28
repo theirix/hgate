@@ -119,7 +119,7 @@ def hgweb(request):
 def repo(request, repo_path):
     return _repo(request, repo_path)
 
-def _repo(request, repo_path=''):
+def _repo(request, repo_path=""):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     is_global = repo_path == ""
@@ -149,6 +149,7 @@ def _repo(request, repo_path=''):
             if form.is_valid():
                 if is_global:
                     form.export_values(hgweb, request.POST)
+                    file_hash = md5_for_file(settings.HGWEB_CONFIG)
                     messages.success(request, _("Global settings saved successfully."))
                 else:
                     form.export_values(hgrc, request.POST)
