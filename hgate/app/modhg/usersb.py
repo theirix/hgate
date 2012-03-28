@@ -2,8 +2,8 @@ import random
 import crypt
 import os
 import repository
-import settings
-from app.modhg.HGWeb import HGWeb
+from hgate import settings
+from hgate.app.modhg.HGWeb import HGWeb
 
 LOGIN_PASSWD_SEP = ":"
 

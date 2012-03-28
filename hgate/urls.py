@@ -1,5 +1,7 @@
 from django.conf.urls.defaults import patterns, url, include
-from app.views import index, repo, user, user_index, hgweb
+from app.views.index import index
+from app.views.repo import repo, hgweb
+from app.views.usersv import user, user_index
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()

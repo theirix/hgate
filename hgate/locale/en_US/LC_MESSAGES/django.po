@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 21:00+0200\n"
+"POT-Creation-Date: 2012-03-29 01:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,87 +97,92 @@ msgstr ""
 msgid "Path should be ended with /* or /**"
 msgstr ""
 
-#: app/views.py:47
-msgid "New group was added."
-msgstr ""
-
-#: app/views.py:59
-msgid "New repository was created."
-msgstr ""
-
-#: app/views.py:76
-#, python-format
-msgid "Group '%s' was deleted successfully."
-msgstr ""
-
-#: app/views.py:91
-#, python-format
-msgid "Group '%s' was changed."
-msgstr ""
-
-#: app/views.py:98
-#, python-format
-msgid "There is already a group with such a name. Group '%s' wasn`t changed."
-msgstr ""
-
-#: app/views.py:146
-msgid "Global settings saved successfully."
-msgstr ""
-
-#: app/views.py:151
-msgid "Repository settings saved successfully."
-msgstr ""
-
-#: app/views.py:189
-#, python-format
-msgid "User '%s' was deleted."
-msgstr ""
-
-#: app/views.py:197
-#, python-format
-msgid "User '%s' was added."
-msgstr ""
-
-#: app/views.py:222
-msgid "Password changed successfully."
-msgstr ""
-
-#: app/views_utils.py:64
+#: app/views/decorators.py:20
 msgid "Main configuration file does not exist by specified path: "
 msgstr ""
 
-#: app/views_utils.py:68
+#: app/views/decorators.py:24
 msgid ""
 "No access to read or write mercurial`s global configuration file by path: "
 msgstr ""
 
-#: app/views_utils.py:72
+#: app/views/decorators.py:28
 msgid "Root directory of repositories does not exist by path: "
 msgstr ""
 
-#: app/views_utils.py:76
+#: app/views/decorators.py:32
 msgid ""
 "No read or execute access to the root directory of repositories by path: "
 msgstr ""
 
-#: app/views_utils.py:79
+#: app/views/decorators.py:35
 msgid "No users file or no read access by path: "
 msgstr ""
 
-#: app/views_utils.py:87
-msgid "No write access for users file by path: "
+#: app/views/index.py:48
+msgid "New group was added."
 msgstr ""
 
-#: app/views_utils.py:94
+#: app/views/index.py:50
+#, python-format
+msgid "Group was not created: %s"
+msgstr ""
+
+#: app/views/index.py:60
+msgid "New repository was created."
+msgstr ""
+
+#: app/views/index.py:77
+#, python-format
+msgid "Group '%s' was deleted successfully."
+msgstr ""
+
+#: app/views/index.py:92
+#, python-format
+msgid "Group '%s' was changed."
+msgstr ""
+
+#: app/views/index.py:99
+#, python-format
+msgid "There is already a group with such a name. Group '%s' wasn`t changed."
+msgstr ""
+
+#: app/views/repo.py:35
+msgid "Global settings saved successfully."
+msgstr ""
+
+#: app/views/repo.py:75
+msgid "Repository settings saved successfully."
+msgstr ""
+
+#: app/views/repo.py:100
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 
-#: app/views_utils.py:96
+#: app/views/repo.py:102
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 
-#: app/views_utils.py:98
+#: app/views/repo.py:104
 msgid "No access to read mercurial`s local configuration file by path: "
+msgstr ""
+
+#: app/views/usersv.py:33
+#, python-format
+msgid "User '%s' was deleted."
+msgstr ""
+
+#: app/views/usersv.py:41
+#, python-format
+msgid "User '%s' was added."
+msgstr ""
+
+#: app/views/usersv.py:65
+msgid "Password changed successfully."
+msgstr ""
+
+#: app/views/usersv.py:79
+msgid "No write access for users file by path: "
 msgstr ""
 
 #: templates/base.html:58
@@ -197,7 +202,7 @@ msgid "Help"
 msgstr ""
 
 #: templates/errors.html:13 templates/repository.html:46
-#: templates/repository.html.py:56 templates/useredit.html:40
+#: templates/repository.html.py:59 templates/useredit.html:40
 msgid "Repository"
 msgstr ""
 
@@ -296,49 +301,49 @@ msgstr ""
 msgid " from hgrc file"
 msgstr ""
 
-#: templates/repository.html:59
+#: templates/repository.html:56
 msgid "HgWeb config"
 msgstr ""
 
-#: templates/repository.html:80
+#: templates/repository.html:81
 msgid "Delete parameter : remove this parameter from the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:81
+#: templates/repository.html:82
 msgid "Edit"
 msgstr ""
 
-#: templates/repository.html:81
+#: templates/repository.html:82
 msgid "Cancel"
 msgstr ""
 
-#: templates/repository.html:86 templates/useredit.html:30
+#: templates/repository.html:87 templates/useredit.html:30
 msgid "Save"
 msgstr ""
 
-#: templates/repository.html:88
+#: templates/repository.html:89
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 
-#: templates/repository.html:91
+#: templates/repository.html:92
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
 msgstr ""
 
-#: templates/repository.html:101
+#: templates/repository.html:102
 msgid "Value is set in the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:103
+#: templates/repository.html:104
 msgid "Value is set in the hgweb config"
 msgstr ""
 
-#: templates/repository.html:105
+#: templates/repository.html:106
 msgid "Value not set in any config"
 msgstr ""
 
-#: templates/repository.html:108
+#: templates/repository.html:109
 msgid "Value not set in hgweb config"
 msgstr ""
 

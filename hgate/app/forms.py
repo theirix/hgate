@@ -111,7 +111,7 @@ class CreateRepoForm(FileHashForm):
 
     def clean_name(self):
         _name = self.cleaned_data['name'].strip()
-        if re.search(r"([\*\:\?\/\\]|^\.$|^\.\.$)", _name): #found one of (*:?/\) or . or ..
+        if re.search(r"([\*:\?/\\]|^\.$|^\.\.$)", _name): #found one of (*:?/\) or . or ..
             raise forms.ValidationError(_("Don`t use special characters any of *:?/\ or names '.' and '..'"))
         return _name
 
@@ -128,6 +128,6 @@ class ManageGroupsForm(FileHashForm):
 
     def clean_path(self):
         _path = self.cleaned_data['path'].strip()
-        if not re.search(r"([\/]\*{1,2})$", _path):
+        if not re.search(r"([/]\*{1,2})$", _path):
             raise forms.ValidationError(_("Path should be ended with /* or /**"))
         return _path
