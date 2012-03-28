@@ -7,19 +7,15 @@ from app.forms import RepositoryForm, CreateRepoForm, AddUser, EditUser, ManageG
 from app.modhg.HGWeb import HGWeb
 from app.modhg.repository import get_absolute_repository_path
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from app.views_utils import check_access_local_hgrc, add_amount_of_repos_to_groups, prepare_path, check_users_file, prepare_tree, check_configs_access, md5_for_file
+from app.views_utils import check_access_local_hgrc, add_amount_of_repos_to_groups, prepare_path, check_users_file, prepare_tree, check_configs_access, md5_for_file, render_to, require_access
 
 #page handlers
-
+@render_to('index.html')
+@require_access(menu='home')
 def index(request):
-    #todo try to make this method smaller
-    if not check_configs_access(request):
-        return render_to_response('errors.html', {"menu" : "home"}, context_instance=RequestContext(request))
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     _tree = modhg.repository.get_tree(hgweb.get_paths_and_collections())
     tree = prepare_tree(_tree)
@@ -40,7 +36,7 @@ def index(request):
 
     model = {"tree": tree, "groups": add_amount_of_repos_to_groups(groups, _tree),
              "collections": collections}
-    
+
     if request.method == 'POST':
         if "create_group" in request.POST:
             groups_form = ManageGroupsForm(hgweb_cfg_hash, request.POST)
@@ -100,7 +96,7 @@ def index(request):
                     pass#do nothing
                 else:
                     messages.warning(request,
-                                     _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
+                        _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
                 return HttpResponseRedirect(reverse('index'))
             else:
                 model["old_group_name"] = old_name
@@ -111,14 +107,19 @@ def index(request):
     model["repo_form"] = create_repo_form
     model["delete_group_form"] = delete_group_form
 
-    return render_to_response('index.html', model, context_instance=RequestContext(request))
+    return model
 
+@render_to('repository.html')
+@require_access(menu='hgweb')
+def hgweb(request):
+    return _repo(request)
+
+@render_to('repository.html')
+@require_access(menu='repository')
 def repo(request, repo_path):
-    if not check_configs_access(request):
-        return render_to_response('errors.html',
-                                  {"menu": (lambda is_global: {True: "hgweb", False: "repository"}[is_global])(
-                                      repo_path == "")},
-                                  context_instance=RequestContext(request))
+    return _repo(request, repo_path)
+
+def _repo(request, repo_path=''):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
     is_global = repo_path == ""
@@ -130,7 +131,7 @@ def repo(request, repo_path):
         try:
             model["repo_path"] = repo_path
             full_repository_path = get_absolute_repository_path(repo_path)
-            hgrc_path = os.path.join(full_repository_path,".hg","hgrc")
+            hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
             check_access_local_hgrc(request, hgrc_path)
             hgrc = HGWeb(hgrc_path, True)
             file_hash = md5_for_file(hgrc_path)
@@ -172,12 +173,12 @@ def repo(request, repo_path):
 
     model["form"] = form
     model["repo_field_delete_form"] = repo_field_delete_form
-    return render_to_response('repository.html', model,
-                              context_instance=RequestContext(request))
+    return model
 
+
+@render_to('users.html')
+@require_access(menu='users')
 def user_index(request):
-    if not check_configs_access(request):
-        return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
     is_w_access = check_users_file(request)
     users_file_hash = md5_for_file(settings.AUTH_FILE)
     form = AddUser(users_file_hash)
@@ -205,13 +206,12 @@ def user_index(request):
     model["delete_user_form"] = delete_user_form
     model["form"] = form
     model["users"] = user_list
-    return render_to_response("users.html", model,
-                          context_instance=RequestContext(request))
+    return model
 
+
+@render_to('useredit.html')
+@require_access(menu='users')
 def user(request, action, login):
-    if not check_configs_access(request):
-        return render_to_response('errors.html', {"menu" : "users"}, context_instance=RequestContext(request))
-
     users_file_hash = md5_for_file(settings.AUTH_FILE)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
@@ -231,5 +231,4 @@ def user(request, action, login):
         model["form"] = form
         model["login"] = login
         model["permissions"] = users.permissions(login)
-        return render_to_response("useredit.html", model,
-                              context_instance=RequestContext(request))
+        return model

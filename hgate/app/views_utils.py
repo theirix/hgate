@@ -4,6 +4,8 @@ import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 __author__ = 'hawaiian'
 
@@ -107,3 +109,76 @@ def md5_for_file(file_name, block_size=2**20):
         md5.update(data)
     f.close()
     return md5.hexdigest()
+
+#decorators:
+
+def require_access(menu):
+    def access_checker(func):
+        def wrapper(request, *args, **kw):
+            if check_configs_access(request):
+                return func(request, *args, **kw)
+            else:
+                return {'menu': menu}, 'errors.html'
+        return wrapper
+    return access_checker
+
+
+def render_to(template):
+    """
+    Decorator for Django views that sends returned dict to render_to_response
+    function.
+
+    Template name can be decorator parameter or TEMPLATE item in returned
+    dictionary.  RequestContext always added as context instance.
+    If view doesn't return dict then decorator simply returns output.
+
+    Parameters:
+     - template: template name to use
+     - mimetype: content type to send in response headers
+
+    Examples:
+    # 1. Template name in decorator parameters
+
+    @render_to('template.html')
+    def foo(request):
+        bar = Bar.object.all()
+        return {'bar': bar}
+
+    # equals to
+    def foo(request):
+        bar = Bar.object.all()
+        return render_to_response('template.html',
+                                  {'bar': bar},
+                                  context_instance=RequestContext(request))
+
+
+    # 2. Template name as TEMPLATE item value in return dictionary.
+         if TEMPLATE is given then its value will have higher priority
+         than render_to argument.
+
+    @render_to()
+    def foo(request, category):
+        template_name = '%s.html' % category
+        return {'bar': bar, 'TEMPLATE': template_name}
+
+    #equals to
+    def foo(request, category):
+        template_name = '%s.html' % category
+        return render_to_response(template_name,
+                                  {'bar': bar},
+                                  context_instance=RequestContext(request))
+
+    """
+
+    def renderer(func):
+        def wrapper(request, *args, **kw):
+            output = func(request, *args, **kw)
+            if isinstance(output, (list, tuple)):
+                return render_to_response(output[1], output[0], RequestContext(request))
+            elif isinstance(output, dict):
+                return render_to_response(template, output, RequestContext(request))
+            return output
+
+        return wrapper
+
+    return renderer

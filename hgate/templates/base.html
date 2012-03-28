@@ -56,7 +56,7 @@
         {% block menu_extra %}{% endblock %}
         <li class="{% block menu_home %}{% endblock %}"><a href="{% url index %}">{% trans "Home" %}</a></li>
         <li class="{% block menu_users %}{% endblock %}"><a href="{% url users_index %}">{% trans "Users" %}</a></li>
-        <li class="{% block menu_hgweb %}{% endblock %}"><a href="{% url repository "" %}">{% trans "HgWeb" %}</a></li>
+        <li class="{% block menu_hgweb %}{% endblock %}"><a href="{% url hgweb %}">{% trans "HgWeb" %}</a></li>
         <li class=""><a href="https://bitbucket.org/shedar/hgate/wiki/" target="_blank">{% trans "Help" %}</a></li>
     </ul>
 </div>
