@@ -17,7 +17,7 @@ __author__ = 'hawaiian'
 @render_to('users.html')
 @require_access(menu='users')
 def user_index(request):
-    is_w_access = check_users_file(request)
+    is_w_access = _check_users_file(request)
     users_file_hash = md5_for_file(settings.AUTH_FILE)
     form = AddUser(users_file_hash)
     delete_user_form = FileHashForm(users_file_hash)
@@ -54,7 +54,7 @@ def user(request, action, login):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     model = {"tree": tree}
-    is_w_access = check_users_file(request)
+    is_w_access = _check_users_file(request)
     if action == "edit":
         # todo: check if login exists
         if request.method == "POST":
@@ -73,7 +73,7 @@ def user(request, action, login):
 
 # helpers
 
-def check_users_file(request):
+def _check_users_file(request):
     ret_val = True
     if not os.access(settings.AUTH_FILE, os.W_OK):
         messages.warning(request, _("No write access for users file by path: ") + settings.AUTH_FILE)

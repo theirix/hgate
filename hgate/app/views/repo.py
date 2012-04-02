@@ -55,7 +55,7 @@ def repo(request, repo_path):
     model = {"tree": tree, "global": False, "repo_path": repo_path}
     full_repository_path = get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
-    check_access_local_hgrc(request, hgrc_path)
+    _check_access_local_hgrc(request, hgrc_path)
     try:
         hgrc = HGWeb(hgrc_path, True)
         file_hash = md5_for_file(hgrc_path)
@@ -94,7 +94,7 @@ def repo(request, repo_path):
 
 # helpers
 
-def check_access_local_hgrc(request, hgrc_path):
+def _check_access_local_hgrc(request, hgrc_path):
     hgdir = hgrc_path[:hgrc_path.rfind('/hgrc')]
     if (not os.access(hgrc_path, os.F_OK)) and (not os.access(hgdir, os.X_OK or os.R_OK or os.W_OK)):
         messages.error(request, _("No hgrc for this repository. No write access to create hgrc by path: ") + hgdir)

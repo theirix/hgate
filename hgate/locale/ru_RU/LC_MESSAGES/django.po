@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 22:17+0300\n"
+"POT-Creation-Date: 2012-04-02 23:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,85 +19,115 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: app/forms.py:20
+#: app/forms.py:25
 msgid "Configuration file was changed, please try again."
 msgstr "Файл конфигурации был изменён, попробуйте ещё раз."
 
-#: app/forms.py:24
+#: app/forms.py:39
+#, python-format
+msgid "Group '%s' was deleted successfully."
+msgstr "Группа '%s' успешно удалена."
+
+#: app/forms.py:45
 msgid "allow_read"
 msgstr ""
 
-#: app/forms.py:25
+#: app/forms.py:46
 msgid "allow_push"
 msgstr ""
 
-#: app/forms.py:26
+#: app/forms.py:47
 msgid "deny_read"
 msgstr ""
 
-#: app/forms.py:27
+#: app/forms.py:48
 msgid "deny_push"
 msgstr ""
 
-#: app/forms.py:28
+#: app/forms.py:49
 msgid "style"
 msgstr ""
 
-#: app/forms.py:29
+#: app/forms.py:50
 msgid "allow_archive"
 msgstr ""
 
-#: app/forms.py:30
+#: app/forms.py:51
 msgid "baseurl"
 msgstr ""
 
-#: app/forms.py:31
+#: app/forms.py:52
 msgid "push_ssl"
 msgstr ""
 
-#: app/forms.py:73 templates/users.html:50
+#: app/forms.py:94 templates/users.html:50
 msgid "Login"
 msgstr "Логин"
 
-#: app/forms.py:74 app/forms.py:94
+#: app/forms.py:95 app/forms.py:116
 msgid "Password"
 msgstr "Пароль"
 
-#: app/forms.py:75 app/forms.py:95
+#: app/forms.py:96 app/forms.py:117
 msgid "Re-enter password"
 msgstr "Повторите пароль"
 
-#: app/forms.py:84 app/forms.py:104
+#: app/forms.py:105 app/forms.py:126
 msgid "Passwords should be the same"
 msgstr "Пароли должны быть одинаковыми"
 
-#: app/forms.py:90
+#: app/forms.py:111
 msgid "User exists"
 msgstr "Пользователь существует"
 
-#: app/forms.py:115
+#: app/forms.py:138
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr "Не используйте специальные символы: *:?/\\, а так же имена '.' и '..'"
 
-#: app/forms.py:118
+#: app/forms.py:141
 msgid "Repository name"
 msgstr "Имя репозитория"
 
-#: app/forms.py:119
+#: app/forms.py:142
 msgid "Group"
 msgstr "Группа"
 
-#: app/forms.py:123 templates/index.html:149
+#: app/forms.py:167
+#, fuzzy
+msgid "New repository was created."
+msgstr "Создан новый репозиторий."
+
+#: app/forms.py:181 templates/index.html:149
 msgid "Group name"
 msgstr "Имя группы"
 
-#: app/forms.py:124
+#: app/forms.py:182
 msgid "Path"
 msgstr "Путь"
 
-#: app/forms.py:133
+#: app/forms.py:191
 msgid "Path should be ended with /* or /**"
 msgstr "Путь должен заканчиваться на /* или /**"
+
+#: app/forms.py:200
+#, fuzzy
+msgid "New group was added."
+msgstr "Новая группа добавлена."
+
+#: app/forms.py:202
+#, fuzzy, python-format
+msgid "Group was not created: %s"
+msgstr "Группа не создана: %s"
+
+#: app/forms.py:218
+#, python-format
+msgid "Group '%s' was changed."
+msgstr "Группа '%s' изменена."
+
+#: app/forms.py:225
+#, python-format
+msgid "There is already a group with such a name. Group '%s' wasn`t changed."
+msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
 
 #: app/views/decorators.py:20
 msgid "Main configuration file does not exist by specified path: "
@@ -122,36 +152,6 @@ msgstr "Нет прав на чтение или выполнение корне
 #: app/views/decorators.py:35
 msgid "No users file or no read access by path: "
 msgstr "Нет файла users или прав на чтение по пути: "
-
-#: app/views/index.py:50
-#, fuzzy
-msgid "New group was added."
-msgstr "Новая группа добавлена."
-
-#: app/views/index.py:52
-#, fuzzy, python-format
-msgid "Group was not created: %s"
-msgstr "Группа не создана: %s"
-
-#: app/views/index.py:62
-#, fuzzy
-msgid "New repository was created."
-msgstr "Создан новый репозиторий."
-
-#: app/views/index.py:80
-#, python-format
-msgid "Group '%s' was deleted successfully."
-msgstr "Группа '%s' успешно удалена."
-
-#: app/views/index.py:99
-#, python-format
-msgid "Group '%s' was changed."
-msgstr "Группа '%s' изменена."
-
-#: app/views/index.py:106
-#, python-format
-msgid "There is already a group with such a name. Group '%s' wasn`t changed."
-msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
 
 #: app/views/repo.py:35
 msgid "Global settings saved successfully."

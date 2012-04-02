@@ -1,6 +1,11 @@
+import os
 import re
 from django import forms
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
+from hgate.app import modhg
 import modhg.usersb as users
 from hgate import settings
 
@@ -20,15 +25,31 @@ class FileHashForm(forms.Form):
             raise forms.ValidationError(_("Configuration file was changed, please try again."))
         return self.cleaned_data
 
+class DeleteGroupForm(FileHashForm):
+    def __init__(self, file_hash, *args, **kwargs):
+        super(DeleteGroupForm, self).__init__(file_hash, *args, **kwargs)
+
+
+    def delete_group(self, request, groups):
+        name = request.POST.get("group_name")
+        is_collection = request.POST.get("is_collection")
+        path = dict(groups)[name]
+        try:
+            modhg.repository.delete_group(path, name, is_collection == 'True')
+            messages.success(request, _("Group '%s' was deleted successfully.") % name)
+        except modhg.repository.RepositoryException as e:
+            messages.warning(request, str(e))
+        return HttpResponseRedirect(reverse('index'))
+
 class RepositoryForm(FileHashForm):
-    allow_read = forms.CharField(label= _("allow_read"), initial=None, required=False)
-    allow_push = forms.CharField(label= _("allow_push"), initial=None, required=False)
-    deny_read = forms.CharField(label= _("deny_read"), initial=None, required=False)
+    allow_read = forms.CharField(label=_("allow_read"), initial=None, required=False)
+    allow_push = forms.CharField(label=_("allow_push"), initial=None, required=False)
+    deny_read = forms.CharField(label=_("deny_read"), initial=None, required=False)
     deny_push = forms.CharField(label=_("deny_push"), initial=None, required=False)
     style = forms.CharField(label=_("style"), initial=None, required=False)
     allow_archive = forms.CharField(label=_("allow_archive"), initial=None, required=False)
     baseurl = forms.CharField(label=_("baseurl"), initial=None, required=False)
-    push_ssl = forms.ChoiceField(label=_("push_ssl"), required=False, choices=(('true','true'),('false','false')))
+    push_ssl = forms.ChoiceField(label=_("push_ssl"), required=False, choices=(('true', 'true'), ('false', 'false')))
 
     classes = {}
 
@@ -90,6 +111,7 @@ class AddUser(FileHashForm):
             raise forms.ValidationError(_("User exists"))
         return login
 
+
 class EditUser(FileHashForm):
     password1 = forms.CharField(label=_("Password"), max_length=20, required=True, widget=forms.PasswordInput)
     password2 = forms.CharField(label=_("Re-enter password"), max_length=20, required=True, widget=forms.PasswordInput)
@@ -104,10 +126,11 @@ class EditUser(FileHashForm):
             raise forms.ValidationError(_("Passwords should be the same"))
         return password2
 
+
 class CreateRepoForm(FileHashForm):
     def __init__(self, default_groups, file_hash, *args, **kwargs):
         super(CreateRepoForm, self).__init__(file_hash, *args, **kwargs)
-        self.fields['group'].choices = [("-","-")] + default_groups
+        self.fields['group'].choices = [("-", "-")] + default_groups
 
     def clean_name(self):
         _name = self.cleaned_data['name'].strip()
@@ -115,13 +138,48 @@ class CreateRepoForm(FileHashForm):
             raise forms.ValidationError(_("Don`t use special characters any of *:?/\ or names '.' and '..'"))
         return _name
 
-    name = forms.CharField(label = _("Repository name"), max_length=100)
-    group = forms.ChoiceField(label = _("Group"))
+    name = forms.CharField(label=_("Repository name"), max_length=100)
+    group = forms.ChoiceField(label=_("Group"))
+
+    def create_repository(self, request, groups):
+        def _prepare_path(name, group, groups):
+            """
+            Resolves absolute path for a single repository or a repository in a group.
+            """
+            res = ""
+            if group == "-":
+                res = settings.REPOSITORIES_ROOT + os.path.sep + name
+            else:
+                for (gr_name, gr_path) in  groups:
+                    if gr_name == group:
+                        res = gr_path.replace("*", "")
+                        if not res.endswith(os.path.sep):
+                            res += os.path.sep
+                        res += name
+                        break
+            return res
+
+        name = self.cleaned_data['name']
+        group = self.cleaned_data['group']
+        repo_path = _prepare_path(name, group, groups)
+        try:
+            modhg.repository.create(repo_path, name, group == "-")
+            messages.success(request, _("New repository was created."))
+            if group == "-":
+                redirect_path = reverse("repository", args=[name])
+            else:
+                redirect_path = reverse("repository", args=[group + os.path.sep + name])
+        except modhg.repository.RepositoryException as e:
+            messages.warning(request, str(e))
+            return HttpResponseRedirect(reverse('index'))
+
+        return HttpResponseRedirect(redirect_path)
+
 
 class ManageGroupsForm(FileHashForm):
     is_collection = forms.CharField(widget=forms.HiddenInput(), initial='False')
-    name = forms.CharField(label = _("Group name"), max_length=100)
-    path = forms.CharField(label = _("Path"))
+    name = forms.CharField(label=_("Group name"), max_length=100)
+    path = forms.CharField(label=_("Path"))
 
     def __init__(self, file_hash, *args, **kwargs):
         super(ManageGroupsForm, self).__init__(file_hash, *args, **kwargs)
@@ -132,3 +190,37 @@ class ManageGroupsForm(FileHashForm):
         if not is_collection == 'True' and not re.search(r"([/]\*{1,2})$", _path):
             raise forms.ValidationError(_("Path should be ended with /* or /**"))
         return _path
+
+    def create_group(self, request):
+        name = self.cleaned_data['name']
+        is_collection = self.cleaned_data['is_collection']
+        path = self.cleaned_data['path']
+        try:
+            modhg.repository.create_group(path, name, is_collection == 'True')
+            messages.success(request, _("New group was added."))
+        except modhg.repository.RepositoryException as e:
+            messages.warning(request, _("Group was not created: %s" % str(e)))
+        return HttpResponseRedirect(reverse('index'))
+
+    def edit_group(self, request, groups, hgweb):
+        old_name = request.POST.get("old_group_name")
+        old_path = request.POST.get("old_group_path")
+        name = self.cleaned_data['name']
+        path = self.cleaned_data['path']
+        is_collection = self.cleaned_data['is_collection'] == 'True'
+        if (old_name != name and name not in zip(*groups)[0]) or (name == old_name and path != old_path):
+            if not is_collection:
+                hgweb.del_paths(old_name)
+            else:
+                hgweb.del_collections(old_name)
+            try:
+                modhg.repository.create_group(path, name, is_collection)
+                messages.success(request, _("Group '%s' was changed." % old_name))
+            except modhg.repository.RepositoryException as e:
+                messages.warning(request, str(e))
+        elif name == old_name and path == old_path:
+            pass#do nothing
+        else:
+            messages.warning(request,
+                _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
+        return HttpResponseRedirect(reverse('index'))
