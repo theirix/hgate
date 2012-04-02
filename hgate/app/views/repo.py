@@ -18,7 +18,7 @@ __author__ = 'hawaiian'
 @require_access(menu='hgweb')
 def hgweb(request):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     hgrc = None
     form = None
     model = {"tree": tree, "global": True}
@@ -50,7 +50,7 @@ def hgweb(request):
 @require_access(menu='repository')
 def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     form = None
     model = {"tree": tree, "global": False, "repo_path": repo_path}
     full_repository_path = get_absolute_repository_path(repo_path)

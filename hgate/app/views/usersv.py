@@ -22,7 +22,7 @@ def user_index(request):
     form = AddUser(users_file_hash)
     delete_user_form = FileHashForm(users_file_hash)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     model = {"tree": tree}
     if request.method == "POST":
         if "delete_user" in request.POST:
@@ -52,7 +52,7 @@ def user_index(request):
 def user(request, action, login):
     users_file_hash = md5_for_file(settings.AUTH_FILE)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
-    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths_and_collections()))
+    tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     model = {"tree": tree}
     is_w_access = check_users_file(request)
     if action == "edit":

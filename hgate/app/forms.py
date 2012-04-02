@@ -1,8 +1,8 @@
 import re
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-import app.modhg.usersb as users
-import settings
+import modhg.usersb as users
+from hgate import settings
 
 class FileHashForm(forms.Form):
     file_hash = forms.CharField(widget=forms.HiddenInput())
@@ -115,11 +115,11 @@ class CreateRepoForm(FileHashForm):
             raise forms.ValidationError(_("Don`t use special characters any of *:?/\ or names '.' and '..'"))
         return _name
 
-
     name = forms.CharField(label = _("Repository name"), max_length=100)
     group = forms.ChoiceField(label = _("Group"))
 
 class ManageGroupsForm(FileHashForm):
+    is_collection = forms.CharField(widget=forms.HiddenInput(), initial='False')
     name = forms.CharField(label = _("Group name"), max_length=100)
     path = forms.CharField(label = _("Path"))
 
@@ -128,6 +128,7 @@ class ManageGroupsForm(FileHashForm):
 
     def clean_path(self):
         _path = self.cleaned_data['path'].strip()
-        if not re.search(r"([/]\*{1,2})$", _path):
+        is_collection = self.cleaned_data.get('is_collection')
+        if not is_collection == 'True' and not re.search(r"([/]\*{1,2})$", _path):
             raise forms.ValidationError(_("Path should be ended with /* or /**"))
         return _path

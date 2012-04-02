@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 01:34+0300\n"
+"POT-Creation-Date: 2012-04-02 22:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,15 +79,15 @@ msgstr "Пользователь существует"
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr "Не используйте специальные символы: *:?/\\, а так же имена '.' и '..'"
 
-#: app/forms.py:119
+#: app/forms.py:118
 msgid "Repository name"
 msgstr "Имя репозитория"
 
-#: app/forms.py:120
+#: app/forms.py:119
 msgid "Group"
 msgstr "Группа"
 
-#: app/forms.py:123 templates/index.html:132
+#: app/forms.py:123 templates/index.html:149
 msgid "Group name"
 msgstr "Имя группы"
 
@@ -95,7 +95,7 @@ msgstr "Имя группы"
 msgid "Path"
 msgstr "Путь"
 
-#: app/forms.py:132
+#: app/forms.py:133
 msgid "Path should be ended with /* or /**"
 msgstr "Путь должен заканчиваться на /* или /**"
 
@@ -123,32 +123,32 @@ msgstr "Нет прав на чтение или выполнение корне
 msgid "No users file or no read access by path: "
 msgstr "Нет файла users или прав на чтение по пути: "
 
-#: app/views/index.py:48
+#: app/views/index.py:50
 #, fuzzy
 msgid "New group was added."
 msgstr "Новая группа добавлена."
 
-#: app/views/index.py:50
+#: app/views/index.py:52
 #, fuzzy, python-format
 msgid "Group was not created: %s"
 msgstr "Группа не создана: %s"
 
-#: app/views/index.py:60
+#: app/views/index.py:62
 #, fuzzy
 msgid "New repository was created."
 msgstr "Создан новый репозиторий."
 
-#: app/views/index.py:77
+#: app/views/index.py:80
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr "Группа '%s' успешно удалена."
 
-#: app/views/index.py:92
+#: app/views/index.py:99
 #, python-format
 msgid "Group '%s' was changed."
 msgstr "Группа '%s' изменена."
 
-#: app/views/index.py:99
+#: app/views/index.py:106
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
@@ -244,23 +244,24 @@ msgstr "Эта группа не пуста.\\n Она содержит "
 msgid "Delete anyway"
 msgstr "Удалить в любом случае?"
 
-#: templates/index.html:47
+#: templates/index.html:48
 msgid "cancel"
 msgstr "отменить"
 
-#: templates/index.html:55
+#: templates/index.html:56
 msgid "save"
 msgstr "сохранить"
 
-#: templates/index.html:87
+#: templates/index.html:94
 msgid "Create repository"
 msgstr "Создать репозиторий"
 
-#: templates/index.html:93 templates/index.html.py:108 templates/users.html:35
+#: templates/index.html:100 templates/index.html.py:123
+#: templates/users.html:35
 msgid "Create"
 msgstr "Создать"
 
-#: templates/index.html:94
+#: templates/index.html:101
 msgid ""
 "Create new repository : Path: default path if no group is specified or "
 "concrete group path.<br>Name: specified name.<br>This action creates dir "
@@ -270,11 +271,16 @@ msgstr ""
 "или путь выбранной группы.<br>Имя: указанное имя.<br>Это действие создаёт "
 "директорию с именем репозитория и выполняет &apos;hg init&apos; в ней."
 
-#: templates/index.html:101
+#: templates/index.html:108
 msgid "Manage groups"
 msgstr "Управление группами"
 
-#: templates/index.html:109
+#: templates/index.html:115
+#, fuzzy
+msgid "Collection"
+msgstr "Действие"
+
+#: templates/index.html:124
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
@@ -282,24 +288,28 @@ msgstr ""
 "Создание новой группы : Создаёт необходимые директории, если необходимо, для "
 "пути группы.<br>Добавляет запись об этой группе в hgweb.config."
 
-#: templates/index.html:133
+#: templates/index.html:148
+msgid "Type"
+msgstr "Тип"
+
+#: templates/index.html:150
 msgid "Full path"
 msgstr "Абсолютный путь"
 
-#: templates/index.html:134 templates/users.html:50
+#: templates/index.html:151 templates/users.html:50
 msgid "Action"
 msgstr "Действие"
 
-#: templates/index.html:142
+#: templates/index.html:167
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 "Клик для начала редактирования данной группы: вы можете изменить имя и путь."
 
-#: templates/index.html:143 templates/users.html:55
+#: templates/index.html:168 templates/users.html:55
 msgid "edit"
 msgstr "редактировать"
 
-#: templates/index.html:147
+#: templates/index.html:172
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
@@ -307,7 +317,7 @@ msgstr ""
 "Удалить группу : удаляет запись об это группе из hgweb.config. "
 "Удаляетдиректорию группы и всё её содержимое."
 
-#: templates/index.html:148 templates/users.html:56
+#: templates/index.html:173 templates/users.html:56
 msgid "delete"
 msgstr "удалить"
 
@@ -425,6 +435,10 @@ msgstr "Изменение пароля и управление правами �
 msgid "Remove user"
 msgstr "Удалить пользователя"
 
+#, fuzzy
+#~ msgid "There is already a group with such a name."
+#~ msgstr "Уже существует группа с таким именем. Группа не создана."
+
 #~ msgid "Can't load config file"
 #~ msgstr "Не могу загрузить файл конфигурации"
 
@@ -433,10 +447,6 @@ msgstr "Удалить пользователя"
 
 #~ msgid "User not found"
 #~ msgstr "Пользователь не найден"
-
-#, fuzzy
-#~ msgid "There is already a group with such a name. Group wasn`t created."
-#~ msgstr "Уже существует группа с таким именем. Группа не создана."
 
 #~ msgid "There is a problem while deleting group: %s"
 #~ msgstr "При удалении группы произошла ошибка: %s"

@@ -5,7 +5,7 @@
 {% block head %}
     {{ block.super }}
     <script>
-        function delete_group(name, reps_count) {
+        function delete_group(name, reps_count, is_collection) {
             var do_delete = false;
             if (confirm("{% trans "Are you sure you want to delete group" %} '" + name + "'?")) {
                 if (reps_count == 0) {
@@ -19,6 +19,7 @@
                 }
             }
             if (do_delete) {
+                $("#delete_group_form input[name='is_collection']").val(is_collection);
                 $("#delete_group_form input[name='group_name']").val(name);
                 $("#delete_group_form").submit();
             } else {
@@ -56,12 +57,15 @@
                         function() {
                             $("#old_group_name").val(name);
                             $("#old_group_path").val(path);
+                            //getting td with collection
+                            var is_collection = $(this).parent().prev().prev().prev().find("input").val();
                             //getting td with name
                             var new_name_val = $(this).parent().prev().prev().find("input").val();
                             //getting td with path
                             var new_path_val = $(this).parent().prev().find("input").val();
                             $("#id_edit_group-name").val(new_name_val);
                             $("#id_edit_group-path").val(new_path_val);
+                            $("#id_edit_group-is_collection").val(is_collection);
                             $("#group_edit_form").submit();
                         }).end().insertAfter(this);
             });
@@ -78,6 +82,9 @@
                         showBody: " : ",
                         showURL: false
                     });
+            $("#is_collection").click(function() {
+                $("#id_is_collection").val(this.checked ? 'True' : 'False');
+            });
         })
     </script>
 {% endblock %}
@@ -104,6 +111,14 @@
         <table>
             {{ groups_form.as_table }}
             <tr>
+                <th>
+                    <label for="is_collection">{% trans "Collection" %}:</label>
+                </th>
+                <td align="left">
+                    <input type="checkbox" id="is_collection" style="width: auto;" />
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2" class="bottom">
                     <input class="submit" type="submit" name="create_group" value="{% trans "Create" %}"/>
                     <span title="{% trans 'Create new group : Creates all missing directories in the group path.<br>Adds record about this group to the hgweb.config.' %}"
@@ -120,6 +135,7 @@
         {% endfor %}
         <input type="hidden" name="group_name" value=""/>
         <input type="hidden" name="delete_group" value=""/>
+        <input type="hidden" name="is_collection" value=""/>
     </form>
     <form id="group_edit_form" action="{% url index %}" style="display:none;" method="post">
         <input type="hidden" name="old_group_name" id="old_group_name" value=""/>
@@ -129,25 +145,34 @@
     {{ edit_group_form.non_field_errors }}
     <table class="datagrid group_list">
         <tr>
+            <th>{% trans "Type" %}</th>
             <th>{% trans "Group name" %}</th>
             <th>{% trans "Full path" %}</th>
             <th>{% trans "Action" %}</th>
         </tr>
-        {% for gr_key, gr_path, rep_count in groups %}
+        {% for gr_key, gr_path, rep_count, is_collection in groups %}
             <tr class="{% cycle odd,even %}">
+                <td>
+                    <input type="hidden" value="{{ is_collection }}" />
+                    {% if is_collection%}
+                        [collections]
+                    {% else %}
+                        [paths]
+                    {% endif %}
+                </td>
                 <td>{{ gr_key }}</td>
                 <td>{{ gr_path }}</td>
                 <td class="action">
-                    {% if gr_key not in collections %}
-                        <span title="{% trans 'Click to start editing this group: you can change name and path.' %}">
-                            {% trans "edit" %}
-                        </span>&nbsp;&nbsp;
-                        <span class="delete_group"
-                              onclick="delete_group('{{ gr_key }}', '{{ rep_count }}');"
-                              title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
-                             {% trans "delete" %}
-                        </span>
-                    {% endif %}
+{#                    {% if gr_key not in collections %}#}
+                    <span title="{% trans 'Click to start editing this group: you can change name and path.' %}">
+                        {% trans "edit" %}
+                    </span>&nbsp;&nbsp;
+                    <span class="delete_group"
+                          onclick="delete_group('{{ gr_key }}', '{{ rep_count }}', '{{ is_collection }}');"
+                          title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
+                         {% trans "delete" %}
+                    </span>
+{#                    {% endif %}#}
                     {% if gr_key == old_group_name and gr_path == old_group_path %}
                         <div id="error_here">
                             <script type="text/javascript">

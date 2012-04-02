@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 01:34+0300\n"
+"POT-Creation-Date: 2012-04-02 22:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,15 +77,15 @@ msgstr ""
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr ""
 
-#: app/forms.py:119
+#: app/forms.py:118
 msgid "Repository name"
 msgstr ""
 
-#: app/forms.py:120
+#: app/forms.py:119
 msgid "Group"
 msgstr ""
 
-#: app/forms.py:123 templates/index.html:132
+#: app/forms.py:123 templates/index.html:149
 msgid "Group name"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgstr ""
 msgid "Path"
 msgstr ""
 
-#: app/forms.py:132
+#: app/forms.py:133
 msgid "Path should be ended with /* or /**"
 msgstr ""
 
@@ -119,30 +119,30 @@ msgstr ""
 msgid "No users file or no read access by path: "
 msgstr ""
 
-#: app/views/index.py:48
+#: app/views/index.py:50
 msgid "New group was added."
 msgstr ""
 
-#: app/views/index.py:50
+#: app/views/index.py:52
 #, python-format
 msgid "Group was not created: %s"
 msgstr ""
 
-#: app/views/index.py:60
+#: app/views/index.py:62
 msgid "New repository was created."
 msgstr ""
 
-#: app/views/index.py:77
+#: app/views/index.py:80
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr ""
 
-#: app/views/index.py:92
+#: app/views/index.py:99
 #, python-format
 msgid "Group '%s' was changed."
 msgstr ""
 
-#: app/views/index.py:99
+#: app/views/index.py:106
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr ""
@@ -234,62 +234,71 @@ msgstr ""
 msgid "Delete anyway"
 msgstr ""
 
-#: templates/index.html:47
+#: templates/index.html:48
 msgid "cancel"
 msgstr ""
 
-#: templates/index.html:55
+#: templates/index.html:56
 msgid "save"
 msgstr ""
 
-#: templates/index.html:87
+#: templates/index.html:94
 msgid "Create repository"
 msgstr ""
 
-#: templates/index.html:93 templates/index.html.py:108 templates/users.html:35
+#: templates/index.html:100 templates/index.html.py:123
+#: templates/users.html:35
 msgid "Create"
 msgstr ""
 
-#: templates/index.html:94
+#: templates/index.html:101
 msgid ""
 "Create new repository : Path: default path if no group is specified or "
 "concrete group path.<br>Name: specified name.<br>This action creates dir "
 "with repository name and makes &apos;hg init&apos; in that dir."
 msgstr ""
 
-#: templates/index.html:101
+#: templates/index.html:108
 msgid "Manage groups"
 msgstr ""
 
-#: templates/index.html:109
+#: templates/index.html:115
+msgid "Collection"
+msgstr ""
+
+#: templates/index.html:124
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
 msgstr ""
 
-#: templates/index.html:133
+#: templates/index.html:148
+msgid "Type"
+msgstr ""
+
+#: templates/index.html:150
 msgid "Full path"
 msgstr ""
 
-#: templates/index.html:134 templates/users.html:50
+#: templates/index.html:151 templates/users.html:50
 msgid "Action"
 msgstr ""
 
-#: templates/index.html:142
+#: templates/index.html:167
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 
-#: templates/index.html:143 templates/users.html:55
+#: templates/index.html:168 templates/users.html:55
 msgid "edit"
 msgstr ""
 
-#: templates/index.html:147
+#: templates/index.html:172
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
 msgstr ""
 
-#: templates/index.html:148 templates/users.html:56
+#: templates/index.html:173 templates/users.html:56
 msgid "delete"
 msgstr ""
 

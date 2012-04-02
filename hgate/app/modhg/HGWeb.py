@@ -38,25 +38,31 @@ class HGWeb:
 
     def get_collections(self):
         if self._parser.has_section("collections"):
-            # todo: this exposes collections as paths with /** suffix. simple support of collections.
             collections = self._parser.items("collections")
-            collections = [ (name, path + "/**") for name, path in collections]
+            # todo: this exposes collections as paths with /** suffix. simple support of collections.
+            #collections = [ (name, path + "/**") for name, path in collections]
             return collections
         else :
             return []
 
     def get_groups(self):
         paths = self.get_paths()
-        groups = []
+        groups = self.get_collections()
         for path in paths:
             if path[1].endswith("*"):
                 groups.append(path)
         groups = sorted(groups)
-        return groups + self.get_collections()
+        return groups
 
     def get_path(self, key):
         try:
             return self._parser.get("paths", key)
+        except (NoOptionError, NoSectionError):
+            return None
+
+    def get_collection(self, key):
+        try:
+            return self._parser.get("collections", key)
         except (NoOptionError, NoSectionError):
             return None
 
@@ -67,8 +73,20 @@ class HGWeb:
         with open(self._file_name, "w") as f:
             self._parser.write(f)
 
+    def add_collections(self, key, path):
+        if "collections" not in self._parser.sections():
+            self._parser.add_section("collections")
+        self._parser.set("collections", key, path)
+        with open(self._file_name, "w") as f:
+            self._parser.write(f)
+
     def del_paths(self, key):
         self._parser.remove_option("paths", key)
+        with open(self._file_name, "w") as f:
+            self._parser.write(f)
+
+    def del_collections(self, key):
+        self._parser.remove_option("collections", key)
         with open(self._file_name, "w") as f:
             self._parser.write(f)
 
