@@ -3,42 +3,51 @@
 {% load repository_extra %}
 
 {% block head %}
-{{ block.super }}
-<script>
-    $(document).ready(function(){
-    $(".repo_edit input:visible, .repo_edit select").attr("disabled","disabled");
-    $(".repo_edit input.submit").removeAttr("disabled");
-    $(".repo_field_edit_link").click(function(){
-        $(this).hide();
-        var row = $(this).parents("tr:first");
-        row.find(".repo_field_cancel_link").show();
-        var inp = row.find("input, select");
-        inp.removeAttr("disabled");
-        inp.focus();
-        return false;
-    });
-    $(".repo_field_cancel_link").click(function(){
-        $(this).hide();
-        var row = $(this).parents("tr:first");
-        row.find(".repo_field_edit_link").show();
-        var inp = row.find("input, select");
-        inp.attr("disabled","disabled");
-        return false;
-    });
-    $(".repo_field_delete_link").click(function(){
-        var field = $(this).parents("tr:first").find("th").text();
-        if (confirm("{% trans "Are you sure you want to delete parameter " %}" + "\"" + field + "\"" + "{% trans " from hgrc file" %}" + "?")) {
-            $('#repo_field_delete_form #parameter').val(field);
-            $('#repo_field_delete_form').submit();
-        }
-    });
-    $(".tooltip").tooltip({
-                delay: 1000,
-                showBody: " : ",
-                showURL: false
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            $(".repo_edit input:visible, .repo_edit select").attr("disabled", "disabled");
+            $(".repo_edit input.submit").removeAttr("disabled");
+            $(".repo_field_edit_link").click(function () {
+                $(this).hide();
+                var row = $(this).parents("tr:first");
+                row.find(".repo_field_cancel_link").show();
+                var inp = row.find("input, select");
+                inp.removeAttr("disabled");
+                inp.focus();
+                return false;
             });
-    })
-</script>
+            $(".repo_field_cancel_link").click(function () {
+                $(this).hide();
+                var row = $(this).parents("tr:first");
+                row.find(".repo_field_edit_link").show();
+                var inp = row.find("input, select");
+                inp.attr("disabled", "disabled");
+                return false;
+            });
+            $(".repo_field_delete_link").click(function () {
+                var field = $(this).parents("tr:first").find("th").text();
+                if (confirm("{% trans "Are you sure you want to delete parameter " %}" + "\"" + field + "\"" + "{% trans " from hgrc file" %}" + "?")) {
+                    $('#repo_field_delete_form #parameter').val(field);
+                    $('#repo_field_delete_form').submit();
+                }
+            });
+            $(".tooltip").tooltip({
+                delay:1000,
+                showBody:" : ",
+                showURL:false
+            });
+            $('.spoiler-body').hide();
+            $('.spoiler-head').click(function(){
+                $(this).toggleClass("folded").toggleClass("unfolded").next().toggle()
+            });
+            $("#repo_delete").click(function() {
+                if($("#sure_delete").is(':checked')) {
+                    $("#delete_repo_form").submit();
+                }
+            });
+        })
+    </script>
 {% endblock %}
 
 {% block menu_extra %}
@@ -52,61 +61,109 @@
 {% endblock %}
 
 {% block content %}
-{% if global %}
-    <h2>{% trans "HgWeb config" %}</h2>
-    {% url hgweb as repo_url %}
-{% else %}
-    <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
-    {% url repository repo_path as repo_url %}
-{% endif %}
+    {% if global %}
+        <h2>{% trans "HgWeb config" %}</h2>
+        {% url hgweb as repo_url %}
+    {% else %}
+        {% url repository repo_path as repo_url %}
+        <div class="repo_name">
+            <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
+            <div class="spoiler-head folded"><span></span>Actions</div>
+            <div class="spoiler-body">
+                <table>
+                    <tr><th colspan="3" align="left">{% trans "Change repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
+                    <tr>
+                        <td>
+                            <label for="repo_name">Name: </label><input type="text" id="repo_name" value="{{ repo_path }}"/>
+                        </td>
+                        <td>
+                            <label for="repo_path">Path: </label><input type="text" id="repo_path" value="{{ repo_path }}"/>
+                        </td>
+                        <td><a href="#">Save</a></td>
+                    </tr>
+                    <tr><th colspan="3" align="left">{% trans "Delete repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
+                    <tr>
+                        <td colspan="2">
+                            <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="delete_repo_form" method="post">
+                                <label>Sure delete?
+                                    <input type="checkbox" id="sure_delete" name="sure_delete" />
+                                </label>
+                                {{ repo_field_delete_form.non_field_errors }}
+                                {% for hidden in repo_field_delete_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            </form>
+                        </td>
+                        <td><a class="repo_delete" id="repo_delete" href="#">Delete</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 
-<form action="{{ repo_url }}" id="repo_field_delete_form" name="repo_field_delete_form" method="post">
-    {{ repo_field_delete_form.non_field_errors }}
-    {% for hidden in repo_field_delete_form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
-    <input type="hidden" name="parameter" id="parameter" value="" />
-    <input type="hidden" name="delete_field" />
-</form>
-
-<form class="repo_edit" action="{{ repo_url }}" method="post">
-    {{ form.non_field_errors }}
-    {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
-    <table>
-        {% for field in form.visible_fields %}
-            <tr class="{{ form|field_class:field }}">
-                <th>{{ field.label_tag }}</th>
-                <td class="action">{{ field.errors }}{{ field }}<span title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}" class="tooltip repo_field_delete_link"></span></td>
-                <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#" class="repo_field_cancel_link">{% trans "Cancel" %}</a></td>
-            </tr>
+    <form action="{{ repo_url }}" id="repo_field_delete_form" name="repo_field_delete_form" method="post">
+        {{ repo_field_delete_form.non_field_errors }}
+        {% for hidden in repo_field_delete_form.hidden_fields %}
+            {{ hidden }}
         {% endfor %}
+        <input type="hidden" name="parameter" id="parameter" value=""/>
+        <input type="hidden" name="delete_field"/>
+    </form>
+
+    <form class="repo_edit" action="{{ repo_url }}" method="post">
+        {{ form.non_field_errors }}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <table>
+            {% for field in form.visible_fields %}
+                <tr class="{{ form|field_class:field }}">
+                    <th>{{ field.label_tag }}</th>
+                    <td class="action">{{ field.errors }}{{ field }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#"
+                                                                                          class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="2" class="bottom">
+                    <input class="submit" type="submit" name="save" value="{% trans "Save" %}"/>
+                    {% if global %}
+                        <span title="{% trans 'Save global configuration : Modifies [web] section in the hgweb.config.' %}"
+                              class="tooltip">[ ? ]</span>
+                    {% else %}
+                        <span title="{% trans 'Save repository configuration : Modifies [web] section of the hgrc of the repository.' %}"
+                              class="tooltip">[ ? ]</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="legend">
         <tr>
-            <td colspan="2" class="bottom">
-                <input class="submit" type="submit" name="save" value="{% trans "Save" %}" />
-                {% if global %}
-                    <span title="{% trans 'Save global configuration : Modifies [web] section in the hgweb.config.' %}"
-                          class="tooltip">[ ? ]</span>
-                {% else %}
-                    <span title="{% trans 'Save repository configuration : Modifies [web] section of the hgrc of the repository.' %}"
-                          class="tooltip">[ ? ]</span>
-                {% endif %}
-            </td>
+            <th>Colors:</th>
         </tr>
+        {% if not global %}
+            <tr>
+                <td class="r_val_local">{% trans "Value is set in the local hgrc file" %}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td class="r_val_global">{% trans "Value is set in the hgweb config" %}</td>
+        </tr>
+        {% if not global %}
+            <tr>
+                <td class="r_val_default">{% trans "Value not set in any config" %}</td>
+            </tr>
+        {% endif %}
+        {% if global %}
+            <tr>
+                <td class="r_val_default">{% trans "Value not set in hgweb config" %}</td>
+            </tr>
+        {% endif %}
     </table>
-</form>
-<table class="legend">
-<tr><th>Colors:</th></tr>
-{% if not global %}
-<tr><td class="r_val_local">{% trans "Value is set in the local hgrc file" %}</td></tr>
-{% endif %}
-<tr><td class="r_val_global">{% trans "Value is set in the hgweb config" %}</td></tr>
-{% if not global %}
-<tr><td class="r_val_default">{% trans "Value not set in any config" %}</td></tr>
-{% endif %}
-{% if global %}
-<tr><td class="r_val_default">{% trans "Value not set in hgweb config" %}</td></tr>
-{% endif %}
-</table>
+
+
 {% endblock %}

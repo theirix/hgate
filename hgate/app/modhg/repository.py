@@ -71,7 +71,7 @@ def create(path, name, has_no_group=False):
         hgweb.add_paths(name, path)
 
 
-def delete(path, name="", has_no_group=False):
+def delete(path, name=""):
     """
     Deletes single repository with it directory tree.
     """
@@ -81,7 +81,7 @@ def delete(path, name="", has_no_group=False):
         shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied"
     except shutil.Error as e: #probably more specific exception is needed
         raise RepositoryException("Repository [%s] is not removed, because of error: %s" % (path, str(e)))
-    if has_no_group:
+    if name != "": # no group
         hgweb = HGWeb(settings.HGWEB_CONFIG)
         hgweb.del_paths(name)
 

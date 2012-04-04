@@ -256,6 +256,10 @@ h3{
     color: #CC4400;
 }
 
+.repo_edit {
+    margin-top: 2em;
+}
+
 .repo_edit th{
     text-align: left;
     padding-right: 5px;
@@ -290,6 +294,48 @@ h3{
 }
 .repo_field_cancel_link{
     display: none;
+}
+
+.repo_name .spoiler-head {
+    background-color: #D3D9E5;
+    padding: 3px 0 3px 9px;
+    cursor: pointer;
+}
+
+.repo_name .folded span {
+    background:  url(../images/treeview-default.gif) -50px -47px no-repeat;
+    height: 16px;
+    width: 16px;
+    margin-left: -6px;
+    float: left;
+}
+
+.repo_name .unfolded span {
+    background:  url(../images/treeview-default.gif) -18px -91px no-repeat;
+    height: 16px;
+    width: 16px;
+    margin-left: -6px;
+    float: left;
+}
+
+.repo_name h2 {
+    margin-bottom: 0.25em;
+}
+
+.repo_name .spoiler-body, table {
+    background-color: #ECECEC;
+}
+
+.repo_name .spoiler-body {
+    padding: 7px 0 7px 10px;
+}
+
+.repo_name td {
+    background-color: #F4F4F4;
+}
+
+.repo_name .repo_delete {
+    color: #FF6666;
 }
 
 /*Errors page*/

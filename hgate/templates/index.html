@@ -26,7 +26,7 @@
                 $("#delete_group_form input[name='group_name']").val('');
             }
         }
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("td.action span:first-child").click(function () {//edit
                 $(this).nextAll().show();
                 $(this).hide();
@@ -39,6 +39,11 @@
                 tdpath.html('');
                 $("<input type='text' value='" + path + "' />").filter("input")
                         .width(path_width)
+//                        .keypress(function(e) {
+//                            if(e.keyCode == 13) {
+//                                todo commit by enter
+//                            }
+//                        })
                         .end().appendTo(tdpath);
                 tdname.html('');
                 $("<input type='text' value='" + name + "' />").filter("input")
@@ -46,7 +51,7 @@
                         .end().appendTo(tdname);
 
                 $("<span>{% trans 'cancel' %}</span>").filter("span").click(
-                        function() {
+                        function () {
                             tdpath.html(path);
                             tdname.html(name);
                             $(this).prev().prev().show();
@@ -54,7 +59,7 @@
                             $(this).remove();
                         }).end().insertAfter(this);
                 $("<span style='padding-right:10pt;'>{% trans 'save' %}</span>").filter("span").click(
-                        function() {
+                        function () {
                             $("#old_group_name").val(name);
                             $("#old_group_path").val(path);
                             //getting td with collection
@@ -70,19 +75,19 @@
                         }).end().insertAfter(this);
             });
             $(".group_list tbody tr").hover(
-                    function() {
+                    function () {
                         $(this).addClass("rowHover")
                     },
-                    function() {
+                    function () {
                         $(this).removeClass("rowHover");
                     }
             );
             $(".tooltip").tooltip({
-                        delay: 1000,
-                        showBody: " : ",
-                        showURL: false
-                    });
-            $("#is_collection").click(function() {
+                delay:1000,
+                showBody:" : ",
+                showURL:false
+            });
+            $("#is_collection").click(function () {
                 $("#id_is_collection").val(this.checked ? 'True' : 'False');
             });
         })
@@ -98,7 +103,8 @@
             <tr>
                 <td colspan="2" class="bottom">
                     <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}"/>
-                    <span title="{% trans 'Create new repository : Path: default path if no group is specified or concrete group path.<br>Name: specified name.<br>This action creates dir with repository name and makes &apos;hg init&apos; in that dir.' %}"
+                    <span title="
+                            {% blocktrans %} Create new repository : Path: default path ({{ default_path }}) if no group is specified or concrete group path.<br>Name: specified name.<br>This action creates dir with repository name and makes &apos;hg init&apos; in that dir. {% endblocktrans %} %}"
                           class="tooltip">[ ? ]</span>
                 </td>
             </tr>
@@ -115,7 +121,7 @@
                     <label for="is_collection">{% trans "Collection" %}:</label>
                 </th>
                 <td align="left">
-                    <input type="checkbox" id="is_collection" style="width: auto;" />
+                    <input type="checkbox" id="is_collection" style="width: auto;"/>
                 </td>
             </tr>
             <tr>
@@ -153,8 +159,8 @@
         {% for gr_key, gr_path, rep_count, is_collection in groups %}
             <tr class="{% cycle odd,even %}">
                 <td>
-                    <input type="hidden" value="{{ is_collection }}" />
-                    {% if is_collection%}
+                    <input type="hidden" value="{{ is_collection }}"/>
+                    {% if is_collection %}
                         [collections]
                     {% else %}
                         [paths]
@@ -163,7 +169,6 @@
                 <td>{{ gr_key }}</td>
                 <td>{{ gr_path }}</td>
                 <td class="action">
-{#                    {% if gr_key not in collections %}#}
                     <span title="{% trans 'Click to start editing this group: you can change name and path.' %}">
                         {% trans "edit" %}
                     </span>&nbsp;&nbsp;
@@ -172,11 +177,10 @@
                           title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
                          {% trans "delete" %}
                     </span>
-{#                    {% endif %}#}
                     {% if gr_key == old_group_name and gr_path == old_group_path %}
                         <div id="error_here">
                             <script type="text/javascript">
-                                $(document).ready(function() {
+                                $(document).ready(function () {
                                     $("#error_here").prev().prev().click();
                                     var td_path_html = $("#error_here").parent().prev().html();
                                     var td_name_html = $("#error_here").parent().prev().prev().html();

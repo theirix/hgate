@@ -3,7 +3,7 @@ from hgate import settings
 from hgate.app import modhg
 from hgate.app.forms import RepositoryForm, FileHashForm
 from hgate.app.modhg.HGWeb import HGWeb
-from hgate.app.modhg.repository import get_absolute_repository_path
+from hgate.app.modhg import repository
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -33,7 +33,7 @@ def hgweb(request):
                 form.export_values(hgweb, request.POST)
                 file_hash = md5_for_file(settings.HGWEB_CONFIG)
                 messages.success(request, _("Global settings saved successfully."))
-        # re-set errors if any occurs in the is_valid method.
+                # re-set errors if any occurs in the is_valid method.
     errors = None
     if form is not None:
         errors = form._errors
@@ -53,7 +53,7 @@ def repo(request, repo_path):
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     form = None
     model = {"tree": tree, "global": False, "repo_path": repo_path}
-    full_repository_path = get_absolute_repository_path(repo_path)
+    full_repository_path = repository.get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
     _check_access_local_hgrc(request, hgrc_path)
     try:
@@ -62,6 +62,9 @@ def repo(request, repo_path):
     except ValueError:
         hgrc = None
         file_hash = None
+
+    #DELETE_REPO_FORM_PREFIX = "delete_repo_form"
+    delete_repo_form = FileHashForm(file_hash)
 
     repo_field_delete_form = FileHashForm(file_hash)
 
@@ -74,13 +77,20 @@ def repo(request, repo_path):
                 repo_field_delete_form = FileHashForm(file_hash)
                 messages.success(request, _("Repository settings saved successfully."))
         elif 'delete_field' in request.POST:
-            if request.method == 'POST':
-                repo_field_delete_form = FileHashForm(file_hash, request.POST)
-                if repo_field_delete_form.is_valid():
-                    parameter = request.POST.get('parameter')
-                    hgrc.del_web_key(parameter)
-                    return HttpResponseRedirect(reverse("repository", args=[repo_path]))
-        # re-set errors if any occurs in the is_valid method.
+            repo_field_delete_form = FileHashForm(file_hash, request.POST)
+            if repo_field_delete_form.is_valid():
+                parameter = request.POST.get('parameter')
+                hgrc.del_web_key(parameter)
+                return HttpResponseRedirect(reverse("repository", args=[repo_path]))
+        elif 'sure_delete' in request.POST:
+            delete_repo_form = FileHashForm(file_hash, request.POST)
+            if delete_repo_form.is_valid():
+                repository.delete(full_repository_path, repo_path)
+                messages.success(request, _("Repository '%s' deleted successfully.") % repo_path)
+                return HttpResponseRedirect(reverse("index"))
+
+
+    # re-set errors if any occurs in the is_valid method.
     errors = None
     if form is not None:
         errors = form._errors
@@ -90,6 +100,8 @@ def repo(request, repo_path):
 
     model["form"] = form
     model["repo_field_delete_form"] = repo_field_delete_form
+    model["delete_repo_form"] = delete_repo_form
+
     return model
 
 # helpers

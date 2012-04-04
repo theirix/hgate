@@ -31,7 +31,8 @@ def index(request):
     edit_group_form = ManageGroupsForm(hgweb_cfg_hash, prefix=EDIT_GROUP_FORM_PREFIX)
 
     model = {"tree": tree,
-             "groups": _ext_groups_with_amount_of_repos_and_collection_flag(groups, collection_names, _tree)}
+             "groups": _ext_groups_with_amount_of_repos_and_collection_flag(groups, collection_names, _tree),
+             "default_path": settings.REPOSITORIES_ROOT}
 
     if request.method == 'POST':
         if "create_group" in request.POST:
