@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 23:54+0300\n"
+"POT-Creation-Date: 2012-04-07 19:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,112 +19,112 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: app/forms.py:25
+#: app/forms.py:26
 msgid "Configuration file was changed, please try again."
 msgstr "Файл конфигурации был изменён, попробуйте ещё раз."
 
-#: app/forms.py:39
+#: app/forms.py:40
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr "Группа '%s' успешно удалена."
 
-#: app/forms.py:45
+#: app/forms.py:46
 msgid "allow_read"
 msgstr ""
 
-#: app/forms.py:46
+#: app/forms.py:47
 msgid "allow_push"
 msgstr ""
 
-#: app/forms.py:47
+#: app/forms.py:48
 msgid "deny_read"
 msgstr ""
 
-#: app/forms.py:48
+#: app/forms.py:49
 msgid "deny_push"
 msgstr ""
 
-#: app/forms.py:49
+#: app/forms.py:50
 msgid "style"
 msgstr ""
 
-#: app/forms.py:50
+#: app/forms.py:51
 msgid "allow_archive"
 msgstr ""
 
-#: app/forms.py:51
+#: app/forms.py:52
 msgid "baseurl"
 msgstr ""
 
-#: app/forms.py:52
+#: app/forms.py:53
 msgid "push_ssl"
 msgstr ""
 
-#: app/forms.py:94 templates/users.html:50
+#: app/forms.py:95 templates/users.html:50
 msgid "Login"
 msgstr "Логин"
 
-#: app/forms.py:95 app/forms.py:116
+#: app/forms.py:96 app/forms.py:117
 msgid "Password"
 msgstr "Пароль"
 
-#: app/forms.py:96 app/forms.py:117
+#: app/forms.py:97 app/forms.py:118
 msgid "Re-enter password"
 msgstr "Повторите пароль"
 
-#: app/forms.py:105 app/forms.py:126
+#: app/forms.py:106 app/forms.py:127
 msgid "Passwords should be the same"
 msgstr "Пароли должны быть одинаковыми"
 
-#: app/forms.py:111
+#: app/forms.py:112
 msgid "User exists"
 msgstr "Пользователь существует"
 
-#: app/forms.py:138
+#: app/forms.py:139
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr "Не используйте специальные символы: *:?/\\, а так же имена '.' и '..'"
 
-#: app/forms.py:141
+#: app/forms.py:142
 msgid "Repository name"
 msgstr "Имя репозитория"
 
-#: app/forms.py:142
+#: app/forms.py:143
 msgid "Group"
 msgstr "Группа"
 
-#: app/forms.py:167
+#: app/forms.py:151
 #, fuzzy
 msgid "New repository was created."
 msgstr "Создан новый репозиторий."
 
-#: app/forms.py:181 templates/index.html:149
+#: app/forms.py:165 templates/index.html:155
 msgid "Group name"
 msgstr "Имя группы"
 
-#: app/forms.py:182
+#: app/forms.py:166
 msgid "Path"
 msgstr "Путь"
 
-#: app/forms.py:191
+#: app/forms.py:175
 msgid "Path should be ended with /* or /**"
 msgstr "Путь должен заканчиваться на /* или /**"
 
-#: app/forms.py:200
+#: app/forms.py:184
 #, fuzzy
 msgid "New group was added."
 msgstr "Новая группа добавлена."
 
-#: app/forms.py:202
+#: app/forms.py:186
 #, fuzzy, python-format
 msgid "Group was not created: %s"
 msgstr "Группа не создана: %s"
 
-#: app/forms.py:218
+#: app/forms.py:202
 #, python-format
 msgid "Group '%s' was changed."
 msgstr "Группа '%s' изменена."
 
-#: app/forms.py:225
+#: app/forms.py:209
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
@@ -153,26 +153,53 @@ msgstr "Нет прав на чтение или выполнение корне
 msgid "No users file or no read access by path: "
 msgstr "Нет файла users или прав на чтение по пути: "
 
-#: app/views/repo.py:35
+#: app/views/repo.py:37
 msgid "Global settings saved successfully."
 msgstr "Глабальные настройки успешно сохранены."
 
-#: app/views/repo.py:75
+#: app/views/repo.py:87
 msgid "Repository settings saved successfully."
 msgstr "Настройки репозитория успешно сохранены."
 
-#: app/views/repo.py:100
+#: app/views/repo.py:99
+#, fuzzy, python-format
+msgid "Repository '%s' deleted successfully."
+msgstr "Настройки репозитория успешно сохранены."
+
+#: app/views/repo.py:102
+#, fuzzy, python-format
+msgid "Repository '%(repo)s' was not deleted: %(cause)s."
+msgstr "Репозиторий [%(path)s] не создан, причина: %(cause)s"
+
+#: app/views/repo.py:113
+#, fuzzy, python-format
+msgid "Repository '%(repo)s' was not moved to the same location: %(location)s."
+msgstr "Репозиторий [%(path)s] не удалён, причина: %(cause)s"
+
+#: app/views/repo.py:120
+#, fuzzy, python-format
+msgid "Repository '%(old_path)s' moved by path '%(new_path)s' successfully."
+msgstr ""
+"Репозиторий [%(old_path)s] не переименован в [%(new_path)s], причина: "
+"%(cause)s"
+
+#: app/views/repo.py:128
+#, fuzzy, python-format
+msgid "Repository '%(repo)s' was not moved: %(cause)s."
+msgstr "Репозиторий [%(path)s] не удалён, причина: %(cause)s"
+
+#: app/views/repo.py:151
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 "Нет hgrc для данного репозитория. Нет прав на запись для создания hgrc по "
 "пути: "
 
-#: app/views/repo.py:102
+#: app/views/repo.py:153
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на запись локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views/repo.py:104
+#: app/views/repo.py:155
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на чтение локального конфигурационного файла mercirial`а по пути: "
@@ -211,14 +238,14 @@ msgstr "Настройки HgWeb"
 msgid "Help"
 msgstr "Помощь"
 
-#: templates/errors.html:13 templates/repository.html:46
-#: templates/repository.html.py:59 templates/useredit.html:40
+#: templates/errors.html:13 templates/repository.html:64
+#: templates/repository.html.py:79 templates/useredit.html:40
 msgid "Repository"
 msgstr "Репозиторий"
 
 #: templates/errors.html:32
 msgid "Fix the above problem"
-msgstr "Исправьте вышеописанную проблему"
+msgstr "Исправьте высшеописанную проблему"
 
 #: templates/errors.html:33
 msgid "to continue work!"
@@ -244,43 +271,44 @@ msgstr "Эта группа не пуста.\\n Она содержит "
 msgid "Delete anyway"
 msgstr "Удалить в любом случае?"
 
-#: templates/index.html:48
+#: templates/index.html:53
 msgid "cancel"
 msgstr "отменить"
 
-#: templates/index.html:56
+#: templates/index.html:61
 msgid "save"
 msgstr "сохранить"
 
-#: templates/index.html:94
+#: templates/index.html:99
 msgid "Create repository"
 msgstr "Создать репозиторий"
 
-#: templates/index.html:100 templates/index.html.py:123
+#: templates/index.html:105 templates/index.html.py:129
 #: templates/users.html:35
 msgid "Create"
 msgstr "Создать"
 
-#: templates/index.html:101
+#: templates/index.html:107
+#, fuzzy, python-format
 msgid ""
-"Create new repository : Path: default path if no group is specified or "
-"concrete group path.<br>Name: specified name.<br>This action creates dir "
-"with repository name and makes &apos;hg init&apos; in that dir."
+" Create new repository : Path: default path (%(default_path)s) if no group "
+"is specified or concrete group path.<br>Name: specified name.<br>This action "
+"creates dir with repository name and makes &apos;hg init&apos; in that dir. "
 msgstr ""
 "Создать новый репозиторий : Путь: путь по-умолчанию, если не указана группа "
 "или путь выбранной группы.<br>Имя: указанное имя.<br>Это действие создаёт "
 "директорию с именем репозитория и выполняет &apos;hg init&apos; в ней."
 
-#: templates/index.html:108
+#: templates/index.html:114
 msgid "Manage groups"
 msgstr "Управление группами"
 
-#: templates/index.html:115
+#: templates/index.html:121
 #, fuzzy
 msgid "Collection"
 msgstr "Действие"
 
-#: templates/index.html:124
+#: templates/index.html:130
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
@@ -288,28 +316,28 @@ msgstr ""
 "Создание новой группы : Создаёт необходимые директории, если необходимо, для "
 "пути группы.<br>Добавляет запись об этой группе в hgweb.config."
 
-#: templates/index.html:148
+#: templates/index.html:154
 msgid "Type"
 msgstr "Тип"
 
-#: templates/index.html:150
+#: templates/index.html:156
 msgid "Full path"
 msgstr "Абсолютный путь"
 
-#: templates/index.html:151 templates/users.html:50
+#: templates/index.html:157 templates/users.html:50
 msgid "Action"
 msgstr "Действие"
 
-#: templates/index.html:167
+#: templates/index.html:172
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 "Клик для начала редактирования данной группы: вы можете изменить имя и путь."
 
-#: templates/index.html:168 templates/users.html:55
+#: templates/index.html:173 templates/users.html:55
 msgid "edit"
 msgstr "редактировать"
 
-#: templates/index.html:172
+#: templates/index.html:177
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
@@ -317,7 +345,7 @@ msgstr ""
 "Удалить группу : удаляет запись об это группе из hgweb.config. "
 "Удаляетдиректорию группы и всё её содержимое."
 
-#: templates/index.html:173 templates/users.html:56
+#: templates/index.html:178 templates/users.html:56
 msgid "delete"
 msgstr "удалить"
 
@@ -329,34 +357,72 @@ msgstr "Вы уверены, что хотите удалить параметр
 msgid " from hgrc file"
 msgstr " из файла hgrc"
 
-#: templates/repository.html:56
+#: templates/repository.html:74
 msgid "HgWeb config"
 msgstr "HgWeb глобальная конфигурация"
 
-#: templates/repository.html:81
+#: templates/repository.html:80
+msgid "Additional actions"
+msgstr "Дополнительно"
+
+#: templates/repository.html:84
+msgid "Change repository:"
+msgstr "Изменить репозиторий:"
+
+#: templates/repository.html:85
+msgid ""
+"Change repository : Allows to change repository name, move it between groups "
+"and default repository directory."
+msgstr ""
+"Изменить репозиторий : Позволяет переименовать репозиторий, переместить его "
+"в группу или директорию по-умолчанию."
+
+#: templates/repository.html:93 templates/repository.html.py:148
+#: templates/useredit.html:30
+msgid "Save"
+msgstr "Сохранить"
+
+#: templates/repository.html:97
+msgid "Delete repository:"
+msgstr "Удалить репозиторий:"
+
+#: templates/repository.html:98
+msgid ""
+"Delete repository : Deletes directory tree and modifies hgweb.config if this "
+"is single path item."
+msgstr ""
+"Удалить репозиторий : Удаляет директорию с репозиторием и всем его "
+"содержимым, удаляет запись из hgweb.config, если репозиторий не группа."
+
+#: templates/repository.html:104
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+#: templates/repository.html:113
+#, fuzzy
+msgid "Delete"
+msgstr "удалить"
+
+#: templates/repository.html:139
 msgid "Delete parameter : remove this parameter from the local hgrc file"
 msgstr ""
 "Удалить параметр : удаляет этот параметр из hgrc файла данного репозитория"
 
-#: templates/repository.html:82
+#: templates/repository.html:141
 msgid "Edit"
 msgstr "Редактировать"
 
-#: templates/repository.html:82
+#: templates/repository.html:142
 msgid "Cancel"
 msgstr "Отменить"
 
-#: templates/repository.html:87 templates/useredit.html:30
-msgid "Save"
-msgstr "Сохранить"
-
-#: templates/repository.html:89
+#: templates/repository.html:150
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 "Сохраняет глобальную конфигурацию : Изменяеи секцию [web] в файле hgweb."
 "config."
 
-#: templates/repository.html:92
+#: templates/repository.html:153
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
@@ -364,19 +430,19 @@ msgstr ""
 "Сохраняет настройки репозитория : Изменяет секцию [web] файла hgrc "
 "репозитория"
 
-#: templates/repository.html:102
+#: templates/repository.html:166
 msgid "Value is set in the local hgrc file"
 msgstr "Значение установлено в локальном hgrc файле"
 
-#: templates/repository.html:104
+#: templates/repository.html:170
 msgid "Value is set in the hgweb config"
 msgstr "Значение установлено в файле настроек hgweb"
 
-#: templates/repository.html:106
+#: templates/repository.html:174
 msgid "Value not set in any config"
 msgstr "Значение не установлено ни в одном файле настроек"
 
-#: templates/repository.html:109
+#: templates/repository.html:179
 msgid "Value not set in hgweb config"
 msgstr "Значение не установлено в файле настроек hgweb"
 
@@ -455,21 +521,8 @@ msgstr "Удалить пользователя"
 #~ msgid "There is already such repository."
 #~ msgstr "Уже существует такой репозиторий."
 
-#~ msgid "Repository [%(path)s] is not created, because of error: %(cause)s"
-#~ msgstr "Репозиторий [%(path)s] не создан, причина: %(cause)s"
-
 #~ msgid "There is no repository by path: [%s]"
 #~ msgstr "Нет репозитория по пути: [%s]"
-
-#~ msgid "Repository [%(path)s] is not removed, because of error: %(cause)s"
-#~ msgstr "Репозиторий [%(path)s] не удалён, причина: %(cause)s"
-
-#~ msgid ""
-#~ "Repository [%(old_path)s] is not moved to [%(new_path)s], because of "
-#~ "error: %(cause)s"
-#~ msgstr ""
-#~ "Репозиторий [%(old_path)s] не переименован в [%(new_path)s], причина: "
-#~ "%(cause)s"
 
 #, fuzzy
 #~ msgid "Invalid repository name."

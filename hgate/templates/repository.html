@@ -52,10 +52,8 @@
                 $("#edit_repo_name").submit();
             });
 
-            {
-                if ($(".repo_name .errorlist").length) {
-                    $(".spoiler-head").toggleClass("folded").toggleClass("unfolded").next().toggle()
-                }
+            if ($(".repo_name .errorlist").length) {
+                $(".spoiler-head").toggleClass("folded").toggleClass("unfolded").next().toggle()
             }
         })
     </script>
@@ -79,23 +77,31 @@
         {% url repository repo_path as repo_url %}
         <div class="repo_name">
             <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
-            <div class="spoiler-head folded"><span></span>Actions</div>
+            <div class="spoiler-head folded"><span></span>{% trans "Additional actions" %}</div>
             <div class="spoiler-body">
                 <table>
-                    <tr><th colspan="2" align="left">{% trans "Change repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
+                    <tr>
+                        <th colspan="2" align="left">{% trans "Change repository:" %} <span
+                                title="{% trans 'Change repository : Allows to change repository name, move it between groups and default repository directory.' %}"
+                                class="tooltip">[ ? ]</span></th>
+                    </tr>
                     <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="edit_repo_name" method="post">
                         {{ repo_form.as_table }}
                     </form>
                     <tr>
                         <td></td>
-                        <td><a href="#" id="save_repo">Save</a></td>
+                        <td><a href="#" id="save_repo">{% trans "Save" %}</a></td>
                     </tr>
                     <tr><td colspan="2" class="td_color">&nbsp;</td></tr>
-                    <tr><th colspan="2" align="left">{% trans "Delete repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
                     <tr>
-                        <td>{# colspan="2"#}
+                        <th colspan="2" align="left">{% trans "Delete repository:" %} <span
+                                title="{% trans 'Delete repository : Deletes directory tree and modifies hgweb.config if this is single path item.' %}"
+                                class="tooltip">[ ? ]</span></th>
+                    </tr>
+                    <tr>
+                        <td>
                             <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="delete_repo_form" method="post">
-                                <label>Sure delete?
+                                <label>{% trans "Are you sure?" %}
                                     <input type="checkbox" id="sure_delete" name="sure_delete" />
                                 </label>
                                 {{ repo_field_delete_form.non_field_errors }}
@@ -104,7 +110,7 @@
                                 {% endfor %}
                             </form>
                         </td>
-                        <td><a class="repo_delete" id="repo_delete" href="#">Delete</a></td>
+                        <td><a class="repo_delete" id="repo_delete" href="#">{% trans "Delete" %}</a></td>
                     </tr>
                 </table>
             </div>

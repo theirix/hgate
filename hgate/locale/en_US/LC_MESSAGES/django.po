@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 23:54+0300\n"
+"POT-Creation-Date: 2012-04-07 19:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,110 +17,110 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: app/forms.py:25
+#: app/forms.py:26
 msgid "Configuration file was changed, please try again."
 msgstr ""
 
-#: app/forms.py:39
+#: app/forms.py:40
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr ""
 
-#: app/forms.py:45
+#: app/forms.py:46
 msgid "allow_read"
 msgstr ""
 
-#: app/forms.py:46
+#: app/forms.py:47
 msgid "allow_push"
 msgstr ""
 
-#: app/forms.py:47
+#: app/forms.py:48
 msgid "deny_read"
 msgstr ""
 
-#: app/forms.py:48
+#: app/forms.py:49
 msgid "deny_push"
 msgstr ""
 
-#: app/forms.py:49
+#: app/forms.py:50
 msgid "style"
 msgstr ""
 
-#: app/forms.py:50
+#: app/forms.py:51
 msgid "allow_archive"
 msgstr ""
 
-#: app/forms.py:51
+#: app/forms.py:52
 msgid "baseurl"
 msgstr ""
 
-#: app/forms.py:52
+#: app/forms.py:53
 msgid "push_ssl"
 msgstr ""
 
-#: app/forms.py:94 templates/users.html:50
+#: app/forms.py:95 templates/users.html:50
 msgid "Login"
 msgstr ""
 
-#: app/forms.py:95 app/forms.py:116
+#: app/forms.py:96 app/forms.py:117
 msgid "Password"
 msgstr ""
 
-#: app/forms.py:96 app/forms.py:117
+#: app/forms.py:97 app/forms.py:118
 msgid "Re-enter password"
 msgstr ""
 
-#: app/forms.py:105 app/forms.py:126
+#: app/forms.py:106 app/forms.py:127
 msgid "Passwords should be the same"
 msgstr ""
 
-#: app/forms.py:111
+#: app/forms.py:112
 msgid "User exists"
 msgstr ""
 
-#: app/forms.py:138
+#: app/forms.py:139
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr ""
 
-#: app/forms.py:141
+#: app/forms.py:142
 msgid "Repository name"
 msgstr ""
 
-#: app/forms.py:142
+#: app/forms.py:143
 msgid "Group"
 msgstr ""
 
-#: app/forms.py:167
+#: app/forms.py:151
 msgid "New repository was created."
 msgstr ""
 
-#: app/forms.py:181 templates/index.html:149
+#: app/forms.py:165 templates/index.html:155
 msgid "Group name"
 msgstr ""
 
-#: app/forms.py:182
+#: app/forms.py:166
 msgid "Path"
 msgstr ""
 
-#: app/forms.py:191
+#: app/forms.py:175
 msgid "Path should be ended with /* or /**"
 msgstr ""
 
-#: app/forms.py:200
+#: app/forms.py:184
 msgid "New group was added."
 msgstr ""
 
-#: app/forms.py:202
+#: app/forms.py:186
 #, python-format
 msgid "Group was not created: %s"
 msgstr ""
 
-#: app/forms.py:218
+#: app/forms.py:202
 #, python-format
 msgid "Group '%s' was changed."
 msgstr ""
 
-#: app/forms.py:225
+#: app/forms.py:209
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr ""
@@ -147,23 +147,48 @@ msgstr ""
 msgid "No users file or no read access by path: "
 msgstr ""
 
-#: app/views/repo.py:35
+#: app/views/repo.py:37
 msgid "Global settings saved successfully."
 msgstr ""
 
-#: app/views/repo.py:75
+#: app/views/repo.py:87
 msgid "Repository settings saved successfully."
 msgstr ""
 
-#: app/views/repo.py:100
-msgid "No hgrc for this repository. No write access to create hgrc by path: "
+#: app/views/repo.py:99
+#, python-format
+msgid "Repository '%s' deleted successfully."
 msgstr ""
 
 #: app/views/repo.py:102
+#, python-format
+msgid "Repository '%(repo)s' was not deleted: %(cause)s."
+msgstr ""
+
+#: app/views/repo.py:113
+#, python-format
+msgid "Repository '%(repo)s' was not moved to the same location: %(location)s."
+msgstr ""
+
+#: app/views/repo.py:120
+#, python-format
+msgid "Repository '%(old_path)s' moved by path '%(new_path)s' successfully."
+msgstr ""
+
+#: app/views/repo.py:128
+#, python-format
+msgid "Repository '%(repo)s' was not moved: %(cause)s."
+msgstr ""
+
+#: app/views/repo.py:151
+msgid "No hgrc for this repository. No write access to create hgrc by path: "
+msgstr ""
+
+#: app/views/repo.py:153
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 
-#: app/views/repo.py:104
+#: app/views/repo.py:155
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 
@@ -201,8 +226,8 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: templates/errors.html:13 templates/repository.html:46
-#: templates/repository.html.py:59 templates/useredit.html:40
+#: templates/errors.html:13 templates/repository.html:64
+#: templates/repository.html.py:79 templates/useredit.html:40
 msgid "Repository"
 msgstr ""
 
@@ -234,71 +259,72 @@ msgstr ""
 msgid "Delete anyway"
 msgstr ""
 
-#: templates/index.html:48
+#: templates/index.html:53
 msgid "cancel"
 msgstr ""
 
-#: templates/index.html:56
+#: templates/index.html:61
 msgid "save"
 msgstr ""
 
-#: templates/index.html:94
+#: templates/index.html:99
 msgid "Create repository"
 msgstr ""
 
-#: templates/index.html:100 templates/index.html.py:123
+#: templates/index.html:105 templates/index.html.py:129
 #: templates/users.html:35
 msgid "Create"
 msgstr ""
 
-#: templates/index.html:101
+#: templates/index.html:107
+#, python-format
 msgid ""
-"Create new repository : Path: default path if no group is specified or "
-"concrete group path.<br>Name: specified name.<br>This action creates dir "
-"with repository name and makes &apos;hg init&apos; in that dir."
+" Create new repository : Path: default path (%(default_path)s) if no group "
+"is specified or concrete group path.<br>Name: specified name.<br>This action "
+"creates dir with repository name and makes &apos;hg init&apos; in that dir. "
 msgstr ""
 
-#: templates/index.html:108
+#: templates/index.html:114
 msgid "Manage groups"
 msgstr ""
 
-#: templates/index.html:115
+#: templates/index.html:121
 msgid "Collection"
 msgstr ""
 
-#: templates/index.html:124
+#: templates/index.html:130
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
 msgstr ""
 
-#: templates/index.html:148
+#: templates/index.html:154
 msgid "Type"
 msgstr ""
 
-#: templates/index.html:150
+#: templates/index.html:156
 msgid "Full path"
 msgstr ""
 
-#: templates/index.html:151 templates/users.html:50
+#: templates/index.html:157 templates/users.html:50
 msgid "Action"
 msgstr ""
 
-#: templates/index.html:167
+#: templates/index.html:172
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 
-#: templates/index.html:168 templates/users.html:55
+#: templates/index.html:173 templates/users.html:55
 msgid "edit"
 msgstr ""
 
-#: templates/index.html:172
+#: templates/index.html:177
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
 msgstr ""
 
-#: templates/index.html:173 templates/users.html:56
+#: templates/index.html:178 templates/users.html:56
 msgid "delete"
 msgstr ""
 
@@ -310,49 +336,82 @@ msgstr ""
 msgid " from hgrc file"
 msgstr ""
 
-#: templates/repository.html:56
+#: templates/repository.html:74
 msgid "HgWeb config"
 msgstr ""
 
-#: templates/repository.html:81
-msgid "Delete parameter : remove this parameter from the local hgrc file"
+#: templates/repository.html:80
+msgid "Additional actions"
 msgstr ""
 
-#: templates/repository.html:82
-msgid "Edit"
+#: templates/repository.html:84
+msgid "Change repository:"
 msgstr ""
 
-#: templates/repository.html:82
-msgid "Cancel"
+#: templates/repository.html:85
+msgid ""
+"Change repository : Allows to change repository name, move it between groups "
+"and default repository directory."
 msgstr ""
 
-#: templates/repository.html:87 templates/useredit.html:30
+#: templates/repository.html:93 templates/repository.html.py:148
+#: templates/useredit.html:30
 msgid "Save"
 msgstr ""
 
-#: templates/repository.html:89
+#: templates/repository.html:97
+msgid "Delete repository:"
+msgstr ""
+
+#: templates/repository.html:98
+msgid ""
+"Delete repository : Deletes directory tree and modifies hgweb.config if this "
+"is single path item."
+msgstr ""
+
+#: templates/repository.html:104
+msgid "Are you sure?"
+msgstr ""
+
+#: templates/repository.html:113
+msgid "Delete"
+msgstr ""
+
+#: templates/repository.html:139
+msgid "Delete parameter : remove this parameter from the local hgrc file"
+msgstr ""
+
+#: templates/repository.html:141
+msgid "Edit"
+msgstr ""
+
+#: templates/repository.html:142
+msgid "Cancel"
+msgstr ""
+
+#: templates/repository.html:150
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 
-#: templates/repository.html:92
+#: templates/repository.html:153
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
 msgstr ""
 
-#: templates/repository.html:102
+#: templates/repository.html:166
 msgid "Value is set in the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:104
+#: templates/repository.html:170
 msgid "Value is set in the hgweb config"
 msgstr ""
 
-#: templates/repository.html:106
+#: templates/repository.html:174
 msgid "Value not set in any config"
 msgstr ""
 
-#: templates/repository.html:109
+#: templates/repository.html:179
 msgid "Value not set in hgweb config"
 msgstr ""
 

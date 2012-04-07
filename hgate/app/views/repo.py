@@ -98,7 +98,8 @@ def repo(request, repo_path):
                     repository.delete(full_repository_path, repo_path)
                     messages.success(request, _("Repository '%s' deleted successfully.") % repo_path)
                 except RepositoryException as e:
-                    messages.warning(request, _("Repository '%s' was not deleted: %s.") % (repo_path, str(e)))
+                    messages.warning(request,
+                        _("Repository '%(repo)s' was not deleted: %(cause)s.") % {"repo": repo_path, "cause": str(e)})
 
                 return HttpResponseRedirect(reverse("index"))
         elif 'save_repo' in request.POST:
@@ -109,18 +110,22 @@ def repo(request, repo_path):
                 new_path = prepare_path(name, group, groups)
                 if new_path == full_repository_path:
                     messages.warning(request,
-                        _("Repository '%s' was not moved to the same location: %s.") % (repo_path, new_path))
+                        _("Repository '%(repo)s' was not moved to the same location: %(location)s.") % {
+                            "repo": repo_path, "location": new_path})
                     return HttpResponseRedirect(reverse("repository", args=[repo_path]))
                 old_item_name = repo_path if group == "-" else ""
                 try:
                     repository.rename(full_repository_path, new_path, old_item_name, name)
-                    messages.success(request, _("Repository '%s' moved by path '%s' successfully.") % (full_repository_path,
-                                                                                                       new_path))
+                    messages.success(request,
+                        _("Repository '%(old_path)s' moved by path '%(new_path)s' successfully.") % {
+                            "old_path": full_repository_path,
+                            "new_path": new_path})
                     # eval new repo_path, might changed after 'repository.rename'.
                     repo_path = "%s/%s" % (group, name) if group != "-" else name
                     return HttpResponseRedirect(reverse("repository", args=[repo_path]))
                 except RepositoryException as e:
-                    messages.warning(request, _("Repository '%s' was not moved: %s.") % (repo_path, str(e)))
+                    messages.warning(request,
+                        _("Repository '%(repo)s' was not moved: %(cause)s.") % {"repo": repo_path, "cause": str(e)})
                     return HttpResponseRedirect(reverse("index"))
 
     # re-set errors if any occurs in the is_valid method.
