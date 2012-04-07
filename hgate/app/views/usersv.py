@@ -63,7 +63,7 @@ def user(request, action, login):
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))
-                return HttpResponseRedirect(reverse('users:action:login', kwargs={'action': action, "login": login}))
+                return HttpResponseRedirect(reverse("users", args=[action, login]))
         else:
             form = EditUser(users_file_hash)
         model["form"] = form

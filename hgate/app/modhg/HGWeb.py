@@ -1,5 +1,6 @@
 from ConfigParser import ConfigParser, NoOptionError, NoSectionError
 import os
+from django.utils.translation import ugettext_lazy as _
 
 __author__ = 'Shedar'
 
@@ -12,13 +13,13 @@ class HGWeb:
         """ @path: string path to hgweb.config file """
         if not os.path.exists(path):
             if not create:
-                raise ValueError("Can't load config file")
+                raise ValueError(_("Can't load config file"))
             else:
                 try:
                     f = open(path, "w")
                     f.close()
                 except IOError:
-                    raise ValueError("Can't create config file")
+                    raise ValueError(_("Can't create config file"))
         self._file_name = path
         self._parser = ConfigParser()
         self._parser.read(path)

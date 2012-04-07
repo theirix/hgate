@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-07 19:10+0300\n"
+"POT-Creation-Date: 2012-04-08 00:12+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,6 +125,59 @@ msgstr ""
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr ""
 
+#: app/modhg/HGWeb.py:16
+msgid "Can't load config file"
+msgstr ""
+
+#: app/modhg/HGWeb.py:22
+msgid "Can't create config file"
+msgstr ""
+
+#: app/modhg/repository.py:33
+#, python-format
+msgid "There is a problem while deleting group: %s"
+msgstr ""
+
+#: app/modhg/repository.py:54
+msgid "There is already a group with such a name."
+msgstr ""
+
+#: app/modhg/repository.py:69
+#, python-format
+msgid "Repository [%(path)s] is not created, because of error: %(cause)s"
+msgstr ""
+
+#: app/modhg/repository.py:81 app/modhg/repository.py:94
+#, python-format
+msgid "There is no repository by path: [%s]"
+msgstr ""
+
+#: app/modhg/repository.py:86
+#, python-format
+msgid "Failed to delete [%(path)s], because of error: %(cause)s"
+msgstr ""
+
+#: app/modhg/repository.py:96
+#, python-format
+msgid "There is file by path: [%s]"
+msgstr ""
+
+#: app/modhg/repository.py:98
+#, python-format
+msgid "There is no access rights by path: [%s]"
+msgstr ""
+
+#: app/modhg/repository.py:104
+#, python-format
+msgid ""
+"Repository [%(old_path)s] is not moved to [%(new_path)s], because of error: "
+"%(cause)s"
+msgstr ""
+
+#: app/modhg/repository.py:130 app/modhg/repository.py:143
+msgid "Invalid repository name."
+msgstr ""
+
 #: app/views/decorators.py:20
 msgid "Main configuration file does not exist by specified path: "
 msgstr ""
@@ -151,44 +204,43 @@ msgstr ""
 msgid "Global settings saved successfully."
 msgstr ""
 
-#: app/views/repo.py:87
+#: app/views/repo.py:85
 msgid "Repository settings saved successfully."
 msgstr ""
 
-#: app/views/repo.py:99
+#: app/views/repo.py:97
 #, python-format
 msgid "Repository '%s' deleted successfully."
 msgstr ""
 
-#: app/views/repo.py:102
-#, python-format
-msgid "Repository '%(repo)s' was not deleted: %(cause)s."
+#: app/views/repo.py:100
+msgid "Repository '%(repo)s' was not deleted, cause: %(cause)."
 msgstr ""
 
-#: app/views/repo.py:113
+#: app/views/repo.py:112
 #, python-format
 msgid "Repository '%(repo)s' was not moved to the same location: %(location)s."
 msgstr ""
 
-#: app/views/repo.py:120
+#: app/views/repo.py:119
 #, python-format
 msgid "Repository '%(old_path)s' moved by path '%(new_path)s' successfully."
 msgstr ""
 
-#: app/views/repo.py:128
+#: app/views/repo.py:127
 #, python-format
 msgid "Repository '%(repo)s' was not moved: %(cause)s."
 msgstr ""
 
-#: app/views/repo.py:151
+#: app/views/repo.py:150
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 
-#: app/views/repo.py:153
+#: app/views/repo.py:152
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 
-#: app/views/repo.py:155
+#: app/views/repo.py:154
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 

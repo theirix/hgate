@@ -72,9 +72,7 @@ def repo(request, repo_path):
         hgrc = None
         file_hash = None
 
-    #DELETE_REPO_FORM_PREFIX = "delete_repo_form"
     delete_repo_form = FileHashForm(file_hash)
-
     repo_field_delete_form = FileHashForm(file_hash)
 
     if request.method == 'POST' and hgrc is not None:
@@ -99,7 +97,8 @@ def repo(request, repo_path):
                     messages.success(request, _("Repository '%s' deleted successfully.") % repo_path)
                 except RepositoryException as e:
                     messages.warning(request,
-                        _("Repository '%(repo)s' was not deleted: %(cause)s.") % {"repo": repo_path, "cause": str(e)})
+                        _("Repository '%(repo)s' was not deleted, cause: %(cause).") % {"repo": repo_path,
+                                                                                        "cause": unicode(e)})
 
                 return HttpResponseRedirect(reverse("index"))
         elif 'save_repo' in request.POST:
@@ -125,7 +124,7 @@ def repo(request, repo_path):
                     return HttpResponseRedirect(reverse("repository", args=[repo_path]))
                 except RepositoryException as e:
                     messages.warning(request,
-                        _("Repository '%(repo)s' was not moved: %(cause)s.") % {"repo": repo_path, "cause": str(e)})
+                        _("Repository '%(repo)s' was not moved: %(cause)s.") % {"repo": repo_path, "cause": unicode(e)})
                     return HttpResponseRedirect(reverse("index"))
 
     # re-set errors if any occurs in the is_valid method.

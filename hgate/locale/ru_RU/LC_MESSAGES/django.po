@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-07 19:10+0300\n"
+"POT-Creation-Date: 2012-04-08 00:12+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,7 +92,6 @@ msgid "Group"
 msgstr "Группа"
 
 #: app/forms.py:151
-#, fuzzy
 msgid "New repository was created."
 msgstr "Создан новый репозиторий."
 
@@ -110,12 +108,11 @@ msgid "Path should be ended with /* or /**"
 msgstr "Путь должен заканчиваться на /* или /**"
 
 #: app/forms.py:184
-#, fuzzy
 msgid "New group was added."
 msgstr "Новая группа добавлена."
 
 #: app/forms.py:186
-#, fuzzy, python-format
+#, python-format
 msgid "Group was not created: %s"
 msgstr "Группа не создана: %s"
 
@@ -128,6 +125,61 @@ msgstr "Группа '%s' изменена."
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
+
+#: app/modhg/HGWeb.py:16
+msgid "Can't load config file"
+msgstr "Не могу загрузить файл конфигурации"
+
+#: app/modhg/HGWeb.py:22
+msgid "Can't create config file"
+msgstr "Не могу создать файл конфигурации"
+
+#: app/modhg/repository.py:33
+#, python-format
+msgid "There is a problem while deleting group: %s"
+msgstr "При удалении группы произошла ошибка: %s"
+
+#: app/modhg/repository.py:54
+msgid "There is already a group with such a name."
+msgstr "Уже существует группа с таким именем."
+
+#: app/modhg/repository.py:69
+#, python-format
+msgid "Repository [%(path)s] is not created, because of error: %(cause)s"
+msgstr "Репозиторий [%(path)s] не создан, причина: %(cause)s"
+
+#: app/modhg/repository.py:81 app/modhg/repository.py:94
+#, python-format
+msgid "There is no repository by path: [%s]"
+msgstr "Нет репозитория по пути: [%s]"
+
+#: app/modhg/repository.py:86
+#, python-format
+msgid "Failed to delete [%(path)s], because of error: %(cause)s"
+msgstr "Ошибка при удалении [%(path)s], причина: %(cause)s"
+
+#: app/modhg/repository.py:96
+#, python-format
+msgid "There is file by path: [%s]"
+msgstr "Нет репозитория по пути: [%s]"
+
+#: app/modhg/repository.py:98
+#, python-format
+msgid "There is no access rights by path: [%s]"
+msgstr "Нет репозитория по пути: [%s]"
+
+#: app/modhg/repository.py:104
+#, python-format
+msgid ""
+"Repository [%(old_path)s] is not moved to [%(new_path)s], because of error: "
+"%(cause)s"
+msgstr ""
+"Репозиторий [%(old_path)s] не переименован в [%(new_path)s], причина: "
+"%(cause)s"
+
+#: app/modhg/repository.py:130 app/modhg/repository.py:143
+msgid "Invalid repository name."
+msgstr "Недопустимое имя репозитория"
 
 #: app/views/decorators.py:20
 msgid "Main configuration file does not exist by specified path: "
@@ -157,49 +209,46 @@ msgstr "Нет файла users или прав на чтение по пути:
 msgid "Global settings saved successfully."
 msgstr "Глабальные настройки успешно сохранены."
 
-#: app/views/repo.py:87
+#: app/views/repo.py:85
 msgid "Repository settings saved successfully."
 msgstr "Настройки репозитория успешно сохранены."
 
-#: app/views/repo.py:99
-#, fuzzy, python-format
+#: app/views/repo.py:97
+#, python-format
 msgid "Repository '%s' deleted successfully."
-msgstr "Настройки репозитория успешно сохранены."
+msgstr "Репозиторий '%s' успешно удалён."
 
-#: app/views/repo.py:102
-#, fuzzy, python-format
-msgid "Repository '%(repo)s' was not deleted: %(cause)s."
-msgstr "Репозиторий [%(path)s] не создан, причина: %(cause)s"
+#: app/views/repo.py:100
+msgid "Repository '%(repo)s' was not deleted, cause: %(cause)."
+msgstr "Репозиторий [%(repo)s] не удалён, причина: %(cause)s"
 
-#: app/views/repo.py:113
-#, fuzzy, python-format
+#: app/views/repo.py:112
+#, python-format
 msgid "Repository '%(repo)s' was not moved to the same location: %(location)s."
-msgstr "Репозиторий [%(path)s] не удалён, причина: %(cause)s"
+msgstr "Репозиторий [%(repo)s] не переименован, причина: то же имя %(location)s."
 
-#: app/views/repo.py:120
-#, fuzzy, python-format
+#: app/views/repo.py:119
+#, python-format
 msgid "Repository '%(old_path)s' moved by path '%(new_path)s' successfully."
-msgstr ""
-"Репозиторий [%(old_path)s] не переименован в [%(new_path)s], причина: "
-"%(cause)s"
+msgstr "Репозиторий [%(old_path)s] успешно переименован в [%(new_path)s]."
 
-#: app/views/repo.py:128
-#, fuzzy, python-format
+#: app/views/repo.py:127
+#, python-format
 msgid "Repository '%(repo)s' was not moved: %(cause)s."
-msgstr "Репозиторий [%(path)s] не удалён, причина: %(cause)s"
+msgstr "Репозиторий [%(repo)s] не переименован, причина: %(cause)s"
 
-#: app/views/repo.py:151
+#: app/views/repo.py:150
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 "Нет hgrc для данного репозитория. Нет прав на запись для создания hgrc по "
 "пути: "
 
-#: app/views/repo.py:153
+#: app/views/repo.py:152
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на запись локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views/repo.py:155
+#: app/views/repo.py:154
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на чтение локального конфигурационного файла mercirial`а по пути: "
@@ -289,24 +338,24 @@ msgid "Create"
 msgstr "Создать"
 
 #: templates/index.html:107
-#, fuzzy, python-format
+#, python-format
 msgid ""
 " Create new repository : Path: default path (%(default_path)s) if no group "
 "is specified or concrete group path.<br>Name: specified name.<br>This action "
 "creates dir with repository name and makes &apos;hg init&apos; in that dir. "
 msgstr ""
-"Создать новый репозиторий : Путь: путь по-умолчанию, если не указана группа "
-"или путь выбранной группы.<br>Имя: указанное имя.<br>Это действие создаёт "
-"директорию с именем репозитория и выполняет &apos;hg init&apos; в ней."
+"Создать новый репозиторий : Путь: путь по-умолчанию (%(default_path)s), если "
+"не указана группа или путь выбранной группы.<br>Имя: указанное имя.<br>Это "
+"действие создаёт директорию с именем репозитория и выполняет &apos;hg "
+"init&apos; в ней."
 
 #: templates/index.html:114
 msgid "Manage groups"
 msgstr "Управление группами"
 
 #: templates/index.html:121
-#, fuzzy
 msgid "Collection"
-msgstr "Действие"
+msgstr "Коллекция"
 
 #: templates/index.html:130
 msgid ""
@@ -399,7 +448,6 @@ msgid "Are you sure?"
 msgstr "Вы уверены?"
 
 #: templates/repository.html:113
-#, fuzzy
 msgid "Delete"
 msgstr "удалить"
 
@@ -501,34 +549,17 @@ msgstr "Изменение пароля и управление правами �
 msgid "Remove user"
 msgstr "Удалить пользователя"
 
-#, fuzzy
-#~ msgid "There is already a group with such a name."
-#~ msgstr "Уже существует группа с таким именем. Группа не создана."
-
-#~ msgid "Can't load config file"
-#~ msgstr "Не могу загрузить файл конфигурации"
-
-#~ msgid "Can't create config file"
-#~ msgstr "Не могу создать файл конфигурации"
+#~ msgid "Repository '%s' was not deleted."
+#~ msgstr "Репозиторий [%s] не удалён."
 
 #~ msgid "User not found"
 #~ msgstr "Пользователь не найден"
 
-#~ msgid "There is a problem while deleting group: %s"
-#~ msgstr "При удалении группы произошла ошибка: %s"
-
-#, fuzzy
+#
 #~ msgid "There is already such repository."
 #~ msgstr "Уже существует такой репозиторий."
 
-#~ msgid "There is no repository by path: [%s]"
-#~ msgstr "Нет репозитория по пути: [%s]"
-
-#, fuzzy
-#~ msgid "Invalid repository name."
-#~ msgstr "Недопустимое имя репозитория"
-
-#, fuzzy
+#
 #~ msgid ""
 #~ " Are you sure you want to delete parameter \" + field + \" from hgrc "
 #~ "file? "

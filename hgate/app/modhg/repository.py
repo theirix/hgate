@@ -3,6 +3,7 @@ from mercurial import hg, ui
 import shutil
 from hgate.app.modhg.HGWeb import HGWeb
 from hgate import settings
+from django.utils.translation import ugettext_lazy as _
 
 __author__ = 'Shedar'
 
@@ -29,7 +30,7 @@ def delete_group(path, name, is_collection = False):
         shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied".
         # def onerror  function to hahdle errors or handle exception shutil.Error
     except (IOError, shutil.Error) as e:
-        raise RepositoryException("There is a problem while deleting group: %s" % str(e))
+        raise RepositoryException(_("There is a problem while deleting group: %s") % str(e))
 
 
 def create_group(path, name, is_collection = False):
@@ -50,7 +51,7 @@ def create_group(path, name, is_collection = False):
         except (OSError, IOError) as e:
             raise RepositoryException("Error: %s" % str(e))
     else:
-        raise RepositoryException("There is already a group with such a name.")
+        raise RepositoryException(_("There is already a group with such a name."))
 
 
 def create(path, name, has_no_group=False):
@@ -64,7 +65,8 @@ def create(path, name, has_no_group=False):
     try:
         hg.repository(uio, path, create=True)
     except Exception as e: #probably more specific exception is needed
-        raise RepositoryException("Repository [%s] is not created, because of error: %s" % (path, str(e)))
+        raise RepositoryException(
+            _("Repository [%(path)s] is not created, because of error: %(cause)s") % {"path": path, "cause": str(e)})
 
     if has_no_group: #another one try-except block for this
         hgweb = HGWeb(settings.HGWEB_CONFIG)
@@ -76,11 +78,12 @@ def delete(path, item_name=""):
     Deletes single repository with it directory tree.
     """
     if not is_repository(path):
-        raise RepositoryException("There is no repository by path: [%s]" % path)
+        raise RepositoryException(_("There is no repository by path: [%s]") % path)
     try:
         shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied"
     except (shutil.Error, OSError) as e: #probably more specific exception is needed
-        raise RepositoryException("Repository [%s] is not removed, because of error: %s" % (path, str(e)))
+        raise RepositoryException(
+            _("Failed to delete [%(path)s], because of error: %(cause)s") % {"path": path, "cause": str(e)})
     if item_name != "": # no group
         hgweb = HGWeb(settings.HGWEB_CONFIG)
         hgweb.del_paths(item_name)
@@ -88,17 +91,18 @@ def delete(path, item_name=""):
 
 def rename(old_path, new_path, old_item_name="", new_item_name=""):
     if not is_repository(old_path):
-        raise RepositoryException("There is no repository by path: [%s]" % old_path)
+        raise RepositoryException(_("There is no repository by path: [%s]") % old_path)
     if os.path.exists(new_path) and not os.path.isdir(new_path):
-        raise RepositoryException("There is file by path: [%s]" % new_path)
+        raise RepositoryException(_("There is file by path: [%s]") % new_path)
     elif os.path.exists(new_path) and not os.access(new_path, os.R_OK or os.W_OK):
-        raise RepositoryException("There is no access rights by path: [%s]" % new_path)
+        raise RepositoryException(_("There is no access rights by path: [%s]") % new_path)
 
     try:
         shutil.move(old_path, new_path)
-    except shutil.Error as e: #probably more specific exception is needed
+    except (shutil.Error, OSError) as e:
         raise RepositoryException(
-            "Repository [%s] is not moved to [%s], because of error: %s" % (old_path, new_path, str(e)))
+            _("Repository [%(old_path)s] is not moved to [%(new_path)s], because of error: %(cause)s") % {
+                "old_path": old_path, "new_path": new_path, "cause": str(e)})
     if old_item_name != "": # no group
         hgweb = HGWeb(settings.HGWEB_CONFIG)
         hgweb.del_paths(old_item_name)
@@ -123,7 +127,7 @@ def get_absolute_repository_path(key):
               for path_item, val in paths\
               if key == path_item or key.startswith(path_item)]
     if not len(values):
-        raise RepositoryException("Invalid repository name.")
+        raise RepositoryException(_("Invalid repository name."))
     return values[0]
 
 def get_group(key):
@@ -136,7 +140,7 @@ def get_group(key):
               for path_item, val in paths\
               if key == path_item or key.startswith(path_item)]
     if not len(values):
-        raise RepositoryException("Invalid repository name.")
+        raise RepositoryException(_("Invalid repository name."))
     return values[0]
 
 

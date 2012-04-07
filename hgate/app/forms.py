@@ -183,7 +183,7 @@ class ManageGroupsForm(FileHashForm):
             modhg.repository.create_group(path, name, is_collection == 'True')
             messages.success(request, _("New group was added."))
         except modhg.repository.RepositoryException as e:
-            messages.warning(request, _("Group was not created: %s" % str(e)))
+            messages.warning(request, _("Group was not created: %s") % unicode(e))
         return HttpResponseRedirect(reverse('index'))
 
     def edit_group(self, request, groups, hgweb):
@@ -199,7 +199,7 @@ class ManageGroupsForm(FileHashForm):
                 hgweb.del_collections(old_name)
             try:
                 modhg.repository.create_group(path, name, is_collection)
-                messages.success(request, _("Group '%s' was changed." % old_name))
+                messages.success(request, _("Group '%s' was changed.") % old_name)
             except modhg.repository.RepositoryException as e:
                 messages.warning(request, str(e))
         elif name == old_name and path == old_path:
