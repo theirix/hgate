@@ -1,5 +1,7 @@
 import hashlib
+import os
 from django.core.urlresolvers import reverse
+from hgate import settings
 
 __author__ = 'hawaiian'
 
@@ -27,4 +29,21 @@ def md5_for_file(file_name, block_size=2 ** 20):
         md5.update(data)
     f.close()
     return md5.hexdigest()
+
+def prepare_path(name, group, groups):
+    """
+    Resolves absolute path for a single repository or a repository in a group.
+    """
+    res = ""
+    if group == "-":
+        res = settings.REPOSITORIES_ROOT + os.path.sep + name
+    else:
+        for (gr_name, gr_path) in  groups:
+            if gr_name == group:
+                res = gr_path.replace("*", "")
+                if not res.endswith(os.path.sep):
+                    res += os.path.sep
+                res += name
+                break
+    return res
 

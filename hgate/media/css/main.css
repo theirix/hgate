@@ -322,15 +322,16 @@ h3{
     margin-bottom: 0.25em;
 }
 
-.repo_name .spoiler-body, table {
+.repo_name .spoiler-body, table, .td_color {
     background-color: #ECECEC;
+    text-align: left;
 }
 
 .repo_name .spoiler-body {
     padding: 7px 0 7px 10px;
 }
 
-.repo_name td {
+.repo_name tr {
     background-color: #F4F4F4;
 }
 

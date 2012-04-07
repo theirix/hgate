@@ -71,7 +71,7 @@ def create(path, name, has_no_group=False):
         hgweb.add_paths(name, path)
 
 
-def delete(path, name=""):
+def delete(path, item_name=""):
     """
     Deletes single repository with it directory tree.
     """
@@ -79,25 +79,30 @@ def delete(path, name=""):
         raise RepositoryException("There is no repository by path: [%s]" % path)
     try:
         shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied"
-    except shutil.Error as e: #probably more specific exception is needed
+    except (shutil.Error, OSError) as e: #probably more specific exception is needed
         raise RepositoryException("Repository [%s] is not removed, because of error: %s" % (path, str(e)))
-    if name != "": # no group
+    if item_name != "": # no group
         hgweb = HGWeb(settings.HGWEB_CONFIG)
-        hgweb.del_paths(name)
+        hgweb.del_paths(item_name)
 
 
-def rename(old_path, new_path, name="", has_no_group=False):
+def rename(old_path, new_path, old_item_name="", new_item_name=""):
     if not is_repository(old_path):
         raise RepositoryException("There is no repository by path: [%s]" % old_path)
+    if os.path.exists(new_path) and not os.path.isdir(new_path):
+        raise RepositoryException("There is file by path: [%s]" % new_path)
+    elif os.path.exists(new_path) and not os.access(new_path, os.R_OK or os.W_OK):
+        raise RepositoryException("There is no access rights by path: [%s]" % new_path)
+
     try:
         shutil.move(old_path, new_path)
     except shutil.Error as e: #probably more specific exception is needed
         raise RepositoryException(
             "Repository [%s] is not moved to [%s], because of error: %s" % (old_path, new_path, str(e)))
-    if has_no_group:
+    if old_item_name != "": # no group
         hgweb = HGWeb(settings.HGWEB_CONFIG)
-        hgweb.del_paths(name)
-        hgweb.add_paths(name, new_path)
+        hgweb.del_paths(old_item_name)
+        hgweb.add_paths(new_item_name, new_path)
 
 
 def is_repository(path):
@@ -106,12 +111,28 @@ def is_repository(path):
 
 
 def get_absolute_repository_path(key):
+    """
+    Resolves absolute path to repository. Waits 'key' or 'group_name/key'.
+    """
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     path = hgweb.get_path(key)
     if path:
         return path
     paths = hgweb.get_paths_and_collections()
     values = [key.replace(path_item, val.strip("*").rstrip("/"), 1)\
+              for path_item, val in paths\
+              if key == path_item or key.startswith(path_item)]
+    if not len(values):
+        raise RepositoryException("Invalid repository name.")
+    return values[0]
+
+def get_group(key):
+    hgweb = HGWeb(settings.HGWEB_CONFIG)
+    path = hgweb.get_path(key)
+    if path:
+        return "-"
+    paths = hgweb.get_paths_and_collections()
+    values = [path_item\
               for path_item, val in paths\
               if key == path_item or key.startswith(path_item)]
     if not len(values):

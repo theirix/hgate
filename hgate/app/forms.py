@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from hgate.app import modhg
+from hgate.app.views.common import prepare_path
 import modhg.usersb as users
 from hgate import settings
 
@@ -142,26 +143,9 @@ class CreateRepoForm(FileHashForm):
     group = forms.ChoiceField(label=_("Group"))
 
     def create_repository(self, request, groups):
-        def _prepare_path(name, group, groups):
-            """
-            Resolves absolute path for a single repository or a repository in a group.
-            """
-            res = ""
-            if group == "-":
-                res = settings.REPOSITORIES_ROOT + os.path.sep + name
-            else:
-                for (gr_name, gr_path) in  groups:
-                    if gr_name == group:
-                        res = gr_path.replace("*", "")
-                        if not res.endswith(os.path.sep):
-                            res += os.path.sep
-                        res += name
-                        break
-            return res
-
         name = self.cleaned_data['name']
         group = self.cleaned_data['group']
-        repo_path = _prepare_path(name, group, groups)
+        repo_path = prepare_path(name, group, groups)
         try:
             modhg.repository.create(repo_path, name, group == "-")
             messages.success(request, _("New repository was created."))

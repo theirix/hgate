@@ -1,13 +1,15 @@
 import os
 from hgate import settings
 from hgate.app import modhg
-from hgate.app.forms import RepositoryForm, FileHashForm
+from hgate.app.forms import RepositoryForm, FileHashForm, CreateRepoForm
 from hgate.app.modhg.HGWeb import HGWeb
 from hgate.app.modhg import repository
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from hgate.app.modhg.repository import RepositoryException
+from hgate.app.views.common import prepare_path
 from hgate.app.views.decorators import render_to, require_access
 from common import prepare_tree, md5_for_file
 
@@ -56,6 +58,13 @@ def repo(request, repo_path):
     full_repository_path = repository.get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
     _check_access_local_hgrc(request, hgrc_path)
+
+    groups = hgweb.get_groups()
+    hgweb_cfg_hash = md5_for_file(settings.HGWEB_CONFIG)
+    edit_repo_form = CreateRepoForm(default_groups=groups, file_hash=hgweb_cfg_hash,
+        data={"name": os.path.split(full_repository_path)[1], "group": repository.get_group(repo_path),
+              "file_hash": hgweb_cfg_hash})
+
     try:
         hgrc = HGWeb(hgrc_path, True)
         file_hash = md5_for_file(hgrc_path)
@@ -85,10 +94,34 @@ def repo(request, repo_path):
         elif 'sure_delete' in request.POST:
             delete_repo_form = FileHashForm(file_hash, request.POST)
             if delete_repo_form.is_valid():
-                repository.delete(full_repository_path, repo_path)
-                messages.success(request, _("Repository '%s' deleted successfully.") % repo_path)
-                return HttpResponseRedirect(reverse("index"))
+                try:
+                    repository.delete(full_repository_path, repo_path)
+                    messages.success(request, _("Repository '%s' deleted successfully.") % repo_path)
+                except RepositoryException as e:
+                    messages.warning(request, _("Repository '%s' was not deleted: %s.") % (repo_path, str(e)))
 
+                return HttpResponseRedirect(reverse("index"))
+        elif 'save_repo' in request.POST:
+            edit_repo_form = CreateRepoForm(groups, hgweb_cfg_hash, request.POST)
+            if edit_repo_form.is_valid():
+                name = edit_repo_form.cleaned_data['name']
+                group = edit_repo_form.cleaned_data['group']
+                new_path = prepare_path(name, group, groups)
+                if new_path == full_repository_path:
+                    messages.warning(request,
+                        _("Repository '%s' was not moved to the same location: %s.") % (repo_path, new_path))
+                    return HttpResponseRedirect(reverse("repository", args=[repo_path]))
+                old_item_name = repo_path if group == "-" else ""
+                try:
+                    repository.rename(full_repository_path, new_path, old_item_name, name)
+                    messages.success(request, _("Repository '%s' moved by path '%s' successfully.") % (full_repository_path,
+                                                                                                       new_path))
+                    # eval new repo_path, might changed after 'repository.rename'.
+                    repo_path = "%s/%s" % (group, name) if group != "-" else name
+                    return HttpResponseRedirect(reverse("repository", args=[repo_path]))
+                except RepositoryException as e:
+                    messages.warning(request, _("Repository '%s' was not moved: %s.") % (repo_path, str(e)))
+                    return HttpResponseRedirect(reverse("index"))
 
     # re-set errors if any occurs in the is_valid method.
     errors = None
@@ -101,6 +134,7 @@ def repo(request, repo_path):
     model["form"] = form
     model["repo_field_delete_form"] = repo_field_delete_form
     model["delete_repo_form"] = delete_repo_form
+    model["repo_form"] = edit_repo_form
 
     return model
 

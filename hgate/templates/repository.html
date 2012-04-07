@@ -46,6 +46,17 @@
                     $("#delete_repo_form").submit();
                 }
             });
+            $("#save_repo").click(function() {
+                var input = $("<input>").attr("type", "hidden").attr("name", "save_repo").val("");
+                $("#edit_repo_name").append($(input));
+                $("#edit_repo_name").submit();
+            });
+
+            {
+                if ($(".repo_name .errorlist").length) {
+                    $(".spoiler-head").toggleClass("folded").toggleClass("unfolded").next().toggle()
+                }
+            }
         })
     </script>
 {% endblock %}
@@ -71,19 +82,18 @@
             <div class="spoiler-head folded"><span></span>Actions</div>
             <div class="spoiler-body">
                 <table>
-                    <tr><th colspan="3" align="left">{% trans "Change repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
+                    <tr><th colspan="2" align="left">{% trans "Change repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
+                    <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="edit_repo_name" method="post">
+                        {{ repo_form.as_table }}
+                    </form>
                     <tr>
-                        <td>
-                            <label for="repo_name">Name: </label><input type="text" id="repo_name" value="{{ repo_path }}"/>
-                        </td>
-                        <td>
-                            <label for="repo_path">Path: </label><input type="text" id="repo_path" value="{{ repo_path }}"/>
-                        </td>
-                        <td><a href="#">Save</a></td>
+                        <td></td>
+                        <td><a href="#" id="save_repo">Save</a></td>
                     </tr>
-                    <tr><th colspan="3" align="left">{% trans "Delete repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
+                    <tr><td colspan="2" class="td_color">&nbsp;</td></tr>
+                    <tr><th colspan="2" align="left">{% trans "Delete repository:" %} <span title="{% trans 'TODO.' %}" class="tooltip">[ ? ]</span></th></tr>
                     <tr>
-                        <td colspan="2">
+                        <td>{# colspan="2"#}
                             <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="delete_repo_form" method="post">
                                 <label>Sure delete?
                                     <input type="checkbox" id="sure_delete" name="sure_delete" />
