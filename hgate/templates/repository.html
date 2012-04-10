@@ -51,8 +51,17 @@
                 $("#edit_repo_name").append($(input));
                 $("#edit_repo_name").submit();
             });
+            $("#edit_mode_ctrl").click(function() {
+                $("#raw_mode").toggle();
+                $("#advanced_mode").toggle();
+                if ($("#raw_mode").is(':visible')) {
+                    $("#edit_mode_ctrl").html("{% trans "Advanced mode" %}");
+                } else {
+                    $("#edit_mode_ctrl").html("{% trans "Raw mode" %}");
+                }
+            });
 
-            if ($(".repo_name .errorlist").length) {
+            if ($(".additional .errorlist").length) {
                 $(".spoiler-head").toggleClass("folded").toggleClass("unfolded").next().toggle()
             }
         })
@@ -69,117 +78,145 @@
     {% if global %}current{% endif %}
 {% endblock %}
 
+{% if global %}
+    {% url hgweb as repo_url %}
+{% else %}
+    {% url repository repo_path as repo_url %}
+{% endif %}
+
 {% block content %}
+    <span class="action_span" id="edit_mode_ctrl">
+        {% if isRawMode %}
+            {% trans "Advanced mode" %}
+        {% else %}
+            {% trans "Raw mode" %}
+        {% endif %}
+    </span>
+
     {% if global %}
         <h2>{% trans "HgWeb config" %}</h2>
-        {% url hgweb as repo_url %}
     {% else %}
-        {% url repository repo_path as repo_url %}
-        <div class="repo_name">
-            <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
-            <div class="spoiler-head folded"><span></span>{% trans "Additional actions" %}</div>
-            <div class="spoiler-body">
-                <table>
-                    <tr>
-                        <th colspan="2" align="left">{% trans "Change repository:" %} <span
-                                title="{% trans 'Change repository : Allows to change repository name, move it between groups and default repository directory.' %}"
-                                class="tooltip">[ ? ]</span></th>
-                    </tr>
-                    <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="edit_repo_name" method="post">
-                        {{ repo_form.as_table }}
-                    </form>
-                    <tr>
-                        <td></td>
-                        <td><a href="#" id="save_repo">{% trans "Save" %}</a></td>
-                    </tr>
-                    <tr><td colspan="2" class="td_color">&nbsp;</td></tr>
-                    <tr>
-                        <th colspan="2" align="left">{% trans "Delete repository:" %} <span
-                                title="{% trans 'Delete repository : Deletes directory tree and modifies hgweb.config if this is single path item.' %}"
-                                class="tooltip">[ ? ]</span></th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="delete_repo_form" method="post">
-                                <label>{% trans "Are you sure?" %}
-                                    <input type="checkbox" id="sure_delete" name="sure_delete" />
-                                </label>
-                                {{ repo_field_delete_form.non_field_errors }}
-                                {% for hidden in repo_field_delete_form.hidden_fields %}
-                                    {{ hidden }}
-                                {% endfor %}
-                            </form>
-                        </td>
-                        <td><a class="repo_delete" id="repo_delete" href="#">{% trans "Delete" %}</a></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
     {% endif %}
 
-    <form action="{{ repo_url }}" id="repo_field_delete_form" name="repo_field_delete_form" method="post">
-        {{ repo_field_delete_form.non_field_errors }}
-        {% for hidden in repo_field_delete_form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-        <input type="hidden" name="parameter" id="parameter" value=""/>
-        <input type="hidden" name="delete_field"/>
-    </form>
+    <div id="raw_mode" {% if not isRawMode %} style="display: none;" {% endif %}>
+        <form action="{{ repo_url }}" id="raw_form" method="post">
+            <table>
+                {{ raw_mode_form.as_table }}
+                <tr>
+                    <td colspan="2" align="right"><input type="submit" value="save" name="raw_save"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="advanced_mode" {% if isRawMode %} style="display: none;" {% endif %}>
+        {% if not global %}
+            <div class="additional">
+                <div class="spoiler-head folded"><span></span>{% trans "Additional actions" %}</div>
+                <div class="spoiler-body">
+                    <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="edit_repo_name" method="post">
+                        <table>
+                            <tr>
+                                <th colspan="2" align="left">{% trans "Change repository:" %} <span
+                                        title="{% trans 'Change repository : Allows to change repository name, move it between groups and default repository directory.' %}"
+                                        class="tooltip">[ ? ]</span></th>
+                            </tr>
+                            {{ repo_form.as_table }}
+                            <tr>
+                                <td></td>
+                                <td><span class="action_span" id="save_repo">{% trans "Save" %}</span></td>
+                            </tr>
+                            <tr><td colspan="2" class="td_color">&nbsp;</td></tr>
+                        </table>
+                    </form>
+                    <table>
+                        <tr>
+                            <th colspan="2" align="left">{% trans "Delete repository:" %} <span
+                                    title="{% trans 'Delete repository : Deletes directory tree and modifies hgweb.config if this is single path item.' %}"
+                                    class="tooltip">[ ? ]</span></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form style="padding: 0; margin: 0;" action="{{ repo_url }}" id="delete_repo_form" method="post">
+                                    <label>{% trans "Are you sure?" %}
+                                        <input type="checkbox" id="sure_delete" name="sure_delete" />
+                                    </label>
+                                    {{ repo_field_delete_form.non_field_errors }}
+                                    {% for hidden in repo_field_delete_form.hidden_fields %}
+                                        {{ hidden }}
+                                    {% endfor %}
+                                </form>
+                            </td>
+                            <td><span class="repo_delete action_span" id="repo_delete" href="#">{% trans "Delete" %}</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
 
-    <form class="repo_edit" action="{{ repo_url }}" method="post">
-        {{ form.non_field_errors }}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-        <table>
-            {% for field in form.visible_fields %}
-                <tr class="{{ form|field_class:field }}">
-                    <th>{{ field.label_tag }}</th>
-                    <td class="action">{{ field.errors }}{{ field }}<span
-                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                            class="tooltip repo_field_delete_link"></span></td>
-                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#"
-                                                                                          class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+        <form action="{{ repo_url }}" id="repo_field_delete_form" name="repo_field_delete_form" method="post">
+            {{ repo_field_delete_form.non_field_errors }}
+            {% for hidden in repo_field_delete_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            <input type="hidden" name="parameter" id="parameter" value=""/>
+            <input type="hidden" name="delete_field"/>
+        </form>
+
+        <form class="repo_edit" action="{{ repo_url }}" method="post">
+            {{ form.non_field_errors }}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            <table>
+                {% for field in form.visible_fields %}
+                    <tr class="{{ form|field_class:field }}">
+                        <th>{{ field.label_tag }}</th>
+                        <td class="action">{{ field.errors }}{{ field }}<span
+                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                                class="tooltip repo_field_delete_link"></span></td>
+                        <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#"
+                                                                                              class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="2" class="bottom">
+                        <input class="submit" type="submit" name="save" value="{% trans "Save" %}"/>
+                        {% if global %}
+                            <span title="{% trans 'Save global configuration : Modifies [web] section in the hgweb.config.' %}"
+                                  class="tooltip">[ ? ]</span>
+                        {% else %}
+                            <span title="{% trans 'Save repository configuration : Modifies [web] section of the hgrc of the repository.' %}"
+                                  class="tooltip">[ ? ]</span>
+                        {% endif %}
                     </td>
                 </tr>
-            {% endfor %}
+            </table>
+        </form>
+        <table class="legend">
             <tr>
-                <td colspan="2" class="bottom">
-                    <input class="submit" type="submit" name="save" value="{% trans "Save" %}"/>
-                    {% if global %}
-                        <span title="{% trans 'Save global configuration : Modifies [web] section in the hgweb.config.' %}"
-                              class="tooltip">[ ? ]</span>
-                    {% else %}
-                        <span title="{% trans 'Save repository configuration : Modifies [web] section of the hgrc of the repository.' %}"
-                              class="tooltip">[ ? ]</span>
-                    {% endif %}
-                </td>
+                <th>Colors:</th>
             </tr>
+            {% if not global %}
+                <tr>
+                    <td class="r_val_local">{% trans "Value is set in the local hgrc file" %}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td class="r_val_global">{% trans "Value is set in the hgweb config" %}</td>
+            </tr>
+            {% if not global %}
+                <tr>
+                    <td class="r_val_default">{% trans "Value not set in any config" %}</td>
+                </tr>
+            {% endif %}
+            {% if global %}
+                <tr>
+                    <td class="r_val_default">{% trans "Value not set in hgweb config" %}</td>
+                </tr>
+            {% endif %}
         </table>
-    </form>
-    <table class="legend">
-        <tr>
-            <th>Colors:</th>
-        </tr>
-        {% if not global %}
-            <tr>
-                <td class="r_val_local">{% trans "Value is set in the local hgrc file" %}</td>
-            </tr>
-        {% endif %}
-        <tr>
-            <td class="r_val_global">{% trans "Value is set in the hgweb config" %}</td>
-        </tr>
-        {% if not global %}
-            <tr>
-                <td class="r_val_default">{% trans "Value not set in any config" %}</td>
-            </tr>
-        {% endif %}
-        {% if global %}
-            <tr>
-                <td class="r_val_default">{% trans "Value not set in hgweb config" %}</td>
-            </tr>
-        {% endif %}
-    </table>
-
+    </div>
 
 {% endblock %}

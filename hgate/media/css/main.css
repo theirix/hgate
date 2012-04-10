@@ -167,13 +167,13 @@ h3{
     background-color: #cacac4 !important;
 }
 
-.datagrid .action span {
+.datagrid .action span, .action_span {
     text-decoration:underline;
     color: #505961;
     cursor: pointer;
 }
 
-.datagrid .action span:hover {
+.datagrid .action span:hover, .action_span:hover {
     text-decoration:none;
 }
 
@@ -296,13 +296,13 @@ h3{
     display: none;
 }
 
-.repo_name .spoiler-head {
+.additional .spoiler-head {
     background-color: #D3D9E5;
     padding: 3px 0 3px 9px;
     cursor: pointer;
 }
 
-.repo_name .folded span {
+.additional .folded span {
     background:  url(../images/treeview-default.gif) -50px -47px no-repeat;
     height: 16px;
     width: 16px;
@@ -310,7 +310,7 @@ h3{
     float: left;
 }
 
-.repo_name .unfolded span {
+.additional .unfolded span {
     background:  url(../images/treeview-default.gif) -18px -91px no-repeat;
     height: 16px;
     width: 16px;
@@ -318,28 +318,28 @@ h3{
     float: left;
 }
 
-.repo_name h2 {
-    margin-bottom: 0.25em;
-}
-
-.repo_name .spoiler-body, table, .td_color {
+.additional .spoiler-body, table, .td_color {
     background-color: #ECECEC;
     text-align: left;
 }
 
-.repo_name .spoiler-body {
+.additional .spoiler-body {
     padding: 7px 0 7px 10px;
 }
 
-.repo_name tr {
+.additional tr {
     background-color: #F4F4F4;
 }
 
-.repo_name .repo_delete {
+.additional .repo_delete {
     color: #FF6666;
 }
 
 /*Errors page*/
 .text {
     text-align: center;
+}
+
+#raw_form textarea {
+    overflow: auto;
 }

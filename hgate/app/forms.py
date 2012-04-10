@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from hgate.app import modhg
+from hgate.app.modhg import repository
+from hgate.app.modhg.repository import RepositoryException
 from hgate.app.views.common import prepare_path
 import modhg.usersb as users
 from hgate import settings
@@ -159,6 +161,30 @@ class CreateRepoForm(FileHashForm):
 
         return HttpResponseRedirect(redirect_path)
 
+    def rename(self, request, repo_path, groups, full_repository_path):
+        name = self.cleaned_data['name']
+        group = self.cleaned_data['group']
+        new_path = prepare_path(name, group, groups)
+        if new_path == full_repository_path:
+            messages.warning(request,
+                _("Repository '%(repo)s' was not moved to the same location: %(location)s.") % {
+                    "repo": repo_path, "location": new_path})
+            return HttpResponseRedirect(reverse("repository", args=[repo_path]))
+        old_item_name = repo_path if group == "-" else ""
+        try:
+            repository.rename(full_repository_path, new_path, old_item_name, name)
+            messages.success(request,
+                _("Repository '%(old_path)s' moved by path '%(new_path)s' successfully.") % {
+                    "old_path": full_repository_path,
+                    "new_path": new_path})
+            # eval new repo_path, might changed after 'repository.rename'.
+            repo_path = "%s/%s" % (group, name) if group != "-" else name
+            return HttpResponseRedirect(reverse("repository", args=[repo_path]))
+        except RepositoryException as e:
+            messages.warning(request,
+                _("Repository '%(repo)s' was not moved: %(cause)s.") % {"repo": repo_path, "cause": unicode(e)})
+            return HttpResponseRedirect(reverse("index"))
+
 
 class ManageGroupsForm(FileHashForm):
     is_collection = forms.CharField(widget=forms.HiddenInput(), initial='False')
@@ -208,3 +234,11 @@ class ManageGroupsForm(FileHashForm):
             messages.warning(request,
                 _("There is already a group with such a name. Group '%s' wasn`t changed.") % old_name)
         return HttpResponseRedirect(reverse('index'))
+
+
+class RawModeForm(FileHashForm):
+    hgrc = forms.CharField(widget=forms.Textarea(attrs={'rows':20, 'cols':80, 'wrap':"off"}), required=False)
+    def __init__(self, file_hash, *args, **kwargs):
+        super(RawModeForm, self).__init__(file_hash, *args, **kwargs)
+
+
