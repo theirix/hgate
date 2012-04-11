@@ -86,7 +86,7 @@
 
 {% block content %}
     <span class="action_span" id="edit_mode_ctrl">
-        {% if isRawMode %}
+        {% if is_raw_mode %}
             {% trans "Advanced mode" %}
         {% else %}
             {% trans "Raw mode" %}
@@ -99,7 +99,7 @@
         <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
     {% endif %}
 
-    <div id="raw_mode" {% if not isRawMode %} style="display: none;" {% endif %}>
+    <div id="raw_mode" {% if not is_raw_mode %} style="display: none;" {% endif %}>
         <form action="{{ repo_url }}" id="raw_form" method="post">
             <table>
                 {{ raw_mode_form.as_table }}
@@ -109,7 +109,7 @@
             </table>
         </form>
     </div>
-    <div id="advanced_mode" {% if isRawMode %} style="display: none;" {% endif %}>
+    <div id="advanced_mode" {% if is_raw_mode %} style="display: none;" {% endif %}>
         {% if not global %}
             <div class="additional">
                 <div class="spoiler-head folded"><span></span>{% trans "Additional actions" %}</div>
@@ -147,7 +147,7 @@
                                     {% endfor %}
                                 </form>
                             </td>
-                            <td><span class="repo_delete action_span" id="repo_delete" href="#">{% trans "Delete" %}</span></td>
+                            <td><span class="repo_delete action_span" id="repo_delete">{% trans "Delete" %}</span></td>
                         </tr>
                     </table>
                 </div>

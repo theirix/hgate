@@ -9,7 +9,6 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from hgate.app.modhg.repository import RepositoryException
-from hgate.app.views.common import prepare_path
 from hgate.app.views.decorators import render_to, require_access
 from common import prepare_tree, md5_for_file
 
@@ -22,30 +21,53 @@ def hgweb(request):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     hgrc = None
-    form = None
+    is_raw_mode = False
     model = {"tree": tree, "global": True}
     file_hash = md5_for_file(settings.HGWEB_CONFIG)
 
+    form = RepositoryForm(file_hash)
     repo_field_delete_form = FileHashForm(file_hash)
+
+    with open(settings.HGWEB_CONFIG, 'r') as f:
+        hgrc_content = f.read()
+    raw_mode_form = RawModeForm(file_hash, initial={"hgrc": hgrc_content})
 
     if request.method == 'POST':
         if 'save' in request.POST:
             form = RepositoryForm(file_hash, request.POST)
             if form.is_valid():
                 form.export_values(hgweb, request.POST)
-                file_hash = md5_for_file(settings.HGWEB_CONFIG)
                 messages.success(request, _("Global settings saved successfully."))
+                return HttpResponseRedirect(reverse("hgweb"))
+        elif 'raw_save' in request.POST:
+            is_raw_mode = True
+            raw_mode_form = RawModeForm(file_hash, request.POST)
+            if raw_mode_form.is_valid():
+                with open(settings.HGWEB_CONFIG, 'w') as f:
+                    f.write(raw_mode_form.cleaned_data['hgrc'])
+                messages.success(request, _("Global settings saved successfully."))
+                return HttpResponseRedirect(reverse("hgweb"))
 
-    # re-set errors if any occurs in the is_valid method.
-    errors = None
-    if form is not None:
+        # re-set errors if any occurs in the is_valid method.
+        file_hash = md5_for_file(settings.HGWEB_CONFIG)
+        repo_field_delete_form = FileHashForm(file_hash)
+
+        # raw_mode form may have _errors set, so just update data in it
+        with open(settings.HGWEB_CONFIG, 'r') as f:
+            hgrc_content = f.read()
+        raw_mode_form.data['hgrc'] = hgrc_content
+        raw_mode_form.data['file_hash'] = file_hash
+
+        # re-set errors if any occurs in the is_valid method.
         errors = form._errors
-    form = RepositoryForm(file_hash)
-    form._errors = errors
-    form.set_default(hgweb, hgrc)
+        form = RepositoryForm(file_hash)
+        form._errors = errors
 
+    form.set_default(hgweb, hgrc)
     model["form"] = form
     model["repo_field_delete_form"] = repo_field_delete_form
+    model["raw_mode_form"] = raw_mode_form
+    model["is_raw_mode"] = is_raw_mode
     return model
 
 
@@ -54,7 +76,8 @@ def hgweb(request):
 def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
-    model = {"tree": tree, "global": False, "repo_path": repo_path, "isRawMode": False}
+    is_raw_mode = False
+    model = {"tree": tree, "global": False, "repo_path": repo_path}
     full_repository_path = repository.get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
     _check_access_local_hgrc(request, hgrc_path)
@@ -105,6 +128,7 @@ def repo(request, repo_path):
             if edit_repo_form.is_valid():
                 return edit_repo_form.rename(request, repo_path, groups, full_repository_path)
         elif 'raw_save' in request.POST:
+            is_raw_mode = True
             raw_mode_form = RawModeForm(local_hgrc_hash, request.POST)
             if raw_mode_form.is_valid():
                 with open(hgrc_path, 'w') as f:
@@ -117,11 +141,14 @@ def repo(request, repo_path):
         local_hgrc_hash = md5_for_file(hgrc_path)
         repo_field_delete_form = FileHashForm(local_hgrc_hash)
         delete_repo_form = FileHashForm(local_hgrc_hash)
-        raw_mode_form = RawModeForm(local_hgrc_hash, initial={"hgrc": hgrc_content, "file_hash": local_hgrc_hash})
+
+        # raw_mode form may have _errors set, so just update data in it
+        with open(hgrc_path, 'r') as f:
+            hgrc_content = f.read()
+        raw_mode_form.data['hgrc'] = hgrc_content
+        raw_mode_form.data['file_hash'] = local_hgrc_hash
 
         # re-set errors if any occurs in the is_valid method.
-        #errors = None
-        #if form is not None:
         errors = form._errors
         form = RepositoryForm(local_hgrc_hash)
         form._errors = errors
@@ -133,6 +160,7 @@ def repo(request, repo_path):
     model["delete_repo_form"] = delete_repo_form
     model["repo_form"] = edit_repo_form
     model["raw_mode_form"] = raw_mode_form
+    model["is_raw_mode"] = is_raw_mode
 
     return model
 
