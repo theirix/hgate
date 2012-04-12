@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-12 00:01+0300\n"
+"POT-Creation-Date: 2012-04-12 23:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,8 +278,8 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: templates/errors.html:13 templates/repository.html:73
-#: templates/repository.html.py:99 templates/useredit.html:40
+#: templates/errors.html:13 templates/repository.html:82
+#: templates/repository.html.py:108 templates/useredit.html:40
 msgid "Repository"
 msgstr ""
 
@@ -380,98 +380,98 @@ msgstr ""
 msgid "delete"
 msgstr ""
 
-#: templates/repository.html:30
+#: templates/repository.html:38
 msgid "Are you sure you want to delete parameter "
 msgstr ""
 
-#: templates/repository.html:30
+#: templates/repository.html:38
 msgid " from hgrc file"
 msgstr ""
 
-#: templates/repository.html:58 templates/repository.html.py:90
+#: templates/repository.html:66 templates/repository.html.py:99
 msgid "Advanced mode"
 msgstr ""
 
-#: templates/repository.html:60 templates/repository.html.py:92
+#: templates/repository.html:69 templates/repository.html.py:101
 msgid "Raw mode"
 msgstr ""
 
-#: templates/repository.html:97
+#: templates/repository.html:106
 msgid "HgWeb config"
 msgstr ""
 
-#: templates/repository.html:115
+#: templates/repository.html:134
 msgid "Additional actions"
 msgstr ""
 
-#: templates/repository.html:120
+#: templates/repository.html:139
 msgid "Change repository:"
 msgstr ""
 
-#: templates/repository.html:121
+#: templates/repository.html:140
 msgid ""
 "Change repository : Allows to change repository name, move it between groups "
 "and default repository directory."
 msgstr ""
 
-#: templates/repository.html:127 templates/repository.html.py:185
+#: templates/repository.html:146 templates/repository.html.py:204
 #: templates/useredit.html:30
 msgid "Save"
 msgstr ""
 
-#: templates/repository.html:134
+#: templates/repository.html:153
 msgid "Delete repository:"
 msgstr ""
 
-#: templates/repository.html:135
+#: templates/repository.html:154
 msgid ""
 "Delete repository : Deletes directory tree and modifies hgweb.config if this "
 "is single path item."
 msgstr ""
 
-#: templates/repository.html:141
+#: templates/repository.html:160
 msgid "Are you sure?"
 msgstr ""
 
-#: templates/repository.html:150
+#: templates/repository.html:169
 msgid "Delete"
 msgstr ""
 
-#: templates/repository.html:176
+#: templates/repository.html:195
 msgid "Delete parameter : remove this parameter from the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:178
+#: templates/repository.html:197
 msgid "Edit"
 msgstr ""
 
-#: templates/repository.html:179
+#: templates/repository.html:198
 msgid "Cancel"
 msgstr ""
 
-#: templates/repository.html:187
+#: templates/repository.html:206
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 
-#: templates/repository.html:190
+#: templates/repository.html:209
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
 msgstr ""
 
-#: templates/repository.html:203
+#: templates/repository.html:222
 msgid "Value is set in the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:207
+#: templates/repository.html:226
 msgid "Value is set in the hgweb config"
 msgstr ""
 
-#: templates/repository.html:211
+#: templates/repository.html:230
 msgid "Value not set in any config"
 msgstr ""
 
-#: templates/repository.html:216
+#: templates/repository.html:235
 msgid "Value not set in hgweb config"
 msgstr ""
 

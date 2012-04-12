@@ -4,8 +4,16 @@
 
 {% block head %}
     {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/codemirror.css" />
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/codemirror.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}/js/properties.js"></script>
+
     <script>
         $(document).ready(function () {
+            var editor = CodeMirror.fromTextArea(document.getElementById("id_hgrc"), {
+                lineNumbers: true
+            });
+
             $(".repo_edit input:visible, .repo_edit select").attr("disabled", "disabled");
             $(".repo_edit input.submit").removeAttr("disabled");
             $(".repo_field_edit_link").click(function () {
@@ -56,6 +64,7 @@
                 $("#advanced_mode").toggle();
                 if ($("#raw_mode").is(':visible')) {
                     $("#edit_mode_ctrl").html("{% trans "Advanced mode" %}");
+                    editor.refresh();
                 } else {
                     $("#edit_mode_ctrl").html("{% trans "Raw mode" %}");
                 }
@@ -101,8 +110,18 @@
 
     <div id="raw_mode" {% if not is_raw_mode %} style="display: none;" {% endif %}>
         <form action="{{ repo_url }}" id="raw_form" method="post">
+            {{ raw_mode_form.non_field_errors }}
             <table>
-                {{ raw_mode_form.as_table }}
+                <tr>
+                    <th><label for="id_hgrc">Hgrc:</label></th>
+                    <td width="100%">
+                        {{ raw_mode_form.hgrc.errors }}
+                        {{ raw_mode_form.hgrc }}
+                        {% for hidden in raw_mode_form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2" align="right"><input type="submit" value="save" name="raw_save"></td>
                 </tr>

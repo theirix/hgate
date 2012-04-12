@@ -340,6 +340,11 @@ h3{
     text-align: center;
 }
 
-#raw_form textarea {
-    overflow: auto;
+#raw_mode .CodeMirror {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+    margin: 10px;
+    line-height: 1.1em;
+    font-size: 1.1em;
 }
