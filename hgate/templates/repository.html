@@ -25,6 +25,24 @@
                 inp.focus();
                 return false;
             });
+
+            $(".repo_field_edit_link").click(function () {
+                $(this).hide();
+                var row = $(this).parents("tr:first");
+                row.find(".repo_field_cancel_link").show();
+                var inp = row.find("input, select");
+                inp.removeAttr("disabled");
+                inp.focus();
+                return false;
+            });
+
+            $("#repo_field_edit_link_allow_read").click(function() {
+                var exp_block = $("#allow_read_exp");
+                exp_block.show();
+                var inp = exp_block.find("#allow_read_exp input, select");
+                inp.removeAttr("disabled");
+            });
+
             $(".repo_field_cancel_link").click(function () {
                 $(this).hide();
                 var row = $(this).parents("tr:first");
@@ -33,6 +51,11 @@
                 inp.attr("disabled", "disabled");
                 return false;
             });
+
+            $("#repo_field_cancel_link_allow_read").click(function() {
+                $("#allow_read_exp").hide();
+            });
+
             $(".repo_field_delete_link").click(function () {
                 var field = $(this).parents("tr:first").find("th").text();
                 if (confirm("{% trans "Are you sure you want to delete parameter " %}" + "\"" + field + "\"" + "{% trans " from hgrc file" %}" + "?")) {
@@ -73,6 +96,39 @@
             if ($(".additional .errorlist").length) {
                 $(".spoiler-head").toggleClass("folded").toggleClass("unfolded").next().toggle()
             }
+
+            $("#add_allow_read_btn").click(function() {
+                if ($("#add_allow_read_id")) {
+                    var selected_user = $("#add_allow_read_id option:selected");
+                    $("#rm_allow_read_id").append('<option value="{0}">{0}</option>'.format(selected_user.val()));
+                    var allow_read_users = $("#id_allow_read");
+                    if (allow_read_users.val()) {
+                        allow_read_users.val("{0}, {1}".format(allow_read_users.val(), selected_user.val()));
+                    } else {
+                        allow_read_users.val(selected_user.val());
+                    }
+                    selected_user.remove();
+                }
+            });
+//            $("#add_allow_read_id").dblclick(function() {
+//                alert($("#add_allow_read_id").val());
+//            })
+            $("#rm_allow_read_btn").click(function() {
+                if ($("#rm_allow_read_id")) {
+                    var selected_user = $("#rm_allow_read_id option:selected");
+                    $("#add_allow_read_id").append('<option value="{0}">{0}</option>'.format(selected_user.val()));
+                    selected_user.remove();
+                    var users = '';
+                    $("#rm_allow_read_id > option").each(function() {
+                        if (users) {
+                            users = "{0}, {1}".format(users, this.value);
+                        } else {
+                            users = this.value;
+                        }
+                    });
+                    $("#id_allow_read").val(users.trim());
+                }
+            });
         })
     </script>
 {% endblock %}
@@ -113,7 +169,9 @@
             {{ raw_mode_form.non_field_errors }}
             <table>
                 <tr>
-                    <th><label for="id_hgrc">Hgrc:</label></th>
+                    <th>
+                        {{ raw_mode_form.hgrc.label_tag }}:
+                    </th>
                     <td width="100%">
                         {{ raw_mode_form.hgrc.errors }}
                         {{ raw_mode_form.hgrc }}
@@ -188,18 +246,130 @@
                 {{ hidden }}
             {% endfor %}
             <table>
-                {% for field in form.visible_fields %}
-                    <tr class="{{ form|field_class:field }}">
-                        <th>{{ field.label_tag }}</th>
-                        <td class="action">{{ field.errors }}{{ field }}<span
-                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                                class="tooltip repo_field_delete_link"></span></td>
-                        <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %}</a><a href="#"
-                                                                                              class="repo_field_cancel_link">{% trans "Cancel" %}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
                 <tr>
+                    <td colspan="3"></td>
+                    <td rowspan="10" align="center" valign="top">
+                        <div id="allow_read_exp" style="display: none;">
+                            <div>
+                                <select style="width: 150px;" id="add_allow_read_id" size="4">
+                                    {% for user in user_list %}
+                                    <option value="{{ user }}">{{ user }}</option>
+                                    {% endfor %}
+                                </select><br/>
+                                <label for="add_allow_read_id">Add:</label><br/>
+                                <input style="width: 150px;" id="add_allow_read_btn" type="button" value="<"/>
+                            </div>
+                            <hr/>
+                            <div >
+                                <select style="width: 150px;" id="rm_allow_read_id" size="4">
+                                    {% for user in allow_read_list %}
+                                    <option value="{{ user }}">{{ user }}</option>
+                                    {% endfor %}
+                                </select><br/>
+                                <label for="rm_allow_read_id">Remove:</label><br/>
+                                <input style="width: 150px;" id="rm_allow_read_btn" type="button" value=">"/>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+{#                {% for field in form.visible_fields %}#}
+{#                    <tr class="{{ form|field_class:field }}">#}
+{#                        <th>{{ field.label_tag }}</th>#}
+{#                        <td class="action">{{ field.errors }}{{ field }}<span#}
+{#                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"#}
+{#                                class="tooltip repo_field_delete_link"></span></td>#}
+{#                        <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} &gt;</a><a href="#"#}
+{#                                                                                              class="repo_field_cancel_link">{% trans "Cancel" %} &lt;</a>#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
+                <tr class="{{ form|field_class:form.allow_read }}">
+                    <th>{{ form.allow_read.label_tag }}</th>
+                    <td class="action">{{ form.allow_read.errors }}{{ form.allow_read }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link" id="repo_field_edit_link_allow_read">
+                        {% trans "Edit" %} &gt;</a>
+                        <a href="#" id="repo_field_cancel_link_allow_read"
+                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                            &lt;</a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.allow_push }}">
+                    <th>{{ form.allow_push.label_tag }}</th>
+                    <td class="action">{{ form.allow_push.errors }}{{ form.allow_push }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} &gt;</a><a href="#"
+                                                                                               class="repo_field_cancel_link">{% trans "Cancel" %}
+                        &lt;</a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.deny_read }}">
+                    <th>{{ form.deny_read.label_tag }}</th>
+                    <td class="action">{{ form.deny_read.errors }}{{ form.deny_read }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
+                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                    </a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.deny_push }}">
+                    <th>{{ form.deny_push.label_tag }}</th>
+                    <td class="action">{{ form.deny_push.errors }}{{ form.deny_push }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
+                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                    </a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.style }}">
+                    <th>{{ form.style.label_tag }}</th>
+                    <td class="action">{{ form.style.errors }}{{ form.style }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
+                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                    </a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.allow_archive }}">
+                    <th>{{ form.allow_archive.label_tag }}</th>
+                    <td class="action">{{ form.allow_archive.errors }}{{ form.allow_archive }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
+                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                    </a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.baseurl }}">
+                    <th>{{ form.baseurl.label_tag }}</th>
+                    <td class="action">{{ form.baseurl.errors }}{{ form.baseurl }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
+                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                    </a>
+                    </td>
+                </tr>
+                <tr class="{{ form|field_class:form.push_ssl }}">
+                    <th>{{ form.push_ssl.label_tag }}</th>
+                    <td class="action">{{ form.push_ssl.errors }}{{ form.push_ssl }}<span
+                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                            class="tooltip repo_field_delete_link"></span></td>
+                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
+                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
+                    </a>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td></td>
                     <td colspan="2" class="bottom">
                         <input class="submit" type="submit" name="save" value="{% trans "Save" %}"/>
                         {% if global %}

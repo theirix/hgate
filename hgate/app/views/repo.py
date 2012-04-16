@@ -1,4 +1,5 @@
 import os
+import hgate.app.modhg.usersb as users
 from hgate import settings
 from hgate.app import modhg
 from hgate.app.forms import RepositoryForm, FileHashForm, CreateRepoForm, RawModeForm
@@ -20,9 +21,15 @@ __author__ = 'hawaiian'
 def hgweb(request):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
-    hgrc = None
     is_raw_mode = False
-    model = {"tree": tree, "global": True}
+
+    allow_read_list = hgweb.get_web_key('allow_read')
+    allow_read_list = allow_read_list if allow_read_list is None else allow_read_list.split(",")
+    allow_read_list = [val.strip() for val in allow_read_list]
+    user_list = users.login_list(settings.AUTH_FILE)
+    user_list = [val for val in user_list if val.strip() not in allow_read_list]
+
+    model = {"tree": tree, "global": True, "user_list": user_list, "allow_read_list": allow_read_list}
     file_hash = md5_for_file(settings.HGWEB_CONFIG)
 
     form = RepositoryForm(file_hash)
@@ -63,7 +70,7 @@ def hgweb(request):
         form = RepositoryForm(file_hash)
         form._errors = errors
 
-    form.set_default(hgweb, hgrc)
+    form.set_default(hgweb, None)
     model["form"] = form
     model["repo_field_delete_form"] = repo_field_delete_form
     model["raw_mode_form"] = raw_mode_form
