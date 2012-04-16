@@ -15,6 +15,8 @@ from common import prepare_tree, md5_for_file
 
 __author__ = 'hawaiian'
 
+#todo think about merging hgweb and repo functions.
+
 #page handlers
 @render_to('repository.html')
 @require_access(menu='hgweb')
@@ -23,13 +25,22 @@ def hgweb(request):
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     is_raw_mode = False
 
-    allow_read_list = hgweb.get_web_key('allow_read')
-    allow_read_list = allow_read_list if allow_read_list is None else allow_read_list.split(",")
-    allow_read_list = [val.strip() for val in allow_read_list]
-    user_list = users.login_list(settings.AUTH_FILE)
-    user_list = [val for val in user_list if val.strip() not in allow_read_list]
+    allow_read_list = _split_users(hgweb.get_web_key('allow_read'))
+    allow_push_list = _split_users(hgweb.get_web_key('allow_push'))
+    deny_read_list = _split_users(hgweb.get_web_key('deny_read'))
+    deny_push_list = _split_users(hgweb.get_web_key('deny_push'))
 
-    model = {"tree": tree, "global": True, "user_list": user_list, "allow_read_list": allow_read_list}
+    user_list = users.login_list(settings.AUTH_FILE)
+    add_to_allow_read_list = [val for val in user_list if val.strip() not in allow_read_list]
+    add_to_allow_push_list = [val for val in user_list if val.strip() not in allow_push_list]
+    add_to_deny_read_list = [val for val in user_list if val.strip() not in deny_read_list]
+    add_to_deny_push_list = [val for val in user_list if val.strip() not in deny_push_list]
+
+    model = {"tree": tree, "global": True, "add_to_allow_read_list": add_to_allow_read_list,
+             "add_to_allow_push_list": add_to_allow_push_list,
+             "add_to_deny_read_list": add_to_deny_read_list, "add_to_deny_push_list": add_to_deny_push_list,
+             "allow_read_list": allow_read_list, "allow_push_list": allow_push_list, "deny_read_list": deny_read_list,
+             "deny_push_list": deny_push_list}
     file_hash = md5_for_file(settings.HGWEB_CONFIG)
 
     form = RepositoryForm(file_hash)
@@ -84,7 +95,7 @@ def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     is_raw_mode = False
-    model = {"tree": tree, "global": False, "repo_path": repo_path}
+    #model = {"tree": tree, "global": False, "repo_path": repo_path}
     full_repository_path = repository.get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
     _check_access_local_hgrc(request, hgrc_path)
@@ -96,6 +107,23 @@ def repo(request, repo_path):
               "file_hash": hgweb_cfg_hash})
 
     hgrc = HGWeb(hgrc_path, True)
+
+    allow_read_list = _split_users(hgrc.get_web_key('allow_read'))
+    allow_push_list = _split_users(hgrc.get_web_key('allow_push'))
+    deny_read_list = _split_users(hgrc.get_web_key('deny_read'))
+    deny_push_list = _split_users(hgrc.get_web_key('deny_push'))
+
+    user_list = users.login_list(settings.AUTH_FILE)
+    add_to_allow_read_list = [val for val in user_list if val.strip() not in allow_read_list]
+    add_to_allow_push_list = [val for val in user_list if val.strip() not in allow_push_list]
+    add_to_deny_read_list = [val for val in user_list if val.strip() not in deny_read_list]
+    add_to_deny_push_list = [val for val in user_list if val.strip() not in deny_push_list]
+
+    model = {"tree": tree, "global": False, "repo_path": repo_path, "add_to_allow_read_list": add_to_allow_read_list,
+             "add_to_allow_push_list": add_to_allow_push_list,
+             "add_to_deny_read_list": add_to_deny_read_list, "add_to_deny_push_list": add_to_deny_push_list,
+             "allow_read_list": allow_read_list, "allow_push_list": allow_push_list, "deny_read_list": deny_read_list,
+             "deny_push_list": deny_push_list}
 
     local_hgrc_hash = md5_for_file(hgrc_path)
     delete_repo_form = FileHashForm(local_hgrc_hash)
@@ -180,3 +208,12 @@ def _check_access_local_hgrc(request, hgrc_path):
         messages.error(request, _("No access to write mercurial`s local configuration file by path: ") + hgrc_path)
     elif os.access(hgrc_path, os.F_OK) and not os.access(hgrc_path, os.R_OK):
         messages.warning(request, _("No access to read mercurial`s local configuration file by path: ") + hgrc_path)
+
+
+def _split_users(users):
+    """
+    Split string of nicknames like "name1, name2,name3..." to list of users.
+    """
+    _users_list = [] if users is None else users.split(",")
+    _users_list = [val.strip() for val in _users_list]
+    return _users_list

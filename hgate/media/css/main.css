@@ -292,8 +292,13 @@ h3{
     text-align: left;
     font-weight: bold;
 }
-.repo_field_cancel_link{
+.repo_field_cancel_link {
     display: none;
+}
+.repo_field_ext_refresh_link {
+    display: none;
+    font-size: smaller;
+    margin-left: 15px;
 }
 
 .additional .spoiler-head {

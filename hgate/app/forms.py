@@ -45,7 +45,7 @@ class DeleteGroupForm(FileHashForm):
         return HttpResponseRedirect(reverse('index'))
 
 class RepositoryForm(FileHashForm):
-    allow_read = forms.CharField(label=_("allow_read"), initial=None, required=False, widget=forms.TextInput(attrs={'readonly':'readonly'}))
+    allow_read = forms.CharField(label=_("allow_read"), initial=None, required=False) #, widget=forms.TextInput(attrs={'readonly':'readonly'})
     allow_push = forms.CharField(label=_("allow_push"), initial=None, required=False)
     deny_read = forms.CharField(label=_("deny_read"), initial=None, required=False)
     deny_push = forms.CharField(label=_("deny_push"), initial=None, required=False)

@@ -36,13 +36,6 @@
                 return false;
             });
 
-            $("#repo_field_edit_link_allow_read").click(function() {
-                var exp_block = $("#allow_read_exp");
-                exp_block.show();
-                var inp = exp_block.find("#allow_read_exp input, select");
-                inp.removeAttr("disabled");
-            });
-
             $(".repo_field_cancel_link").click(function () {
                 $(this).hide();
                 var row = $(this).parents("tr:first");
@@ -50,10 +43,6 @@
                 var inp = row.find("input, select");
                 inp.attr("disabled", "disabled");
                 return false;
-            });
-
-            $("#repo_field_cancel_link_allow_read").click(function() {
-                $("#allow_read_exp").hide();
             });
 
             $(".repo_field_delete_link").click(function () {
@@ -97,38 +86,103 @@
                 $(".spoiler-head").toggleClass("folded").toggleClass("unfolded").next().toggle()
             }
 
-            $("#add_allow_read_btn").click(function() {
-                if ($("#add_allow_read_id")) {
-                    var selected_user = $("#add_allow_read_id option:selected");
-                    $("#rm_allow_read_id").append('<option value="{0}">{0}</option>'.format(selected_user.val()));
-                    var allow_read_users = $("#id_allow_read");
-                    if (allow_read_users.val()) {
-                        allow_read_users.val("{0}, {1}".format(allow_read_users.val(), selected_user.val()));
-                    } else {
-                        allow_read_users.val(selected_user.val());
+            // ==== editing users ====
+            var allow_read_list = [{% for user in allow_read_list %}'{{ user }}',{% endfor %}];
+            var add_to_allow_read_list = [{% for user in add_to_allow_read_list %}'{{ user }}',{% endfor %}];
+
+            var allow_push_list = [{% for user in allow_push_list %}'{{ user }}',{% endfor %}];
+            var add_to_allow_push_list = [{% for user in add_to_allow_push_list %}'{{ user }}',{% endfor %}];
+
+            var deny_read_list = [{% for user in deny_read_list %}'{{ user }}',{% endfor %}];
+            var add_to_deny_read_list = [{% for user in add_to_deny_read_list %}'{{ user }}',{% endfor %}];
+
+            var deny_push_list = [{% for user in deny_push_list %}'{{ user }}',{% endfor %}];
+            var add_to_deny_push_list = [{% for user in add_to_deny_push_list %}'{{ user }}',{% endfor %}];
+
+            function apply_ext_block(add_list, rm_list, users_inp) {
+                var ext_block = $("#edit_ext");
+                var inp = ext_block.find("#edit_ext input, select");
+                inp.removeAttr("disabled");
+                ext_block.show();
+
+                var available_to_add = $("#available_to_add_id");
+                available_to_add.empty();
+                add_list.forEach(function(element, index, array) {
+                    available_to_add.append('<option value="{0}">{0}</option>'.format(element));
+                });
+
+                var available_to_rm = $("#available_to_rm_id");
+                available_to_rm.empty();
+                rm_list.forEach(function(element, index, array) {
+                    available_to_rm.append('<option value="{0}">{0}</option>'.format(element));
+                });
+
+                $("#available_to_add_btn").unbind('click').click(function() {
+                    if ($("#available_to_add_id option:selected").length) {
+                        var selected_user = $("#available_to_add_id option:selected");
+                        $("#available_to_rm_id").append('<option value="{0}">{0}</option>'.format(selected_user.val()));
+                        var pos = add_list.indexOf(selected_user.val());
+                        add_list.splice(pos, 1);
+                        rm_list.splice(rm_list.length, 0, selected_user.val());
+                        selected_user.remove();
+                        users_inp.val(rm_list.join(", "));
                     }
-                    selected_user.remove();
-                }
+                });
+                $("#available_to_add_id").dblclick(function() {
+                    $("#available_to_add_btn").click();
+                });
+                $("#available_to_rm_btn").unbind('click').click(function() {
+                    if ($("#available_to_rm_id option:selected").length) {
+                        var selected_user = $("#available_to_rm_id option:selected");
+                        $("#available_to_add_id").append('<option value="{0}">{0}</option>'.format(selected_user.val()));
+                        var pos = rm_list.indexOf(selected_user.val());
+                        rm_list.splice(pos, 1);
+                        add_list.splice(add_list.length, 0, selected_user.val());
+                        selected_user.remove();
+                        users_inp.val(rm_list.join(", "));
+                    }
+                });
+                $("#available_to_rm_id").dblclick(function() {
+                    $("#available_to_rm_btn").click();
+                });
+            }
+
+            //==== cancel link ====
+            $("#repo_field_cancel_link_allow_read, #repo_field_cancel_link_allow_push, #repo_field_cancel_link_deny_read, #repo_field_cancel_link_deny_push").click(function () {
+                $(".repo_field_ext_refresh_link").css("font-weight" , "");
+                $("#edit_ext").hide();
+                $(this).next().hide(); // hiding "==" link
+                return false;
             });
-//            $("#add_allow_read_id").dblclick(function() {
-//                alert($("#add_allow_read_id").val());
-//            })
-            $("#rm_allow_read_btn").click(function() {
-                if ($("#rm_allow_read_id")) {
-                    var selected_user = $("#rm_allow_read_id option:selected");
-                    $("#add_allow_read_id").append('<option value="{0}">{0}</option>'.format(selected_user.val()));
-                    selected_user.remove();
-                    var users = '';
-                    $("#rm_allow_read_id > option").each(function() {
-                        if (users) {
-                            users = "{0}, {1}".format(users, this.value);
-                        } else {
-                            users = this.value;
-                        }
-                    });
-                    $("#id_allow_read").val(users.trim());
-                }
+            // === edit link ===
+            $("#repo_field_edit_link_allow_read, #repo_field_edit_link_allow_read_refresh").click(function() {
+                $(".repo_field_ext_refresh_link").css("font-weight" , "");
+                $("#repo_field_edit_link_allow_read_refresh").show().css("font-weight" , "bold");
+                apply_ext_block(add_to_allow_read_list, allow_read_list, $("#id_allow_read"));
+                return false;
             });
+
+            $("#repo_field_edit_link_allow_push, #repo_field_edit_link_allow_push_refresh").click(function() {
+                $(".repo_field_ext_refresh_link").css("font-weight" , "");
+                $("#repo_field_edit_link_allow_push_refresh").css("font-weight" , "bold").show();
+                apply_ext_block(add_to_allow_push_list, allow_push_list, $("#id_allow_push"));
+                return false;
+            });
+
+            $("#repo_field_edit_link_deny_read, #repo_field_edit_link_deny_read_refresh").click(function() {
+                $(".repo_field_ext_refresh_link").css("font-weight" , "");
+                $("#repo_field_edit_link_deny_read_refresh").show().css("font-weight" , "bold");
+                apply_ext_block(add_to_deny_read_list, deny_read_list, $("#id_deny_read"));
+                return false;
+            });
+
+            $("#repo_field_edit_link_deny_push, #repo_field_edit_link_deny_push_refresh").click(function() {
+                $(".repo_field_ext_refresh_link").css("font-weight" , "");
+                $("#repo_field_edit_link_deny_push_refresh").css("font-weight" , "bold").show();
+                apply_ext_block(add_to_deny_push_list, deny_push_list, $("#id_deny_push"));
+                return false;
+            });
+            // ==== /editing users ====
         })
     </script>
 {% endblock %}
@@ -249,81 +303,77 @@
                 <tr>
                     <td colspan="3"></td>
                     <td rowspan="10" align="center" valign="top">
-                        <div id="allow_read_exp" style="display: none;">
+                        <div id="edit_ext" style="display: none;">
                             <div>
-                                <select style="width: 150px;" id="add_allow_read_id" size="4">
-                                    {% for user in user_list %}
-                                    <option value="{{ user }}">{{ user }}</option>
-                                    {% endfor %}
+                                <select style="width: 150px;" id="available_to_add_id" size="4">
                                 </select><br/>
-                                <label for="add_allow_read_id">Add:</label><br/>
-                                <input style="width: 150px;" id="add_allow_read_btn" type="button" value="<"/>
+                                <label for="available_to_add_id">Add:</label><br/>
+                                <input style="width: 150px;" id="available_to_add_btn" type="button" value="<"/>
                             </div>
                             <hr/>
                             <div >
-                                <select style="width: 150px;" id="rm_allow_read_id" size="4">
-                                    {% for user in allow_read_list %}
-                                    <option value="{{ user }}">{{ user }}</option>
-                                    {% endfor %}
+                                <select style="width: 150px;" id="available_to_rm_id" size="4">
                                 </select><br/>
-                                <label for="rm_allow_read_id">Remove:</label><br/>
-                                <input style="width: 150px;" id="rm_allow_read_btn" type="button" value=">"/>
+                                <label for="available_to_rm_id">Remove:</label><br/>
+                                <input style="width: 150px;" id="available_to_rm_btn" type="button" value=">"/>
                             </div>
                         </div>
                     </td>
                 </tr>
 
-{#                {% for field in form.visible_fields %}#}
-{#                    <tr class="{{ form|field_class:field }}">#}
-{#                        <th>{{ field.label_tag }}</th>#}
-{#                        <td class="action">{{ field.errors }}{{ field }}<span#}
-{#                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"#}
-{#                                class="tooltip repo_field_delete_link"></span></td>#}
-{#                        <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} &gt;</a><a href="#"#}
-{#                                                                                              class="repo_field_cancel_link">{% trans "Cancel" %} &lt;</a>#}
-{#                        </td>#}
-{#                    </tr>#}
-{#                {% endfor %}#}
                 <tr class="{{ form|field_class:form.allow_read }}">
                     <th>{{ form.allow_read.label_tag }}</th>
-                    <td class="action">{{ form.allow_read.errors }}{{ form.allow_read }}<span
-                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                            class="tooltip repo_field_delete_link"></span></td>
-                    <td><a href="#" class="repo_field_edit_link" id="repo_field_edit_link_allow_read">
-                        {% trans "Edit" %} &gt;</a>
+                    <td class="action">
+                        {{ form.allow_read.errors }}{{ form.allow_read }}<span
+                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                                class="tooltip repo_field_delete_link"></span>
+                        {#                        <span title="{% trans 'Users : ' %}{% for user in allow_read_list %}{{ user }}<br/>{% endfor %}"#}
+                        {#                              class="tooltip" id="id_allow_read_tooltip">[ ! ]</span>#}
+                    </td>
+                    <td>
+                        <a href="#" class="repo_field_edit_link" id="repo_field_edit_link_allow_read">{% trans "Edit" %}</a>
                         <a href="#" id="repo_field_cancel_link_allow_read"
-                           class="repo_field_cancel_link">{% trans "Cancel" %}
-                            &lt;</a>
+                           class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+                        <a href="#" id="repo_field_edit_link_allow_read_refresh" class="repo_field_ext_refresh_link">{% trans "Editor" %}</a>
                     </td>
                 </tr>
                 <tr class="{{ form|field_class:form.allow_push }}">
                     <th>{{ form.allow_push.label_tag }}</th>
-                    <td class="action">{{ form.allow_push.errors }}{{ form.allow_push }}<span
-                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                            class="tooltip repo_field_delete_link"></span></td>
-                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} &gt;</a><a href="#"
-                                                                                               class="repo_field_cancel_link">{% trans "Cancel" %}
-                        &lt;</a>
+                    <td class="action">
+                        {{ form.allow_push.errors }}{{ form.allow_push }}<span
+                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                                class="tooltip repo_field_delete_link"></span></td>
+                    <td>
+                        <a href="#" id="repo_field_edit_link_allow_push" class="repo_field_edit_link">{% trans "Edit" %}</a>
+                        <a href="#" id="repo_field_cancel_link_allow_push"
+                           class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+                        <a href="#" id="repo_field_edit_link_allow_push_refresh" class="repo_field_ext_refresh_link">{% trans "Editor" %}</a>
                     </td>
                 </tr>
                 <tr class="{{ form|field_class:form.deny_read }}">
                     <th>{{ form.deny_read.label_tag }}</th>
-                    <td class="action">{{ form.deny_read.errors }}{{ form.deny_read }}<span
-                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                            class="tooltip repo_field_delete_link"></span></td>
-                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
-                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
-                    </a>
+                    <td class="action">
+                        {{ form.deny_read.errors }}{{ form.deny_read }}<span
+                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                                class="tooltip repo_field_delete_link"></span></td>
+                    <td>
+                        <a href="#" id="repo_field_edit_link_deny_read" class="repo_field_edit_link">{% trans "Edit" %}</a>
+                        <a href="#" id="repo_field_cancel_link_deny_read"
+                           class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+                        <a href="#" id="repo_field_edit_link_deny_read_refresh" class="repo_field_ext_refresh_link">{% trans "Editor" %}</a>
                     </td>
                 </tr>
                 <tr class="{{ form|field_class:form.deny_push }}">
                     <th>{{ form.deny_push.label_tag }}</th>
-                    <td class="action">{{ form.deny_push.errors }}{{ form.deny_push }}<span
-                            title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                            class="tooltip repo_field_delete_link"></span></td>
-                    <td><a href="#" class="repo_field_edit_link">{% trans "Edit" %} </a><a href="#"
-                                                                                           class="repo_field_cancel_link">{% trans "Cancel" %}
-                    </a>
+                    <td class="action">
+                        {{ form.deny_push.errors }}{{ form.deny_push }}<span
+                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                                class="tooltip repo_field_delete_link"></span></td>
+                    <td>
+                        <a href="#" id="repo_field_edit_link_deny_push" class="repo_field_edit_link">{% trans "Edit" %}</a>
+                        <a href="#" id="repo_field_cancel_link_deny_push"
+                                       class="repo_field_cancel_link">{% trans "Cancel" %}</a>
+                        <a href="#" id="repo_field_edit_link_deny_push_refresh" class="repo_field_ext_refresh_link">{% trans "Editor" %}</a>
                     </td>
                 </tr>
                 <tr class="{{ form|field_class:form.style }}">
