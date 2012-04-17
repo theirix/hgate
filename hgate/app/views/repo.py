@@ -214,6 +214,6 @@ def _split_users(users):
     """
     Split string of nicknames like "name1, name2,name3..." to list of users.
     """
-    _users_list = [] if users is None else users.split(",")
+    _users_list = [] if users is None or not users.strip() else users.split(",")
     _users_list = [val.strip() for val in _users_list]
     return _users_list
