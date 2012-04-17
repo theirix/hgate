@@ -302,20 +302,19 @@
             <table>
                 <tr>
                     <td colspan="3"></td>
-                    <td rowspan="10" align="center" valign="top">
-                        <div id="edit_ext" style="display: none;">
-                            <div>
-                                <select style="width: 150px;" id="available_to_add_id" size="4">
+                    <td rowspan="10" valign="top"> <!-- align="center" valign="top" -->
+                        <div id="edit_ext" style="display: none; width: 340px;">
+                            <div style="width: 150px; float: right;">
+                                <select style="width: 150px;" id="available_to_rm_id" size="13">
                                 </select><br/>
-                                <label for="available_to_add_id">Add:</label><br/>
-                                <input style="width: 150px;" id="available_to_add_btn" type="button" value="<"/>
-                            </div>
-                            <hr/>
-                            <div >
-                                <select style="width: 150px;" id="available_to_rm_id" size="4">
-                                </select><br/>
-                                <label for="available_to_rm_id">Remove:</label><br/>
+                                <label for="available_to_rm_id">{% trans "Remove:" %}</label><br/>
                                 <input style="width: 150px;" id="available_to_rm_btn" type="button" value=">"/>
+                            </div>
+                            <div style="width: 170px; float: left; border-right: 1px dashed #D3D9E5;">
+                                <select style="width: 150px;" id="available_to_add_id" size="13">
+                                </select><br/>
+                                <label for="available_to_add_id">{% trans "Add:" %}</label><br/>
+                                <input style="width: 150px;" id="available_to_add_btn" type="button" value="<"/>
                             </div>
                         </div>
                     </td>
