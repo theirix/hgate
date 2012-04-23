@@ -52,11 +52,6 @@
                     $('#repo_field_delete_form').submit();
                 }
             });
-            $(".tooltip").tooltip({
-                delay:1000,
-                showBody:" : ",
-                showURL:false
-            });
             $('.spoiler-body').hide();
             $('.spoiler-head').click(function(){
                 $(this).toggleClass("folded").toggleClass("unfolded").next().toggle()
@@ -99,7 +94,16 @@
             var deny_push_list = [{% for user in deny_push_list %}'{{ user }}',{% endfor %}];
             var add_to_deny_push_list = [{% for user in add_to_deny_push_list %}'{{ user }}',{% endfor %}];
 
-            function apply_ext_block(add_list, rm_list, users_inp) {
+            function update_tooltip(users_list, users_tooltip) {
+                var new_tooltip = '{% trans "Users : " %}';
+                users_list.forEach(function(element, index, array) {
+                    new_tooltip += element + "<br/>";
+                });
+                users_tooltip.attr('title', new_tooltip);
+                tooltip(users_tooltip);
+            }
+
+            function apply_ext_block(add_list, rm_list, users_inp, users_tooltip) {
                 var ext_block = $("#edit_ext");
                 var inp = ext_block.find("#edit_ext input, select");
                 inp.removeAttr("disabled");
@@ -126,6 +130,7 @@
                         rm_list.splice(rm_list.length, 0, selected_user.val());
                         selected_user.remove();
                         users_inp.val(rm_list.join(", "));
+                        update_tooltip(rm_list, users_tooltip);
                     }
                 });
                 $("#available_to_add_id").dblclick(function() {
@@ -140,6 +145,7 @@
                         add_list.splice(add_list.length, 0, selected_user.val());
                         selected_user.remove();
                         users_inp.val(rm_list.join(", "));
+                        update_tooltip(rm_list, users_tooltip);
                     }
                 });
                 $("#available_to_rm_id").dblclick(function() {
@@ -158,28 +164,28 @@
             $("#repo_field_edit_link_allow_read, #repo_field_edit_link_allow_read_refresh").click(function() {
                 $(".repo_field_ext_refresh_link").css("font-weight" , "");
                 $("#repo_field_edit_link_allow_read_refresh").show().css("font-weight" , "bold");
-                apply_ext_block(add_to_allow_read_list, allow_read_list, $("#id_allow_read"));
+                apply_ext_block(add_to_allow_read_list, allow_read_list, $("#id_allow_read"), $("#id_allow_read_tooltip"));
                 return false;
             });
 
             $("#repo_field_edit_link_allow_push, #repo_field_edit_link_allow_push_refresh").click(function() {
                 $(".repo_field_ext_refresh_link").css("font-weight" , "");
                 $("#repo_field_edit_link_allow_push_refresh").css("font-weight" , "bold").show();
-                apply_ext_block(add_to_allow_push_list, allow_push_list, $("#id_allow_push"));
+                apply_ext_block(add_to_allow_push_list, allow_push_list, $("#id_allow_push"), $("#id_allow_push_tooltip"));
                 return false;
             });
 
             $("#repo_field_edit_link_deny_read, #repo_field_edit_link_deny_read_refresh").click(function() {
                 $(".repo_field_ext_refresh_link").css("font-weight" , "");
                 $("#repo_field_edit_link_deny_read_refresh").show().css("font-weight" , "bold");
-                apply_ext_block(add_to_deny_read_list, deny_read_list, $("#id_deny_read"));
+                apply_ext_block(add_to_deny_read_list, deny_read_list, $("#id_deny_read"), $("#id_deny_read_tooltip"));
                 return false;
             });
 
             $("#repo_field_edit_link_deny_push, #repo_field_edit_link_deny_push_refresh").click(function() {
                 $(".repo_field_ext_refresh_link").css("font-weight" , "");
                 $("#repo_field_edit_link_deny_push_refresh").css("font-weight" , "bold").show();
-                apply_ext_block(add_to_deny_push_list, deny_push_list, $("#id_deny_push"));
+                apply_ext_block(add_to_deny_push_list, deny_push_list, $("#id_deny_push"), $("#id_deny_push_tooltip"));
                 return false;
             });
             // ==== /editing users ====
@@ -323,11 +329,11 @@
                 <tr class="{{ form|field_class:form.allow_read }}">
                     <th>{{ form.allow_read.label_tag }}</th>
                     <td class="action">
-                        {{ form.allow_read.errors }}{{ form.allow_read }}<span
-                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                                class="tooltip repo_field_delete_link"></span>
-                        {#                        <span title="{% trans 'Users : ' %}{% for user in allow_read_list %}{{ user }}<br/>{% endfor %}"#}
-                        {#                              class="tooltip" id="id_allow_read_tooltip">[ ! ]</span>#}
+                        {{ form.allow_read.errors }}{{ form.allow_read }}
+                        <span title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                              class="tooltip repo_field_delete_link"></span>
+                        <span title="{% trans 'Users : ' %}{% for user in allow_read_list %}{{ user }}<br/>{% endfor %}"
+                              class="tooltip" id="id_allow_read_tooltip">[ ! ]</span>
                     </td>
                     <td>
                         <a href="#" class="repo_field_edit_link" id="repo_field_edit_link_allow_read">{% trans "Edit" %}</a>
@@ -339,9 +345,12 @@
                 <tr class="{{ form|field_class:form.allow_push }}">
                     <th>{{ form.allow_push.label_tag }}</th>
                     <td class="action">
-                        {{ form.allow_push.errors }}{{ form.allow_push }}<span
-                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                                class="tooltip repo_field_delete_link"></span></td>
+                        {{ form.allow_push.errors }}{{ form.allow_push }}
+                        <span title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                              class="tooltip repo_field_delete_link"></span>
+                        <span title="{% trans 'Users : ' %}{% for user in allow_push_list %}{{ user }}<br/>{% endfor %}"
+                              class="tooltip" id="id_allow_push_tooltip">[ ! ]</span>
+                    </td>
                     <td>
                         <a href="#" id="repo_field_edit_link_allow_push" class="repo_field_edit_link">{% trans "Edit" %}</a>
                         <a href="#" id="repo_field_cancel_link_allow_push"
@@ -352,9 +361,12 @@
                 <tr class="{{ form|field_class:form.deny_read }}">
                     <th>{{ form.deny_read.label_tag }}</th>
                     <td class="action">
-                        {{ form.deny_read.errors }}{{ form.deny_read }}<span
-                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                                class="tooltip repo_field_delete_link"></span></td>
+                        {{ form.deny_read.errors }}{{ form.deny_read }}
+                        <span title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                              class="tooltip repo_field_delete_link"></span>
+                        <span title="{% trans 'Users : ' %}{% for user in deny_read_list %}{{ user }}<br/>{% endfor %}"
+                              class="tooltip" id="id_deny_read_tooltip">[ ! ]</span>
+                    </td>
                     <td>
                         <a href="#" id="repo_field_edit_link_deny_read" class="repo_field_edit_link">{% trans "Edit" %}</a>
                         <a href="#" id="repo_field_cancel_link_deny_read"
@@ -365,9 +377,12 @@
                 <tr class="{{ form|field_class:form.deny_push }}">
                     <th>{{ form.deny_push.label_tag }}</th>
                     <td class="action">
-                        {{ form.deny_push.errors }}{{ form.deny_push }}<span
-                                title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
-                                class="tooltip repo_field_delete_link"></span></td>
+                        {{ form.deny_push.errors }}{{ form.deny_push }}
+                        <span title="{% trans "Delete parameter : remove this parameter from the local hgrc file" %}"
+                              class="tooltip repo_field_delete_link"></span>
+                        <span title="{% trans 'Users : ' %}{% for user in deny_push_list %}{{ user }}<br/>{% endfor %}"
+                              class="tooltip" id="id_allow_read_tooltip">[ ! ]</span>
+                    </td>
                     <td>
                         <a href="#" id="repo_field_edit_link_deny_push" class="repo_field_edit_link">{% trans "Edit" %}</a>
                         <a href="#" id="repo_field_cancel_link_deny_push"

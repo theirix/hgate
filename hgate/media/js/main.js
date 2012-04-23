@@ -6,3 +6,12 @@ String.prototype.format = function() {
     }
     return formatted;
 };
+
+function tooltip(apply_for) {
+    if (typeof apply_for == 'undefined' ) apply_for = $(".tooltip");
+    apply_for.tooltip({
+        delay:1000,
+        showBody:" : ",
+        showURL:false
+    });
+};
