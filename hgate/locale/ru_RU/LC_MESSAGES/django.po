@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 01:58-0500\n"
+"POT-Creation-Date: 2012-04-23 06:27-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -225,50 +225,50 @@ msgstr "Нет файла users или прав на чтение по пути:
 msgid "Global settings saved successfully."
 msgstr "Глабальные настройки успешно сохранены."
 
-#: app/views/repo.py:142 app/views/repo.py:171
+#: app/views/repo.py:151 app/views/repo.py:180
 msgid "Repository settings saved successfully."
 msgstr "Настройки репозитория успешно сохранены."
 
-#: app/views/repo.py:155
+#: app/views/repo.py:164
 #, python-format
 msgid "Repository '%s' deleted successfully."
 msgstr "Репозиторий '%s' успешно удалён."
 
-#: app/views/repo.py:158
+#: app/views/repo.py:167
 msgid "Repository '%(repo)s' was not deleted, cause: %(cause)."
 msgstr "Репозиторий [%(repo)s] не удалён, причина: %(cause)s"
 
-#: app/views/repo.py:206
+#: app/views/repo.py:215
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 "Нет hgrc для данного репозитория. Нет прав на запись для создания hgrc по "
 "пути: "
 
-#: app/views/repo.py:208
+#: app/views/repo.py:217
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на запись локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views/repo.py:210
+#: app/views/repo.py:219
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на чтение локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views/usersv.py:33
+#: app/views/usersv.py:34
 #, python-format
 msgid "User '%s' was deleted."
 msgstr "Пользователь '%s' удалён."
 
-#: app/views/usersv.py:41
+#: app/views/usersv.py:42
 #, python-format
 msgid "User '%s' was added."
 msgstr "Пользователь '%s' добавлен."
 
-#: app/views/usersv.py:65
+#: app/views/usersv.py:66
 msgid "Password changed successfully."
 msgstr "Пароль успешно изменён."
 
-#: app/views/usersv.py:79
+#: app/views/usersv.py:83
 msgid "No write access for users file by path: "
 msgstr "Нет прав на запись файла users по пути: "
 
@@ -558,6 +558,10 @@ msgstr "Читать"
 #: templates/useredit.html:37
 msgid "Push"
 msgstr "Писать"
+
+#: templates/useredit.html:48
+msgid "User does not have any permissions."
+msgstr "У пользователья нет прав на чтение/запись."
 
 #: templates/users.html:15
 msgid "Delete user"

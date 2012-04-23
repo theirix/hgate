@@ -28,7 +28,7 @@
     </table>
     
 </form>
-{% if permissions|length > 0 %}
+
 <h3>{% trans "Permissions" %}</h3>
 <table class="datagrid permission_table">
 <tr>
@@ -44,7 +44,9 @@
             <div class="fll">{{ perm.read }}</div><div class="flr">{{ perm.push }}</div><div>/</div>
         </td>
     </tr>
+{% empty %}
+    <tr><td colspan="2" align="center"><i>{% trans "User does not have any permissions." %}</i></td></tr>
 {% endfor %}
 </table>
-{% endif %}
+
 {% endblock %}

@@ -1,4 +1,5 @@
 import os
+from django.utils.datastructures import SortedDict
 from hgate.app import modhg
 from hgate.app.views.decorators import render_to, require_access
 from hgate import settings
@@ -54,12 +55,12 @@ def user(request, action, login):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     model = {"tree": tree}
-    is_w_access = _check_users_file(request)
+    is_write_access = _check_users_file(request)
     if action == "edit":
         # todo: check if login exists
         if request.method == "POST":
             form = EditUser(users_file_hash, request.POST)
-            if form.is_valid() and is_w_access:
+            if form.is_valid() and is_write_access:
                 password = form.cleaned_data['password2']
                 users.update(settings.AUTH_FILE, login, password)
                 messages.success(request, _("Password changed successfully."))
@@ -68,7 +69,10 @@ def user(request, action, login):
             form = EditUser(users_file_hash)
         model["form"] = form
         model["login"] = login
-        model["permissions"] = users.permissions(login)
+        # sorting permissions dict by key
+        permissions = users.permissions(login)
+        permissions = sorted(permissions.items(), key=lambda elem: elem[0])
+        model["permissions"] = SortedDict(permissions)
         return model
 
 # helpers
