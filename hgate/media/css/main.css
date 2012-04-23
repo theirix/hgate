@@ -323,6 +323,28 @@ h3{
     float: left;
 }
 
+#edit_ext {
+    display: none;
+    width: 350px;
+}
+
+#edit_ext select, #available_to_add_btn, #available_to_rm_btn {
+    width: 150px;
+}
+
+#edit_ext .items_to_remove_block {
+    width: 150px;
+    float: right;
+}
+
+#edit_ext .items_to_add_block {
+    width: 170px;
+    float: left;
+    border-right: 2px dashed #D3D9E5;
+    border-left: 2px dashed #D3D9E5;
+    padding-left: 10px;
+}
+
 .additional .spoiler-body, table, .td_color {
     background-color: #ECECEC;
     text-align: left;

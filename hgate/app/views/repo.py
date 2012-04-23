@@ -95,7 +95,7 @@ def repo(request, repo_path):
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     tree = prepare_tree(modhg.repository.get_tree(hgweb.get_paths(), hgweb.get_collections()))
     is_raw_mode = False
-    #model = {"tree": tree, "global": False, "repo_path": repo_path}
+
     full_repository_path = repository.get_absolute_repository_path(repo_path)
     hgrc_path = os.path.join(full_repository_path, ".hg", "hgrc")
     _check_access_local_hgrc(request, hgrc_path)

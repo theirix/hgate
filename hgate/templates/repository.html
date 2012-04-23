@@ -128,6 +128,8 @@
                         var pos = add_list.indexOf(selected_user.val());
                         add_list.splice(pos, 1);
                         rm_list.splice(rm_list.length, 0, selected_user.val());
+                        add_list.sort();
+                        rm_list.sort();
                         selected_user.remove();
                         users_inp.val(rm_list.join(", "));
                         update_tooltip(rm_list, users_tooltip);
@@ -143,6 +145,8 @@
                         var pos = rm_list.indexOf(selected_user.val());
                         rm_list.splice(pos, 1);
                         add_list.splice(add_list.length, 0, selected_user.val());
+                        add_list.sort();
+                        rm_list.sort();
                         selected_user.remove();
                         users_inp.val(rm_list.join(", "));
                         update_tooltip(rm_list, users_tooltip);
@@ -309,18 +313,18 @@
                 <tr>
                     <td colspan="3"></td>
                     <td rowspan="10" valign="top"> <!-- align="center" valign="top" -->
-                        <div id="edit_ext" style="display: none; width: 340px;">
-                            <div style="width: 150px; float: right;">
-                                <select style="width: 150px;" id="available_to_rm_id" size="13">
+                        <div id="edit_ext">
+                            <div class="items_to_remove_block">
+                                <select id="available_to_rm_id" size="13">
                                 </select><br/>
                                 <label for="available_to_rm_id">{% trans "Remove:" %}</label><br/>
-                                <input style="width: 150px;" id="available_to_rm_btn" type="button" value=">"/>
+                                <input id="available_to_rm_btn" type="button" value=">"/>
                             </div>
-                            <div style="width: 170px; float: left; border-right: 1px dashed #D3D9E5;">
-                                <select style="width: 150px;" id="available_to_add_id" size="13">
+                            <div class="items_to_add_block" >
+                                <select id="available_to_add_id" size="13">
                                 </select><br/>
                                 <label for="available_to_add_id">{% trans "Add:" %}</label><br/>
-                                <input style="width: 150px;" id="available_to_add_btn" type="button" value="<"/>
+                                <input id="available_to_add_btn" type="button" value="<"/>
                             </div>
                         </div>
                     </td>

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 09:08-0500\n"
+"POT-Creation-Date: 2012-04-23 18:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,8 +286,8 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: templates/errors.html:13 templates/repository.html:198
-#: templates/repository.html.py:224 templates/useredit.html:35
+#: templates/errors.html:13 templates/repository.html:202
+#: templates/repository.html.py:228 templates/useredit.html:35
 msgid "Repository"
 msgstr ""
 
@@ -397,118 +396,118 @@ msgstr ""
 msgid " from hgrc file"
 msgstr ""
 
-#: templates/repository.html:73 templates/repository.html.py:215
+#: templates/repository.html:73 templates/repository.html.py:219
 msgid "Advanced mode"
 msgstr ""
 
-#: templates/repository.html:76 templates/repository.html.py:217
+#: templates/repository.html:76 templates/repository.html.py:221
 msgid "Raw mode"
 msgstr ""
 
-#: templates/repository.html:98 templates/repository.html.py:335
-#: templates/repository.html:351 templates/repository.html.py:367
-#: templates/repository.html:383
+#: templates/repository.html:98 templates/repository.html.py:339
+#: templates/repository.html:355 templates/repository.html.py:371
+#: templates/repository.html:387
 msgid "Users : "
 msgstr ""
 
-#: templates/repository.html:222
+#: templates/repository.html:226
 msgid "HgWeb config"
 msgstr ""
 
-#: templates/repository.html:252
+#: templates/repository.html:256
 msgid "Additional actions"
 msgstr ""
 
-#: templates/repository.html:257
+#: templates/repository.html:261
 msgid "Change repository:"
 msgstr ""
 
-#: templates/repository.html:258
+#: templates/repository.html:262
 msgid ""
 "Change repository : Allows to change repository name, move it between groups "
 "and default repository directory."
 msgstr ""
 
-#: templates/repository.html:264 templates/repository.html.py:438
+#: templates/repository.html:268 templates/repository.html.py:442
 #: templates/useredit.html:25
 msgid "Save"
 msgstr ""
 
-#: templates/repository.html:271
+#: templates/repository.html:275
 msgid "Delete repository:"
 msgstr ""
 
-#: templates/repository.html:272
+#: templates/repository.html:276
 msgid ""
 "Delete repository : Deletes directory tree and modifies hgweb.config if this "
 "is single path item."
 msgstr ""
 
-#: templates/repository.html:278
+#: templates/repository.html:282
 msgid "Are you sure?"
 msgstr ""
 
-#: templates/repository.html:287
+#: templates/repository.html:291
 msgid "Delete"
 msgstr ""
 
-#: templates/repository.html:316
+#: templates/repository.html:320
 msgid "Remove:"
 msgstr ""
 
-#: templates/repository.html:322
+#: templates/repository.html:326
 msgid "Add:"
 msgstr ""
 
-#: templates/repository.html:333 templates/repository.html.py:349
-#: templates/repository.html:365 templates/repository.html.py:381
-#: templates/repository.html:396 templates/repository.html.py:406
-#: templates/repository.html:416 templates/repository.html.py:426
+#: templates/repository.html:337 templates/repository.html.py:353
+#: templates/repository.html:369 templates/repository.html.py:385
+#: templates/repository.html:400 templates/repository.html.py:410
+#: templates/repository.html:420 templates/repository.html.py:430
 msgid "Delete parameter : remove this parameter from the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:339 templates/repository.html.py:355
-#: templates/repository.html:371 templates/repository.html.py:387
-#: templates/repository.html:398 templates/repository.html.py:408
-#: templates/repository.html:418 templates/repository.html.py:428
+#: templates/repository.html:343 templates/repository.html.py:359
+#: templates/repository.html:375 templates/repository.html.py:391
+#: templates/repository.html:402 templates/repository.html.py:412
+#: templates/repository.html:422 templates/repository.html.py:432
 msgid "Edit"
 msgstr ""
 
-#: templates/repository.html:341 templates/repository.html.py:357
-#: templates/repository.html:373 templates/repository.html.py:389
-#: templates/repository.html:399 templates/repository.html.py:409
-#: templates/repository.html:419 templates/repository.html.py:429
+#: templates/repository.html:345 templates/repository.html.py:361
+#: templates/repository.html:377 templates/repository.html.py:393
+#: templates/repository.html:403 templates/repository.html.py:413
+#: templates/repository.html:423 templates/repository.html.py:433
 msgid "Cancel"
 msgstr ""
 
-#: templates/repository.html:342 templates/repository.html.py:358
-#: templates/repository.html:374 templates/repository.html.py:390
+#: templates/repository.html:346 templates/repository.html.py:362
+#: templates/repository.html:378 templates/repository.html.py:394
 msgid "Editor"
 msgstr ""
 
-#: templates/repository.html:440
+#: templates/repository.html:444
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 
-#: templates/repository.html:443
+#: templates/repository.html:447
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
 msgstr ""
 
-#: templates/repository.html:456
+#: templates/repository.html:460
 msgid "Value is set in the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:460
+#: templates/repository.html:464
 msgid "Value is set in the hgweb config"
 msgstr ""
 
-#: templates/repository.html:464
+#: templates/repository.html:468
 msgid "Value not set in any config"
 msgstr ""
 
-#: templates/repository.html:469
+#: templates/repository.html:473
 msgid "Value not set in hgweb config"
 msgstr ""
 
