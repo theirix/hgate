@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 06:27-0500\n"
+"POT-Creation-Date: 2012-04-23 09:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,126 +18,131 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: app/forms.py:28
+#: app/forms.py:29
 msgid "Configuration file was changed, please try again."
 msgstr "Файл конфигурации был изменён, попробуйте ещё раз."
 
-#: app/forms.py:42
+#: app/forms.py:43
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr "Группа '%s' успешно удалена."
 
-#: app/forms.py:48
+#: app/forms.py:49
 msgid "allow_read"
 msgstr ""
 
-#: app/forms.py:49
+#: app/forms.py:50
 msgid "allow_push"
 msgstr ""
 
-#: app/forms.py:50
+#: app/forms.py:51
 msgid "deny_read"
 msgstr ""
 
-#: app/forms.py:51
+#: app/forms.py:52
 msgid "deny_push"
 msgstr ""
 
-#: app/forms.py:52
+#: app/forms.py:53
 msgid "style"
 msgstr ""
 
-#: app/forms.py:53
+#: app/forms.py:54
 msgid "allow_archive"
 msgstr ""
 
-#: app/forms.py:54
+#: app/forms.py:55
 msgid "baseurl"
 msgstr ""
 
-#: app/forms.py:55
+#: app/forms.py:56
 msgid "push_ssl"
 msgstr ""
 
-#: app/forms.py:97 templates/users.html:45
+#: app/forms.py:98 templates/users.html:45
 msgid "Login"
 msgstr "Логин"
 
-#: app/forms.py:98 app/forms.py:119
+#: app/forms.py:99 app/forms.py:120
 msgid "Password"
 msgstr "Пароль"
 
-#: app/forms.py:99 app/forms.py:120
+#: app/forms.py:100 app/forms.py:121
 msgid "Re-enter password"
 msgstr "Повторите пароль"
 
-#: app/forms.py:108 app/forms.py:129
+#: app/forms.py:109 app/forms.py:130
 msgid "Passwords should be the same"
 msgstr "Пароли должны быть одинаковыми"
 
-#: app/forms.py:114
+#: app/forms.py:115
 msgid "User exists"
 msgstr "Пользователь существует"
 
-#: app/forms.py:141
+#: app/forms.py:142
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr "Не используйте специальные символы: *:?/\\, а так же имена '.' и '..'"
 
-#: app/forms.py:144
+#: app/forms.py:145
 msgid "Repository name"
 msgstr "Имя репозитория"
 
-#: app/forms.py:145
+#: app/forms.py:146
 msgid "Group"
 msgstr "Группа"
 
-#: app/forms.py:153
+#: app/forms.py:154
 msgid "New repository was created."
 msgstr "Создан новый репозиторий."
 
-#: app/forms.py:170
+#: app/forms.py:171
 #, python-format
 msgid "Repository '%(repo)s' was not moved to the same location: %(location)s."
 msgstr ""
 "Репозиторий [%(repo)s] не переименован, причина: то же имя %(location)s."
 
-#: app/forms.py:177
+#: app/forms.py:178
 #, python-format
 msgid "Repository '%(old_path)s' moved by path '%(new_path)s' successfully."
 msgstr "Репозиторий [%(old_path)s] успешно переименован в [%(new_path)s]."
 
-#: app/forms.py:185
+#: app/forms.py:186
 #, python-format
 msgid "Repository '%(repo)s' was not moved: %(cause)s."
 msgstr "Репозиторий [%(repo)s] не переименован, причина: %(cause)s"
 
-#: app/forms.py:191 templates/index.html:150
+#: app/forms.py:192 templates/index.html:151
 msgid "Group name"
 msgstr "Имя группы"
 
-#: app/forms.py:192
+#: app/forms.py:193
 msgid "Path"
 msgstr "Путь"
 
-#: app/forms.py:201
+#: app/forms.py:202
 msgid "Path should be ended with /* or /**"
 msgstr "Путь должен заканчиваться на /* или /**"
 
-#: app/forms.py:210
+#: app/forms.py:207
+#, python-format
+msgid "The path already define by group: %s"
+msgstr "Данный путь уже определён для группы: %s"
+
+#: app/forms.py:216
 msgid "New group was added."
 msgstr "Новая группа добавлена."
 
-#: app/forms.py:212
+#: app/forms.py:218
 #, python-format
 msgid "Group was not created: %s"
 msgstr "Группа не создана: %s"
 
-#: app/forms.py:228
+#: app/forms.py:234
 #, python-format
 msgid "Group '%s' was changed."
 msgstr "Группа '%s' изменена."
 
-#: app/forms.py:235
+#: app/forms.py:241
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
@@ -158,6 +163,11 @@ msgstr "При удалении группы произошла ошибка: %s
 #: app/modhg/repository.py:54
 msgid "There is already a group with such a name."
 msgstr "Уже существует группа с таким именем."
+
+#
+#: app/modhg/repository.py:63
+msgid "There is already such a repository."
+msgstr "Уже существует такой репозиторий."
 
 #: app/modhg/repository.py:69
 #, python-format
@@ -329,16 +339,16 @@ msgstr "отменить"
 msgid "save"
 msgstr "сохранить"
 
-#: templates/index.html:94
+#: templates/index.html:95
 msgid "Create repository"
 msgstr "Создать репозиторий"
 
-#: templates/index.html:100 templates/index.html.py:124
+#: templates/index.html:101 templates/index.html.py:125
 #: templates/users.html:30
 msgid "Create"
 msgstr "Создать"
 
-#: templates/index.html:102
+#: templates/index.html:103
 #, python-format
 msgid ""
 " Create new repository : Path: default path (%(default_path)s) if no group "
@@ -350,15 +360,15 @@ msgstr ""
 "действие создаёт директорию с именем репозитория и выполняет &apos;hg "
 "init&apos; в ней."
 
-#: templates/index.html:109
+#: templates/index.html:110
 msgid "Manage groups"
 msgstr "Управление группами"
 
-#: templates/index.html:116
+#: templates/index.html:117
 msgid "Collection"
 msgstr "Коллекция"
 
-#: templates/index.html:125
+#: templates/index.html:126
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
@@ -366,28 +376,28 @@ msgstr ""
 "Создание новой группы : Создаёт необходимые директории, если необходимо, для "
 "пути группы.<br>Добавляет запись об этой группе в hgweb.config."
 
-#: templates/index.html:149
+#: templates/index.html:150
 msgid "Type"
 msgstr "Тип"
 
-#: templates/index.html:151
+#: templates/index.html:152
 msgid "Full path"
 msgstr "Абсолютный путь"
 
-#: templates/index.html:152 templates/users.html:45
+#: templates/index.html:153 templates/users.html:45
 msgid "Action"
 msgstr "Действие"
 
-#: templates/index.html:167
+#: templates/index.html:168
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 "Клик для начала редактирования данной группы: вы можете изменить имя и путь."
 
-#: templates/index.html:168 templates/users.html:50
+#: templates/index.html:169 templates/users.html:50
 msgid "edit"
 msgstr "редактировать"
 
-#: templates/index.html:172
+#: templates/index.html:173
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
@@ -395,7 +405,7 @@ msgstr ""
 "Удалить группу : удаляет запись об это группе из hgweb.config. "
 "Удаляетдиректорию группы и всё её содержимое."
 
-#: templates/index.html:173 templates/users.html:51
+#: templates/index.html:174 templates/users.html:51
 msgid "delete"
 msgstr "удалить"
 
@@ -595,10 +605,6 @@ msgstr "Удалить пользователя"
 
 #~ msgid "User not found"
 #~ msgstr "Пользователь не найден"
-
-#
-#~ msgid "There is already such repository."
-#~ msgstr "Уже существует такой репозиторий."
 
 #
 #~ msgid ""

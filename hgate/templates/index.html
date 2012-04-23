@@ -85,6 +85,7 @@
             $("#is_collection").click(function () {
                 $("#id_is_collection").val(this.checked ? 'True' : 'False');
             });
+            $("#is_collection").prop("checked", $("#id_is_collection").val() == 'True');
         })
     </script>
 {% endblock %}

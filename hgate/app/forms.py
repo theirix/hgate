@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from hgate.app import modhg
 from hgate.app.modhg import repository
+from hgate.app.modhg.HGWeb import HGWeb
 from hgate.app.modhg.repository import RepositoryException
 from hgate.app.views.common import prepare_path
 import modhg.usersb as users
@@ -41,7 +42,7 @@ class DeleteGroupForm(FileHashForm):
             modhg.repository.delete_group(path, name, is_collection == 'True')
             messages.success(request, _("Group '%s' was deleted successfully.") % name)
         except modhg.repository.RepositoryException as e:
-            messages.warning(request, str(e))
+            messages.warning(request, unicode(e))
         return HttpResponseRedirect(reverse('index'))
 
 class RepositoryForm(FileHashForm):
@@ -156,7 +157,7 @@ class CreateRepoForm(FileHashForm):
             else:
                 redirect_path = reverse("repository", args=[group + os.path.sep + name])
         except modhg.repository.RepositoryException as e:
-            messages.warning(request, str(e))
+            messages.warning(request, unicode(e))
             return HttpResponseRedirect(reverse('index'))
 
         return HttpResponseRedirect(redirect_path)
@@ -199,6 +200,11 @@ class ManageGroupsForm(FileHashForm):
         is_collection = self.cleaned_data.get('is_collection')
         if not is_collection == 'True' and not re.search(r"([/]\*{1,2})$", _path):
             raise forms.ValidationError(_("Path should be ended with /* or /**"))
+        hgweb = HGWeb(settings.HGWEB_CONFIG)
+        groups = hgweb.get_paths_and_collections()
+        for name, path_item in groups:
+            if path_item.rstrip('*/') == _path.rstrip('*/'):
+                raise forms.ValidationError(_("The path already define by group: %s") % name)
         return _path
 
     def create_group(self, request):
@@ -227,7 +233,7 @@ class ManageGroupsForm(FileHashForm):
                 modhg.repository.create_group(path, name, is_collection)
                 messages.success(request, _("Group '%s' was changed.") % old_name)
             except modhg.repository.RepositoryException as e:
-                messages.warning(request, str(e))
+                messages.warning(request, unicode(e))
         elif name == old_name and path == old_path:
             pass#do nothing
         else:

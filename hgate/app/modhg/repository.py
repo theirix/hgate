@@ -60,7 +60,7 @@ def create(path, name, has_no_group=False):
     """
     if is_repository(path):
         raise RepositoryException(
-            "There is already such repository.") #make here something more informative or exception
+            _("There is already such a repository.")) #make here something more informative or exception
     uio = ui.ui()
     try:
         hg.repository(uio, path, create=True)
