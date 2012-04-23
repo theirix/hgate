@@ -108,10 +108,19 @@ def repo(request, repo_path):
 
     hgrc = HGWeb(hgrc_path, True)
 
-    allow_read_list = _split_users(hgrc.get_web_key('allow_read'))
-    allow_push_list = _split_users(hgrc.get_web_key('allow_push'))
-    deny_read_list = _split_users(hgrc.get_web_key('deny_read'))
-    deny_push_list = _split_users(hgrc.get_web_key('deny_push'))
+    def _hgweb_or_hgrc_list(hgweb, hgrc, param_name):
+        """
+        checks if user list is not specified in the hgrc, tries to read it from hgweb
+        """
+        _list = _split_users(hgrc.get_web_key(param_name))
+        if not _list:
+            _list = _split_users(hgweb.get_web_key(param_name))
+        return _list
+
+    allow_read_list = _hgweb_or_hgrc_list(hgweb, hgrc, 'allow_read')
+    allow_push_list = _hgweb_or_hgrc_list(hgweb, hgrc, 'allow_push')
+    deny_read_list = _hgweb_or_hgrc_list(hgweb, hgrc, 'deny_read')
+    deny_push_list = _hgweb_or_hgrc_list(hgweb, hgrc, 'deny_push')
 
     user_list = users.login_list(settings.AUTH_FILE)
     add_to_allow_read_list = [val for val in user_list if val.strip() not in allow_read_list]
