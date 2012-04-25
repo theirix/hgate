@@ -5,22 +5,35 @@
 {% block head %}
     {{ block.super }}
     <script>
-        function delete_group(name, reps_count, is_collection) {
+        var group_names = [{% for gr_key, gr_path in groups %}'{{ gr_key }}',{% endfor %}];
+        var group_paths = [{% for gr_key, gr_path in groups %}'{{ gr_path }}',{% endfor %}];
+        // regexp to match trailing /,/*,/**
+        var replace = new RegExp("/\\*{0,2}$");
+
+        function delete_group(name, path, reps_count, is_collection) {
             var do_delete = false;
+            var delete_content = true;
             if (confirm("{% trans "Are you sure you want to delete group" %} '" + name + "'?")) {
-                if (reps_count == 0) {
-                    do_delete = true;
-                } else {
+                group_paths.forEach(function(element, index, array) {
+                    if (element.replace(replace, "") == path.replace(replace, "") && name != group_names[index]) {
+                        delete_content = confirm("{% trans "The path is already defined by group" %} '" + group_names[index] + "{% trans "', delete content of the group?" %}");
+                        return 0;
+                    }
+                });
+                if ((reps_count > 0) && delete_content) {
                     var repository_word = "{% trans "repositories" %}";
                     if (reps_count == 1)
                         repository_word = "{% trans "repository" %}";
                     if (confirm("{% trans "This group is not empty.\n It has " %} " + reps_count + " " + repository_word + ". {% trans "Delete anyway" %}?"))
                         do_delete = true;
+                } else {
+                    do_delete = true;
                 }
             }
             if (do_delete) {
                 $("#delete_group_form input[name='is_collection']").val(is_collection);
                 $("#delete_group_form input[name='group_name']").val(name);
+                $("#delete_group_form input[name='delete_content']").val(delete_content ? 'True' : 'False');
                 $("#delete_group_form").submit();
             } else {
                 $("#delete_group_form input[name='group_name']").val('');
@@ -86,7 +99,7 @@
                 $("#id_is_collection").val(this.checked ? 'True' : 'False');
             });
             $("#is_collection").prop("checked", $("#id_is_collection").val() == 'True');
-        })
+        });
     </script>
 {% endblock %}
 
@@ -109,7 +122,7 @@
     <hr style="margin: 15px 0 15px 0;"/>
     <h3>{% trans "Manage groups" %}</h3>
 
-    <form class="group_create" action="{% url index %}" method="post">
+    <form class="group_create" id="group_create_id" action="{% url index %}" method="post">
         <table>
             {{ groups_form.as_table }}
             <tr>
@@ -138,6 +151,7 @@
         <input type="hidden" name="group_name" value=""/>
         <input type="hidden" name="delete_group" value=""/>
         <input type="hidden" name="is_collection" value=""/>
+        <input type="hidden" name="delete_content" value=""/>
     </form>
     <form id="group_edit_form" action="{% url index %}" style="display:none;" method="post">
         <input type="hidden" name="old_group_name" id="old_group_name" value=""/>
@@ -169,7 +183,7 @@
                         {% trans "edit" %}
                     </span>&nbsp;&nbsp;
                     <span class="delete_group"
-                          onclick="delete_group('{{ gr_key }}', '{{ rep_count }}', '{{ is_collection }}');"
+                          onclick="delete_group('{{ gr_key }}', '{{ gr_path }}', '{{ rep_count }}', '{{ is_collection }}');"
                           title="{% trans 'Delete the group: removes record about this group from hgweb.config. Deletes group`s dir and all it`s subdirectories.' %}">
                          {% trans "delete" %}
                     </span>

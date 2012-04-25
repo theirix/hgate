@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 18:40+0300\n"
+"POT-Creation-Date: 2012-04-25 13:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,126 +20,126 @@ msgstr ""
 msgid "Configuration file was changed, please try again."
 msgstr ""
 
-#: app/forms.py:43
+#: app/forms.py:44
 #, python-format
 msgid "Group '%s' was deleted successfully."
 msgstr ""
 
-#: app/forms.py:49
+#: app/forms.py:50
 msgid "allow_read"
 msgstr ""
 
-#: app/forms.py:50
+#: app/forms.py:51
 msgid "allow_push"
 msgstr ""
 
-#: app/forms.py:51
+#: app/forms.py:52
 msgid "deny_read"
 msgstr ""
 
-#: app/forms.py:52
+#: app/forms.py:53
 msgid "deny_push"
 msgstr ""
 
-#: app/forms.py:53
+#: app/forms.py:54
 msgid "style"
 msgstr ""
 
-#: app/forms.py:54
+#: app/forms.py:55
 msgid "allow_archive"
 msgstr ""
 
-#: app/forms.py:55
+#: app/forms.py:56
 msgid "baseurl"
 msgstr ""
 
-#: app/forms.py:56
+#: app/forms.py:57
 msgid "push_ssl"
 msgstr ""
 
-#: app/forms.py:98 templates/users.html:45
+#: app/forms.py:99 templates/users.html:45
 msgid "Login"
 msgstr ""
 
-#: app/forms.py:99 app/forms.py:120
+#: app/forms.py:100 app/forms.py:121
 msgid "Password"
 msgstr ""
 
-#: app/forms.py:100 app/forms.py:121
+#: app/forms.py:101 app/forms.py:122
 msgid "Re-enter password"
 msgstr ""
 
-#: app/forms.py:109 app/forms.py:130
+#: app/forms.py:110 app/forms.py:131
 msgid "Passwords should be the same"
 msgstr ""
 
-#: app/forms.py:115
+#: app/forms.py:116
 msgid "User exists"
 msgstr ""
 
-#: app/forms.py:142
+#: app/forms.py:143
 msgid "Don`t use special characters any of *:?/\\ or names '.' and '..'"
 msgstr ""
 
-#: app/forms.py:145
+#: app/forms.py:146
 msgid "Repository name"
 msgstr ""
 
-#: app/forms.py:146
+#: app/forms.py:147
 msgid "Group"
 msgstr ""
 
-#: app/forms.py:154
+#: app/forms.py:155
 msgid "New repository was created."
 msgstr ""
 
-#: app/forms.py:171
+#: app/forms.py:172
 #, python-format
 msgid "Repository '%(repo)s' was not moved to the same location: %(location)s."
 msgstr ""
 
-#: app/forms.py:178
+#: app/forms.py:179
 #, python-format
 msgid "Repository '%(old_path)s' moved by path '%(new_path)s' successfully."
 msgstr ""
 
-#: app/forms.py:186
+#: app/forms.py:187
 #, python-format
 msgid "Repository '%(repo)s' was not moved: %(cause)s."
 msgstr ""
 
-#: app/forms.py:192 templates/index.html:151
+#: app/forms.py:193 templates/index.html:165
 msgid "Group name"
 msgstr ""
 
-#: app/forms.py:193
+#: app/forms.py:194
 msgid "Path"
 msgstr ""
 
-#: app/forms.py:202
+#: app/forms.py:203
 msgid "Path should be ended with /* or /**"
 msgstr ""
 
-#: app/forms.py:207
+#: app/forms.py:208
 #, python-format
-msgid "The path already define by group: %s"
+msgid "The path is already defined by group: %s"
 msgstr ""
 
-#: app/forms.py:216
+#: app/forms.py:217
 msgid "New group was added."
 msgstr ""
 
-#: app/forms.py:218
+#: app/forms.py:219
 #, python-format
 msgid "Group was not created: %s"
 msgstr ""
 
-#: app/forms.py:234
+#: app/forms.py:235
 #, python-format
 msgid "Group '%s' was changed."
 msgstr ""
 
-#: app/forms.py:241
+#: app/forms.py:242
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr ""
@@ -152,52 +152,52 @@ msgstr ""
 msgid "Can't create config file"
 msgstr ""
 
-#: app/modhg/repository.py:33
+#: app/modhg/repository.py:35
 #, python-format
 msgid "There is a problem while deleting group: %s"
 msgstr ""
 
-#: app/modhg/repository.py:54
+#: app/modhg/repository.py:56
 msgid "There is already a group with such a name."
 msgstr ""
 
-#: app/modhg/repository.py:63
+#: app/modhg/repository.py:65
 msgid "There is already such a repository."
 msgstr ""
 
-#: app/modhg/repository.py:69
+#: app/modhg/repository.py:71
 #, python-format
 msgid "Repository [%(path)s] is not created, because of error: %(cause)s"
 msgstr ""
 
-#: app/modhg/repository.py:81 app/modhg/repository.py:94
+#: app/modhg/repository.py:83 app/modhg/repository.py:96
 #, python-format
 msgid "There is no repository by path: [%s]"
 msgstr ""
 
-#: app/modhg/repository.py:86
+#: app/modhg/repository.py:88
 #, python-format
 msgid "Failed to delete [%(path)s], because of error: %(cause)s"
 msgstr ""
 
-#: app/modhg/repository.py:96
+#: app/modhg/repository.py:98
 #, python-format
 msgid "There is file by path: [%s]"
 msgstr ""
 
-#: app/modhg/repository.py:98
+#: app/modhg/repository.py:100
 #, python-format
 msgid "There is no access rights by path: [%s]"
 msgstr ""
 
-#: app/modhg/repository.py:104
+#: app/modhg/repository.py:106
 #, python-format
 msgid ""
 "Repository [%(old_path)s] is not moved to [%(new_path)s], because of error: "
 "%(cause)s"
 msgstr ""
 
-#: app/modhg/repository.py:130 app/modhg/repository.py:143
+#: app/modhg/repository.py:132 app/modhg/repository.py:145
 msgid "Invalid repository name."
 msgstr ""
 
@@ -299,44 +299,52 @@ msgstr ""
 msgid "to continue work!"
 msgstr ""
 
-#: templates/index.html:10
+#: templates/index.html:16
 msgid "Are you sure you want to delete group"
 msgstr ""
 
-#: templates/index.html:14
+#: templates/index.html:19
+msgid "The path is already defined by group"
+msgstr ""
+
+#: templates/index.html:19
+msgid "', delete content of the group?"
+msgstr ""
+
+#: templates/index.html:24
 msgid "repositories"
 msgstr ""
 
-#: templates/index.html:16
+#: templates/index.html:26
 msgid "repository"
 msgstr ""
 
-#: templates/index.html:17
+#: templates/index.html:27
 msgid "This group is not empty.\\n It has "
 msgstr ""
 
-#: templates/index.html:17
+#: templates/index.html:27
 msgid "Delete anyway"
 msgstr ""
 
-#: templates/index.html:53
+#: templates/index.html:66
 msgid "cancel"
 msgstr ""
 
-#: templates/index.html:61
+#: templates/index.html:74
 msgid "save"
 msgstr ""
 
-#: templates/index.html:95
+#: templates/index.html:108
 msgid "Create repository"
 msgstr ""
 
-#: templates/index.html:101 templates/index.html.py:125
+#: templates/index.html:114 templates/index.html.py:138
 #: templates/users.html:30
 msgid "Create"
 msgstr ""
 
-#: templates/index.html:103
+#: templates/index.html:116
 #, python-format
 msgid ""
 " Create new repository : Path: default path (%(default_path)s) if no group "
@@ -344,47 +352,47 @@ msgid ""
 "creates dir with repository name and makes &apos;hg init&apos; in that dir. "
 msgstr ""
 
-#: templates/index.html:110
+#: templates/index.html:123
 msgid "Manage groups"
 msgstr ""
 
-#: templates/index.html:117
+#: templates/index.html:130
 msgid "Collection"
 msgstr ""
 
-#: templates/index.html:126
+#: templates/index.html:139
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
 msgstr ""
 
-#: templates/index.html:150
+#: templates/index.html:164
 msgid "Type"
 msgstr ""
 
-#: templates/index.html:152
+#: templates/index.html:166
 msgid "Full path"
 msgstr ""
 
-#: templates/index.html:153 templates/users.html:45
+#: templates/index.html:167 templates/users.html:45
 msgid "Action"
 msgstr ""
 
-#: templates/index.html:168
+#: templates/index.html:182
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 
-#: templates/index.html:169 templates/users.html:50
+#: templates/index.html:183 templates/users.html:50
 msgid "edit"
 msgstr ""
 
-#: templates/index.html:173
+#: templates/index.html:187
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
 msgstr ""
 
-#: templates/index.html:174 templates/users.html:51
+#: templates/index.html:188 templates/users.html:51
 msgid "delete"
 msgstr ""
 

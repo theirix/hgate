@@ -35,11 +35,12 @@ class DeleteGroupForm(FileHashForm):
 
 
     def delete_group(self, request, groups):
-        name = request.POST.get("group_name")
-        is_collection = request.POST.get("is_collection")
+        name = request.POST["group_name"]
+        is_collection = request.POST["is_collection"]
+        delete_content = request.POST['delete_content']
         path = dict(groups)[name]
         try:
-            modhg.repository.delete_group(path, name, is_collection == 'True')
+            modhg.repository.delete_group(path, name, is_collection == 'True', delete_content == 'True')
             messages.success(request, _("Group '%s' was deleted successfully.") % name)
         except modhg.repository.RepositoryException as e:
             messages.warning(request, unicode(e))
@@ -204,7 +205,7 @@ class ManageGroupsForm(FileHashForm):
         groups = hgweb.get_paths_and_collections()
         for name, path_item in groups:
             if path_item.rstrip('*/') == _path.rstrip('*/'):
-                raise forms.ValidationError(_("The path already define by group: %s") % name)
+                raise forms.ValidationError(_("The path is already defined by group: %s") % name)
         return _path
 
     def create_group(self, request):

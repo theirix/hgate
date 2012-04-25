@@ -15,7 +15,7 @@ class RepositoryException(Exception):
     pass
 
 
-def delete_group(path, name, is_collection = False):
+def delete_group(path, name, is_collection = False, delete_content = True):
     """
     Deletes group: deletes name from [paths] section of it is collection or from [collections] section;
     Also deletes directory tree py path.
@@ -27,7 +27,9 @@ def delete_group(path, name, is_collection = False):
             path = path.rstrip('*')
         else:
             hgweb.del_collections(name) # may throw IOError
-        shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied".
+        if delete_content:
+            shutil.rmtree(path) #, ignore_errors=True - to ignore any problem like "Permission denied".
+            os.makedirs(path)
         # def onerror  function to hahdle errors or handle exception shutil.Error
     except (IOError, shutil.Error) as e:
         raise RepositoryException(_("There is a problem while deleting group: %s") % str(e))
