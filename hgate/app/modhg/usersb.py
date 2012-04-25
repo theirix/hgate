@@ -142,7 +142,7 @@ def _remove_from_hgrc(login):
     _remove_hgrc_single(login, settings.HGWEB_CONFIG)
     hgweb = HGWeb(settings.HGWEB_CONFIG)
     paths = hgweb.get_paths()
-    collections = hgweb.get_collections
+    collections = hgweb.get_collections()
     for (name, path) in collections:
         _remove_from_hgrc_int(name, path, True, login)
     for (name, path) in paths:

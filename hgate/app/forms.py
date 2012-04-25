@@ -198,6 +198,8 @@ class ManageGroupsForm(FileHashForm):
 
     def clean_path(self):
         _path = self.cleaned_data['path'].strip()
+        if _path == self.data['old_group_path']:
+            return _path
         is_collection = self.cleaned_data.get('is_collection')
         if not is_collection == 'True' and not re.search(r"([/]\*{1,2})$", _path):
             raise forms.ValidationError(_("Path should be ended with /* or /**"))
