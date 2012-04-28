@@ -225,7 +225,13 @@
     {% if global %}
         <h2>{% trans "HgWeb config" %}</h2>
     {% else %}
-        <h2>{% trans "Repository" %}: {{ repo_path }}</h2>
+        <h2>{% trans "Repository" %}:
+        {% if hgweb_repo_url != '-' %}
+            <a href="{{ hgweb_repo_url }}">{{ repo_path }}</a>
+        {% else %}
+            {{ repo_path }}
+        {% endif %}
+        </h2>
     {% endif %}
 
     <div id="raw_mode" {% if not is_raw_mode %} style="display: none;" {% endif %}>

@@ -205,6 +205,7 @@ def repo(request, repo_path):
     model["repo_form"] = edit_repo_form
     model["raw_mode_form"] = raw_mode_form
     model["is_raw_mode"] = is_raw_mode
+    model["hgweb_repo_url"] = _hgweb_repo_url(full_repository_path) if _is_collection(repo_path, hgweb) else _hgweb_repo_url(repo_path)
 
     return model
 
@@ -226,3 +227,17 @@ def _split_users(users):
     _users_list = [] if users is None or not users.strip() else users.split(",")
     _users_list = [val.strip() for val in _users_list]
     return _users_list
+
+def _hgweb_repo_url(repo_path):
+    if settings.HGWEB_URL == '-':
+        return '-'
+    return settings.HGWEB_URL.rstrip('/') + '/' + repo_path.strip('/')
+
+def _is_collection(repo_path, hgweb):
+    splitted_path = repo_path.split('/')
+    if len(splitted_path) > 1:
+        collections = hgweb.get_collections()
+        group_name = splitted_path[0]
+        if collections and group_name in zip(*collections)[0]:
+            return True
+    return False

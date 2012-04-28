@@ -3,6 +3,7 @@ import os
 import hgate
 
 # hGate specific settings
+HGWEB_URL = '-' # e.g. http://localhost/hg . If '-' no links will be provided.
 HGWEB_CONFIG = "/etc/mercurial/hgweb.config"
 REPOSITORIES_ROOT = "/home/hg"
 AUTH_FILE = "/etc/mercurial/users"

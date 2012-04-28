@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-25 13:05+0300\n"
+"POT-Creation-Date: 2012-04-28 17:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,30 +119,30 @@ msgstr "Имя группы"
 msgid "Path"
 msgstr "Путь"
 
-#: app/forms.py:203
+#: app/forms.py:205
 msgid "Path should be ended with /* or /**"
 msgstr "Путь должен заканчиваться на /* или /**"
 
-#: app/forms.py:208
+#: app/forms.py:210
 #, python-format
 msgid "The path is already defined by group: %s"
 msgstr "Данный путь уже определён для группы: %s"
 
-#: app/forms.py:217
+#: app/forms.py:219
 msgid "New group was added."
 msgstr "Новая группа добавлена."
 
-#: app/forms.py:219
+#: app/forms.py:221
 #, python-format
 msgid "Group was not created: %s"
 msgstr "Группа не создана: %s"
 
-#: app/forms.py:235
+#: app/forms.py:237
 #, python-format
 msgid "Group '%s' was changed."
 msgstr "Группа '%s' изменена."
 
-#: app/forms.py:242
+#: app/forms.py:244
 #, python-format
 msgid "There is already a group with such a name. Group '%s' wasn`t changed."
 msgstr "Уже существует группа с таким именем. Группа '%s' не изменена."
@@ -248,18 +248,18 @@ msgstr "Репозиторий '%s' успешно удалён."
 msgid "Repository '%(repo)s' was not deleted, cause: %(cause)."
 msgstr "Репозиторий [%(repo)s] не удалён, причина: %(cause)s"
 
-#: app/views/repo.py:215
+#: app/views/repo.py:216
 msgid "No hgrc for this repository. No write access to create hgrc by path: "
 msgstr ""
 "Нет hgrc для данного репозитория. Нет прав на запись для создания hgrc по "
 "пути: "
 
-#: app/views/repo.py:217
+#: app/views/repo.py:218
 msgid "No access to write mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на запись локального конфигурационного файла mercirial`а по пути: "
 
-#: app/views/repo.py:219
+#: app/views/repo.py:220
 msgid "No access to read mercurial`s local configuration file by path: "
 msgstr ""
 "Нет прав на чтение локального конфигурационного файла mercirial`а по пути: "
@@ -282,19 +282,19 @@ msgstr "Пароль успешно изменён."
 msgid "No write access for users file by path: "
 msgstr "Нет прав на запись файла users по пути: "
 
-#: templates/base.html:48
+#: templates/base.html:51
 msgid "Home"
 msgstr "Главная"
 
-#: templates/base.html:49
+#: templates/base.html:52
 msgid "Users"
 msgstr "Пользователи"
 
-#: templates/base.html:50
+#: templates/base.html:53
 msgid "HgWeb"
 msgstr "Настройки HgWeb"
 
-#: templates/base.html:51
+#: templates/base.html:54
 msgid "Help"
 msgstr "Помощь"
 
@@ -433,9 +433,9 @@ msgstr "Продвинутый режим редактирования"
 msgid "Raw mode"
 msgstr "Редактирование конфигурации 'как есть'"
 
-#: templates/repository.html:98 templates/repository.html.py:339
-#: templates/repository.html:355 templates/repository.html.py:371
-#: templates/repository.html:387
+#: templates/repository.html:98 templates/repository.html.py:345
+#: templates/repository.html:361 templates/repository.html.py:377
+#: templates/repository.html:393
 msgid "Users : "
 msgstr "Пользователи : "
 
@@ -443,15 +443,15 @@ msgstr "Пользователи : "
 msgid "HgWeb config"
 msgstr "HgWeb глобальная конфигурация"
 
-#: templates/repository.html:256
+#: templates/repository.html:262
 msgid "Additional actions"
 msgstr "Дополнительно"
 
-#: templates/repository.html:261
+#: templates/repository.html:267
 msgid "Change repository:"
 msgstr "Изменить репозиторий:"
 
-#: templates/repository.html:262
+#: templates/repository.html:268
 msgid ""
 "Change repository : Allows to change repository name, move it between groups "
 "and default repository directory."
@@ -459,16 +459,16 @@ msgstr ""
 "Изменить репозиторий : Позволяет переименовать репозиторий, переместить его "
 "в группу или директорию по-умолчанию."
 
-#: templates/repository.html:268 templates/repository.html.py:442
+#: templates/repository.html:274 templates/repository.html.py:448
 #: templates/useredit.html:25
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/repository.html:275
+#: templates/repository.html:281
 msgid "Delete repository:"
 msgstr "Удалить репозиторий:"
 
-#: templates/repository.html:276
+#: templates/repository.html:282
 msgid ""
 "Delete repository : Deletes directory tree and modifies hgweb.config if this "
 "is single path item."
@@ -476,56 +476,56 @@ msgstr ""
 "Удалить репозиторий : Удаляет директорию с репозиторием и всем его "
 "содержимым, удаляет запись из hgweb.config, если репозиторий не группа."
 
-#: templates/repository.html:282
+#: templates/repository.html:288
 msgid "Are you sure?"
 msgstr "Вы уверены?"
 
-#: templates/repository.html:291
+#: templates/repository.html:297
 msgid "Delete"
 msgstr "удалить"
 
-#: templates/repository.html:320
+#: templates/repository.html:326
 msgid "Remove:"
 msgstr "Удалить:"
 
-#: templates/repository.html:326
+#: templates/repository.html:332
 msgid "Add:"
 msgstr "Добавить:"
 
-#: templates/repository.html:337 templates/repository.html.py:353
-#: templates/repository.html:369 templates/repository.html.py:385
-#: templates/repository.html:400 templates/repository.html.py:410
-#: templates/repository.html:420 templates/repository.html.py:430
+#: templates/repository.html:343 templates/repository.html.py:359
+#: templates/repository.html:375 templates/repository.html.py:391
+#: templates/repository.html:406 templates/repository.html.py:416
+#: templates/repository.html:426 templates/repository.html.py:436
 msgid "Delete parameter : remove this parameter from the local hgrc file"
 msgstr ""
 "Удалить параметр : удаляет этот параметр из hgrc файла данного репозитория"
 
-#: templates/repository.html:343 templates/repository.html.py:359
-#: templates/repository.html:375 templates/repository.html.py:391
-#: templates/repository.html:402 templates/repository.html.py:412
-#: templates/repository.html:422 templates/repository.html.py:432
+#: templates/repository.html:349 templates/repository.html.py:365
+#: templates/repository.html:381 templates/repository.html.py:397
+#: templates/repository.html:408 templates/repository.html.py:418
+#: templates/repository.html:428 templates/repository.html.py:438
 msgid "Edit"
 msgstr "Редактировать"
 
-#: templates/repository.html:345 templates/repository.html.py:361
-#: templates/repository.html:377 templates/repository.html.py:393
-#: templates/repository.html:403 templates/repository.html.py:413
-#: templates/repository.html:423 templates/repository.html.py:433
+#: templates/repository.html:351 templates/repository.html.py:367
+#: templates/repository.html:383 templates/repository.html.py:399
+#: templates/repository.html:409 templates/repository.html.py:419
+#: templates/repository.html:429 templates/repository.html.py:439
 msgid "Cancel"
 msgstr "Отменить"
 
-#: templates/repository.html:346 templates/repository.html.py:362
-#: templates/repository.html:378 templates/repository.html.py:394
+#: templates/repository.html:352 templates/repository.html.py:368
+#: templates/repository.html:384 templates/repository.html.py:400
 msgid "Editor"
 msgstr "Редактор"
 
-#: templates/repository.html:444
+#: templates/repository.html:450
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 "Сохраняет глобальную конфигурацию : Изменяеи секцию [web] в файле hgweb."
 "config."
 
-#: templates/repository.html:447
+#: templates/repository.html:453
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
@@ -533,19 +533,19 @@ msgstr ""
 "Сохраняет настройки репозитория : Изменяет секцию [web] файла hgrc "
 "репозитория"
 
-#: templates/repository.html:460
+#: templates/repository.html:466
 msgid "Value is set in the local hgrc file"
 msgstr "Значение установлено в локальном hgrc файле"
 
-#: templates/repository.html:464
+#: templates/repository.html:470
 msgid "Value is set in the hgweb config"
 msgstr "Значение установлено в файле настроек hgweb"
 
-#: templates/repository.html:468
+#: templates/repository.html:474
 msgid "Value not set in any config"
 msgstr "Значение не установлено ни в одном файле настроек"
 
-#: templates/repository.html:473
+#: templates/repository.html:479
 msgid "Value not set in hgweb config"
 msgstr "Значение не установлено в файле настроек hgweb"
 

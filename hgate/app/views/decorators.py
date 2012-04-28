@@ -99,8 +99,10 @@ def render_to(template):
         def wrapper(request, *args, **kw):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
-                return render_to_response(output[1], output[0], RequestContext(request))
+                _data = [('hgweb_url', settings.HGWEB_URL)] + output[0]
+                return render_to_response(output[1], _data, RequestContext(request))
             elif isinstance(output, dict):
+                output['hgweb_url'] = settings.HGWEB_URL
                 return render_to_response(template, output, RequestContext(request))
             return output
 
