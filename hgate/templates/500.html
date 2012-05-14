@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block menu_home %}
+    {% if menu == "home" %}current{% endif %}
+{% endblock %}
+{% block menu_users %}
+    {% if menu == "users" %}current{% endif %}
+{% endblock %}
+{% block menu_extra %}
+    {% if menu == "repository" %}
+        {% if not global %}
+            <li class="current"><a href="#">{% trans "Repository" %}</a></li>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+{% block menu_hgweb %}
+    {% if menu == "hgweb" %}current{% endif %}
+{% endblock %}
+
+
+{% block tree %}
+{% endblock %}
+
+{% block content %}
+    <div class="text">
+        <h1>
+            500!
+        </h1>
+        <h2>{% trans "Something bad happened, see logs for details." %}</h2>
+    </div>
+{% endblock %}

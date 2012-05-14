@@ -15,8 +15,8 @@ PROJECT_ROOT, PROJECT_MODULE_NAME = os.path.split(
     os.path.dirname(os.path.realpath(hgate.__file__))
 )
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG = False
+TEMPLATE_DEBUG = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

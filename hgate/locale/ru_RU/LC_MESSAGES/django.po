@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-28 17:41+0300\n"
+"POT-Creation-Date: 2012-05-14 23:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -282,6 +282,16 @@ msgstr "Пароль успешно изменён."
 msgid "No write access for users file by path: "
 msgstr "Нет прав на запись файла users по пути: "
 
+#: templates/500.html:13 templates/errors.html:13
+#: templates/repository.html:202 templates/repository.html.py:228
+#: templates/useredit.html:35
+msgid "Repository"
+msgstr "Репозиторий"
+
+#: templates/500.html:30
+msgid "Something bad happened, see logs for details."
+msgstr "Случилось нечто непредвиденное, смотрите логи."
+
 #: templates/base.html:51
 msgid "Home"
 msgstr "Главная"
@@ -297,11 +307,6 @@ msgstr "Настройки HgWeb"
 #: templates/base.html:54
 msgid "Help"
 msgstr "Помощь"
-
-#: templates/errors.html:13 templates/repository.html:202
-#: templates/repository.html.py:228 templates/useredit.html:35
-msgid "Repository"
-msgstr "Репозиторий"
 
 #: templates/errors.html:32
 msgid "Fix the above problem"
