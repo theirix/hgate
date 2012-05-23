@@ -50,6 +50,8 @@
            title="{% trans "Change password and manage user's permissions" %}">{% trans "edit" %}</a>&nbsp;&nbsp;
         <span class="user_delete" title="{% trans "Remove user" %}">{% trans "delete" %}</span>
     </td>
+{% empty %}
+    <tr><td colspan="2" align="center"><em>{% trans "There are no users." %}</em></td></tr>
 {% endfor %}
 </table>
 {% endblock %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-14 23:22+0300\n"
+"POT-Creation-Date: 2012-05-23 22:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -401,6 +401,10 @@ msgstr ""
 msgid "delete"
 msgstr ""
 
+#: templates/index.html:211
+msgid "There are no groups."
+msgstr ""
+
 #: templates/repository.html:50
 msgid "Are you sure you want to delete parameter "
 msgstr ""
@@ -417,9 +421,9 @@ msgstr ""
 msgid "Raw mode"
 msgstr ""
 
-#: templates/repository.html:98 templates/repository.html.py:345
-#: templates/repository.html:361 templates/repository.html.py:377
-#: templates/repository.html:393
+#: templates/repository.html:98 templates/repository.html.py:347
+#: templates/repository.html:363 templates/repository.html.py:379
+#: templates/repository.html:395
 msgid "Users : "
 msgstr ""
 
@@ -441,7 +445,7 @@ msgid ""
 "and default repository directory."
 msgstr ""
 
-#: templates/repository.html:274 templates/repository.html.py:448
+#: templates/repository.html:274 templates/repository.html.py:450
 #: templates/useredit.html:25
 msgid "Save"
 msgstr ""
@@ -464,63 +468,71 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: templates/repository.html:326
+#: templates/repository.html:324
+msgid "Choose to remove:"
+msgstr ""
+
+#: templates/repository.html:327
 msgid "Remove:"
 msgstr ""
 
-#: templates/repository.html:332
+#: templates/repository.html:331
+msgid "Choose to add:"
+msgstr ""
+
+#: templates/repository.html:334
 msgid "Add:"
 msgstr ""
 
-#: templates/repository.html:343 templates/repository.html.py:359
-#: templates/repository.html:375 templates/repository.html.py:391
-#: templates/repository.html:406 templates/repository.html.py:416
-#: templates/repository.html:426 templates/repository.html.py:436
-msgid "Delete parameter : remove this parameter from the local hgrc file"
-msgstr ""
-
-#: templates/repository.html:349 templates/repository.html.py:365
-#: templates/repository.html:381 templates/repository.html.py:397
+#: templates/repository.html:345 templates/repository.html.py:361
+#: templates/repository.html:377 templates/repository.html.py:393
 #: templates/repository.html:408 templates/repository.html.py:418
 #: templates/repository.html:428 templates/repository.html.py:438
-msgid "Edit"
+msgid "Delete parameter : remove this parameter from the local hgrc file"
 msgstr ""
 
 #: templates/repository.html:351 templates/repository.html.py:367
 #: templates/repository.html:383 templates/repository.html.py:399
-#: templates/repository.html:409 templates/repository.html.py:419
-#: templates/repository.html:429 templates/repository.html.py:439
+#: templates/repository.html:410 templates/repository.html.py:420
+#: templates/repository.html:430 templates/repository.html.py:440
+msgid "Edit"
+msgstr ""
+
+#: templates/repository.html:353 templates/repository.html.py:369
+#: templates/repository.html:385 templates/repository.html.py:401
+#: templates/repository.html:411 templates/repository.html.py:421
+#: templates/repository.html:431 templates/repository.html.py:441
 msgid "Cancel"
 msgstr ""
 
-#: templates/repository.html:352 templates/repository.html.py:368
-#: templates/repository.html:384 templates/repository.html.py:400
+#: templates/repository.html:354 templates/repository.html.py:370
+#: templates/repository.html:386 templates/repository.html.py:402
 msgid "Editor"
 msgstr ""
 
-#: templates/repository.html:450
+#: templates/repository.html:452
 msgid "Save global configuration : Modifies [web] section in the hgweb.config."
 msgstr ""
 
-#: templates/repository.html:453
+#: templates/repository.html:455
 msgid ""
 "Save repository configuration : Modifies [web] section of the hgrc of the "
 "repository."
 msgstr ""
 
-#: templates/repository.html:466
+#: templates/repository.html:468
 msgid "Value is set in the local hgrc file"
 msgstr ""
 
-#: templates/repository.html:470
+#: templates/repository.html:472
 msgid "Value is set in the hgweb config"
 msgstr ""
 
-#: templates/repository.html:474
+#: templates/repository.html:476
 msgid "Value not set in any config"
 msgstr ""
 
-#: templates/repository.html:479
+#: templates/repository.html:481
 msgid "Value not set in hgweb config"
 msgstr ""
 
@@ -579,4 +591,8 @@ msgstr ""
 
 #: templates/users.html:51
 msgid "Remove user"
+msgstr ""
+
+#: templates/users.html:54
+msgid "There are no users."
 msgstr ""

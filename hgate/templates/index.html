@@ -113,7 +113,7 @@
                 <td colspan="2" class="bottom">
                     <input class="submit" type="submit" name="create_repo" value="{% trans "Create" %}"/>
                     <span title="
-                            {% blocktrans %} Create new repository : Path: default path ({{ default_path }}) if no group is specified or concrete group path.<br>Name: specified name.<br>This action creates dir with repository name and makes &apos;hg init&apos; in that dir. {% endblocktrans %} %}"
+                            {% blocktrans %} Create new repository : Path: default path ({{ default_path }}) if no group is specified or concrete group path.<br>Name: specified name.<br>This action creates dir with repository name and makes &apos;hg init&apos; in that dir. {% endblocktrans %}"
                           class="tooltip">[ ? ]</span>
                 </td>
             </tr>
@@ -207,6 +207,8 @@
                     {% endif %}
                 </td>
             </tr>
+        {% empty %}
+            <tr><td colspan="4" align="center"><em>{% trans "There are no groups." %}</em></td></tr>
         {% endfor %}
     </table>
 

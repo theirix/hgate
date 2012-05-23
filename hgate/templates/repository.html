@@ -321,16 +321,18 @@
                     <td rowspan="10" valign="top"> <!-- align="center" valign="top" -->
                         <div id="edit_ext">
                             <div class="items_to_remove_block">
+                                <label for="available_to_rm_id">{% trans "Choose to remove:" %}</label><br/>
                                 <select id="available_to_rm_id" size="13">
                                 </select><br/>
-                                <label for="available_to_rm_id">{% trans "Remove:" %}</label><br/>
-                                <input id="available_to_rm_btn" type="button" value=">"/>
+                                <label for="available_to_rm_btn">{% trans "Remove:" %}</label><br/>
+                                <input id="available_to_rm_btn" type="button" value="-"/>
                             </div>
                             <div class="items_to_add_block" >
+                                <label for="available_to_add_id">{% trans "Choose to add:" %}</label><br/>
                                 <select id="available_to_add_id" size="13">
                                 </select><br/>
-                                <label for="available_to_add_id">{% trans "Add:" %}</label><br/>
-                                <input id="available_to_add_btn" type="button" value="<"/>
+                                <label for="available_to_add_btn">{% trans "Add:" %}</label><br/>
+                                <input id="available_to_add_btn" type="button" value="+"/>
                             </div>
                         </div>
                     </td>
