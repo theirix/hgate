@@ -99,6 +99,19 @@
                 $("#id_is_collection").val(this.checked ? 'True' : 'False');
             });
             $("#is_collection").prop("checked", $("#id_is_collection").val() == 'True');
+            function make_repo_summary() {
+                var group = $("#id_group").val();
+                var path = $("#id_group").find("option:selected").text();
+                if (group == '-') {
+                    group = '{% trans "No group" %}';
+                    path = '{{ default_path }}';
+                }
+                var name = $("#id_name").val();
+                path = path.replace(new RegExp("[*\/]+$", "g"), "") + "/";
+                $("#repo_path_id").html(group + ": " + path + name);
+            }
+            $("#id_group").change(make_repo_summary);
+            $("#id_name").keyup(make_repo_summary);
         });
     </script>
 {% endblock %}
@@ -119,6 +132,7 @@
             </tr>
         </table>
     </form>
+    <span style="font-size: small;" id="repo_path_id"></span>
     <hr style="margin: 15px 0 15px 0;"/>
     <h3>{% trans "Manage groups" %}</h3>
 

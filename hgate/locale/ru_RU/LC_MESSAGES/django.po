@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-23 22:44+0300\n"
+"POT-Creation-Date: 2012-05-24 02:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,7 +111,7 @@ msgstr "Репозиторий [%(old_path)s] успешно переимено�
 msgid "Repository '%(repo)s' was not moved: %(cause)s."
 msgstr "Репозиторий [%(repo)s] не переименован, причина: %(cause)s"
 
-#: app/forms.py:193 templates/index.html:165
+#: app/forms.py:193 templates/index.html:179
 msgid "Group name"
 msgstr "Имя группы"
 
@@ -352,16 +352,20 @@ msgstr "отменить"
 msgid "save"
 msgstr "сохранить"
 
-#: templates/index.html:108
+#: templates/index.html:106
+msgid "No group"
+msgstr "Нет группы"
+
+#: templates/index.html:121
 msgid "Create repository"
 msgstr "Создать репозиторий"
 
-#: templates/index.html:114 templates/index.html.py:138
+#: templates/index.html:127 templates/index.html.py:152
 #: templates/users.html:30
 msgid "Create"
 msgstr "Создать"
 
-#: templates/index.html:116
+#: templates/index.html:129
 #, python-format
 msgid ""
 " Create new repository : Path: default path (%(default_path)s) if no group "
@@ -373,15 +377,15 @@ msgstr ""
 "действие создаёт директорию с именем репозитория и выполняет &apos;hg "
 "init&apos; в ней."
 
-#: templates/index.html:123
+#: templates/index.html:137
 msgid "Manage groups"
 msgstr "Управление группами"
 
-#: templates/index.html:130
+#: templates/index.html:144
 msgid "Collection"
 msgstr "Коллекция"
 
-#: templates/index.html:139
+#: templates/index.html:153
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
@@ -389,28 +393,28 @@ msgstr ""
 "Создание новой группы : Создаёт необходимые директории, если необходимо, для "
 "пути группы.<br>Добавляет запись об этой группе в hgweb.config."
 
-#: templates/index.html:164
+#: templates/index.html:178
 msgid "Type"
 msgstr "Тип"
 
-#: templates/index.html:166
+#: templates/index.html:180
 msgid "Full path"
 msgstr "Абсолютный путь"
 
-#: templates/index.html:167 templates/users.html:45
+#: templates/index.html:181 templates/users.html:45
 msgid "Action"
 msgstr "Действие"
 
-#: templates/index.html:182
+#: templates/index.html:196
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 "Клик для начала редактирования данной группы: вы можете изменить имя и путь."
 
-#: templates/index.html:183 templates/users.html:50
+#: templates/index.html:197 templates/users.html:50
 msgid "edit"
 msgstr "редактировать"
 
-#: templates/index.html:187
+#: templates/index.html:201
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
@@ -418,11 +422,11 @@ msgstr ""
 "Удалить группу : удаляет запись об это группе из hgweb.config. "
 "Удаляетдиректорию группы и всё её содержимое."
 
-#: templates/index.html:188 templates/users.html:51
+#: templates/index.html:202 templates/users.html:51
 msgid "delete"
 msgstr "удалить"
 
-#: templates/index.html:211
+#: templates/index.html:225
 msgid "There are no groups."
 msgstr "Групп нет"
 

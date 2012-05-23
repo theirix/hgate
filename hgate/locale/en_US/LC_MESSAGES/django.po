@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-23 22:44+0300\n"
+"POT-Creation-Date: 2012-05-24 02:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Repository '%(repo)s' was not moved: %(cause)s."
 msgstr ""
 
-#: app/forms.py:193 templates/index.html:165
+#: app/forms.py:193 templates/index.html:179
 msgid "Group name"
 msgstr ""
 
@@ -340,16 +340,20 @@ msgstr ""
 msgid "save"
 msgstr ""
 
-#: templates/index.html:108
+#: templates/index.html:106
+msgid "No group"
+msgstr ""
+
+#: templates/index.html:121
 msgid "Create repository"
 msgstr ""
 
-#: templates/index.html:114 templates/index.html.py:138
+#: templates/index.html:127 templates/index.html.py:152
 #: templates/users.html:30
 msgid "Create"
 msgstr ""
 
-#: templates/index.html:116
+#: templates/index.html:129
 #, python-format
 msgid ""
 " Create new repository : Path: default path (%(default_path)s) if no group "
@@ -357,51 +361,51 @@ msgid ""
 "creates dir with repository name and makes &apos;hg init&apos; in that dir. "
 msgstr ""
 
-#: templates/index.html:123
+#: templates/index.html:137
 msgid "Manage groups"
 msgstr ""
 
-#: templates/index.html:130
+#: templates/index.html:144
 msgid "Collection"
 msgstr ""
 
-#: templates/index.html:139
+#: templates/index.html:153
 msgid ""
 "Create new group : Creates all missing directories in the group path."
 "<br>Adds record about this group to the hgweb.config."
 msgstr ""
 
-#: templates/index.html:164
+#: templates/index.html:178
 msgid "Type"
 msgstr ""
 
-#: templates/index.html:166
+#: templates/index.html:180
 msgid "Full path"
 msgstr ""
 
-#: templates/index.html:167 templates/users.html:45
+#: templates/index.html:181 templates/users.html:45
 msgid "Action"
 msgstr ""
 
-#: templates/index.html:182
+#: templates/index.html:196
 msgid "Click to start editing this group: you can change name and path."
 msgstr ""
 
-#: templates/index.html:183 templates/users.html:50
+#: templates/index.html:197 templates/users.html:50
 msgid "edit"
 msgstr ""
 
-#: templates/index.html:187
+#: templates/index.html:201
 msgid ""
 "Delete the group: removes record about this group from hgweb.config. Deletes "
 "group`s dir and all it`s subdirectories."
 msgstr ""
 
-#: templates/index.html:188 templates/users.html:51
+#: templates/index.html:202 templates/users.html:51
 msgid "delete"
 msgstr ""
 
-#: templates/index.html:211
+#: templates/index.html:225
 msgid "There are no groups."
 msgstr ""
 
