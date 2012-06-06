@@ -2,8 +2,6 @@ from ConfigParser import ConfigParser, NoOptionError, NoSectionError
 import os
 from django.utils.translation import ugettext_lazy as _
 
-__author__ = 'Shedar'
-
 class HGWeb:
     """
     Global config management class

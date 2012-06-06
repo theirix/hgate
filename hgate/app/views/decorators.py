@@ -5,8 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-__author__ = 'hawaiian'
-
 def _check_configs_access(request):
     """
     checks existing and 'rwx' of next files:

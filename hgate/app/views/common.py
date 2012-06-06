@@ -3,8 +3,6 @@ import os
 from django.core.urlresolvers import reverse
 from hgate import settings
 
-__author__ = 'hawaiian'
-
 #helper functions
 
 def prepare_tree(tree, group=""):

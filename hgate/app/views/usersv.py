@@ -12,8 +12,6 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from common import prepare_tree, md5_for_file
 
-__author__ = 'hawaiian'
-
 #page handlers
 @render_to('users.html')
 @require_access(menu='users')

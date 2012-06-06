@@ -5,8 +5,6 @@ from hgate.app.modhg.HGWeb import HGWeb
 from hgate import settings
 from django.utils.translation import ugettext_lazy as _
 
-__author__ = 'Shedar'
-
 
 class RepositoryException(Exception):
     """

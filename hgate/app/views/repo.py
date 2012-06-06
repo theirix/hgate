@@ -13,8 +13,6 @@ from hgate.app.modhg.repository import RepositoryException
 from hgate.app.views.decorators import render_to, require_access
 from common import prepare_tree, md5_for_file
 
-__author__ = 'hawaiian'
-
 #todo think about merging hgweb and repo functions.
 
 #page handlers

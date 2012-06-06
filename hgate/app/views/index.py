@@ -6,8 +6,6 @@ from hgate.app.modhg.HGWeb import HGWeb
 from common import prepare_tree, md5_for_file
 #from mercurial import scmutil, util
 
-__author__ = 'hawaiian'
-
 #page handlers
 @render_to('index.html')
 @require_access(menu='home')
