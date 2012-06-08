@@ -227,7 +227,7 @@
     {% else %}
         <h2>{% trans "Repository" %}:
         {% if hgweb_repo_url != '-' %}
-            <a href="{{ hgweb_repo_url }}">{{ repo_path }}</a>
+            <a class="external" href="{{ hgweb_repo_url }}">{{ repo_path }}</a>
         {% else %}
             {{ repo_path }}
         {% endif %}
