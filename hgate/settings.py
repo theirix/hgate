@@ -8,6 +8,8 @@ HGWEB_CONFIG = "/etc/mercurial/hgweb.config"
 REPOSITORIES_ROOT = "/home/hg"
 AUTH_FILE = "/etc/mercurial/users"
 AUTH_TYPE = "basic"
+#AUTH_TYPE = "digest"
+#AUTH_REALM = "realm"
 MEDIA_URL = ''
 #MEDIA_URL = '/hgate'
 

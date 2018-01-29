@@ -1,6 +1,7 @@
 import random
 import crypt
 import os
+from hashlib import md5
 import repository
 from hgate import settings
 from hgate.app.modhg.HGWeb import HGWeb
@@ -191,7 +192,14 @@ def _salt():
     return random.choice(letters) + random.choice(letters)
 
 def _form_file_row(login, password):
-    return login + ":" + crypt.crypt(password, _salt()) + os.linesep
+    if settings.AUTH_TYPE == 'basic':
+        return login + ":" + crypt.crypt(password, _salt()) + os.linesep
+    elif settings.AUTH_TYPE == 'digest':
+        realm = settings.AUTH_REALM
+        phash = md5(login + ":" + realm + ":" + password).hexdigest()
+        return login + ":" + realm + ":" + phash + os.linesep
+    else:
+        raise Exception('unsupported AUTH_TYPE')
 
 def _get_rows(filename):
     with open(filename, 'r') as f:
