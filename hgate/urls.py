@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url, include
+from django.conf.urls.defaults import *
 from app.views.index import index
 from app.views.repo import repo, hgweb
 from app.views.usersv import user, user_index
