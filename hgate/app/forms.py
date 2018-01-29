@@ -11,7 +11,7 @@ from hgate.app.modhg.HGWeb import HGWeb
 from hgate.app.modhg.repository import RepositoryException
 from hgate.app.views.common import prepare_path
 import modhg.usersb as users
-from hgate import settings
+from django.conf import settings
 
 class FileHashForm(forms.Form):
     file_hash = forms.CharField(widget=forms.HiddenInput())

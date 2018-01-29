@@ -1,7 +1,7 @@
 import os
 import copy
 from django.contrib import messages
-from hgate import settings
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render_to_response
 from django.template import RequestContext

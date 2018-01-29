@@ -1,6 +1,6 @@
 from hgate.app import modhg
 from hgate.app.views.decorators import render_to, require_access
-import hgate.settings as settings
+from django.conf import settings
 from hgate.app.forms import CreateRepoForm, ManageGroupsForm, DeleteGroupForm
 from hgate.app.modhg.HGWeb import HGWeb
 from common import prepare_tree, md5_for_file

@@ -2,7 +2,7 @@ import os
 from mercurial import hg, ui
 import shutil
 from hgate.app.modhg.HGWeb import HGWeb
-from hgate import settings
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 

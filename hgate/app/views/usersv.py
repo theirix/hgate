@@ -2,7 +2,7 @@ import os
 from django.utils.datastructures import SortedDict
 from hgate.app import modhg
 from hgate.app.views.decorators import render_to, require_access
-from hgate import settings
+from django.conf import settings
 import hgate.app.modhg.usersb as users
 from hgate.app.forms import AddUser, EditUser, FileHashForm
 from hgate.app.modhg.HGWeb import HGWeb

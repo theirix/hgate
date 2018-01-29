@@ -3,7 +3,7 @@ import crypt
 import os
 from hashlib import md5
 import repository
-from hgate import settings
+from django.conf import settings
 from hgate.app.modhg.HGWeb import HGWeb
 
 LOGIN_PASSWD_SEP = ":"

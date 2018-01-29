@@ -1,7 +1,7 @@
 import os
 import re
 import hgate.app.modhg.usersb as users
-from hgate import settings
+from django.conf import settings
 from hgate.app import modhg
 from hgate.app.forms import RepositoryForm, FileHashForm, CreateRepoForm, RawModeForm
 from hgate.app.modhg.HGWeb import HGWeb

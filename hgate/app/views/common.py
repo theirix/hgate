@@ -1,7 +1,7 @@
 import hashlib
 import os
 from django.core.urlresolvers import reverse
-from hgate import settings
+from django.conf import settings
 
 #helper functions
 
