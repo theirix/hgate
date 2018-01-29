@@ -1,4 +1,5 @@
 import os
+import copy
 from django.contrib import messages
 from hgate import settings
 from django.utils.translation import ugettext_lazy as _
@@ -97,8 +98,9 @@ def render_to(template):
         def wrapper(request, *args, **kw):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
-                _data = [('hgweb_url', settings.HGWEB_URL)] + output[0]
-                return render_to_response(output[1], _data, RequestContext(request))
+                outc = copy.copy(output[0])
+                outc['hgweb_url'] = settings.HGWEB_URL
+                return render_to_response(output[1], outc, RequestContext(request))
             elif isinstance(output, dict):
                 output['hgweb_url'] = settings.HGWEB_URL
                 return render_to_response(template, output, RequestContext(request))
