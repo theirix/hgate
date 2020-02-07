@@ -1,3 +1,9 @@
+Forked and improved version by theirix.
+Original hGate tool was from https://bitbucket.org/shedar/hgate
+Converted from Bitbucket (from https://bitbucket.org/theirix/hgate) to the GitHub due to sunsetting Mercurial support.
+
+--- cut ---
+
 hGate is a tool for managing users and repositrories when using Mercurial and HgWebDir.
 If you use Mercurial as a main control version system, and repositories are located at one of your servers, then you have to login to your server to create a new repository, create a new user or change it`s password, give rights to a user for a specific repository and so on. hGate makes above tasks easier.
 It is opensource and free software under GPLv2 licence.
